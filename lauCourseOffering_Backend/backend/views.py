@@ -9,18 +9,23 @@ import datetime
 # Create your views here.
 
 
+def checkToken(request):
+    token = request.COOKIES.get('jwt')
+
+    if not token:
+        raise AuthenticationFailed('Unauthenticated')
+    try:
+        payload = jwt.decode(token, 'secret', algorithms=['HS256'])
+    except jwt.ExpiredSignatureError:
+        raise AuthenticationFailed('Unauthenticated')
+    return payload['id']
+
+
 class CreateUserApi(APIView):
 
     def post(self, request):
-        token = request.COOKIES.get('jwt')
-
-        if not token:
-            raise AuthenticationFailed('Unauthenticated!')
-        try:
-            payload = jwt.decode(token, 'secret', algorithms=['HS256'])
-        except jwt.ExpiredSignatureError:
-            raise AuthenticationFailed("Unauthenticated!")
-        user = User.objects.filter(id=payload['id'], isChaiperson=True).first
+        user = User.objects.filter(id=checkToken(
+            request), isChaiperson=True).first
         if user:
 
             serializer = UserSerializer(data=request.data)
@@ -46,7 +51,6 @@ class LoginApi(APIView):
             'iat': datetime.datetime.utcnow()
         }
 
-        # .decode('utf-8')
         token = jwt.encode(payload, 'secret', algorithm='HS256')
 
         response = Response()
@@ -56,3 +60,11 @@ class LoginApi(APIView):
             'jwt': token
         }
         return response
+class UsersListApi(APIView):
+    def get(self, request):
+        checkToken(request)
+
+        users = User.objects.all()
+        serializer = UserSerializer(users, many=True)
+
+        return Response(serializer.data)
