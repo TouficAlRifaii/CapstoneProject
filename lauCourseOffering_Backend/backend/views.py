@@ -2,8 +2,8 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
-from .serializers import UserSerializer
-from .models import User
+from .serializers import UserSerializer, CourseSerializer
+from .models import User, Course
 import jwt
 import datetime
 # Create your views here.
@@ -60,6 +60,8 @@ class LoginApi(APIView):
             'jwt': token
         }
         return response
+
+
 class UsersListApi(APIView):
     def get(self, request):
         checkToken(request)
@@ -68,3 +70,40 @@ class UsersListApi(APIView):
         serializer = UserSerializer(users, many=True)
 
         return Response(serializer.data)
+
+
+class LogoutView(APIView):
+    def post(self, request):
+        response = Response()
+        response.delete_cookie('jwt')
+        response.data = {
+            'message': 'success'
+        }
+        return response
+
+
+class CoursesApi(APIView):
+    def get(self, request):
+        checkToken(request=request)
+        if 'course_id' in request.data:
+            course = Course.objects.get(
+                id=request.data['course_id'])
+            if course is None: 
+                return Response({
+                    "message" : "Course Does not exist"
+                })
+            serializer = CourseSerializer(course)
+            return Response(serializer.data)
+        else:
+            courses = Course.objects.all()
+            serializer = CourseSerializer(courses, many=True)
+            return Response(serializer.data)
+    
+    def post(self, request):
+        checkToken(request=request)
+        serializer = CourseSerializer(data=request.data)
+        serializer.is_valid()
+        serializer.save()
+        return Response({
+            "message": "success"
+        })
