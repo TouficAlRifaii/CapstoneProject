@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Course
+from .models import User, Course , CourseRelationShip
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -21,13 +21,13 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class CourseSerializer(serializers.ModelSerializer):
-    prerequisites = serializers.PrimaryKeyRelatedField(
-        many=True, queryset=Course.objects.all())
-    corequisites = serializers.PrimaryKeyRelatedField(
-        many=True, queryset=Course.objects.all())
 
     class Meta:
         model = Course
         fields = ['id', 'subject', 'courseNumber', 'title',
-                  'creditsNumber', 'campus', 'prerequisites', 'corequisites']
+                  'creditsNumber', 'campus']
         
+class CourseRelationSerializer(serializers.ModelSerializer):
+    class Meta: 
+        model= CourseRelationShip
+        fields = ['id', 'mainCourse_id' , 'secondCourse_id' , 'isPrerequisite']

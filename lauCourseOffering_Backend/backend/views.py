@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
-from .serializers import UserSerializer, CourseSerializer
+from .serializers import UserSerializer, CourseSerializer , CourseRelationSerializer
 from .models import User, Course
 import jwt
 import datetime
@@ -104,6 +104,52 @@ class CoursesApi(APIView):
         serializer = CourseSerializer(data=request.data)
         serializer.is_valid()
         serializer.save()
+        
         return Response({
             "message": "success"
         })
+
+class BulkCourse(APIView):
+    def post(self, request):
+        checkToken(request=request)
+        courses = request.data['courses']
+        
+        for i in courses: 
+        
+            serializer = CourseSerializer(data= i)
+            serializer.is_valid()
+            serializer.save()
+
+        return Response({
+            "message": "success"
+        })
+    
+class RequisitesApi(APIView):
+    def post(self, request):
+        checkToken(request=request)
+
+        prerequisites = request.data['prerequisites']
+        corequisites = request.data['corequisites']
+
+        if len(prerequisites>0):
+            for i in prerequisites:
+                data = {
+                    "isPrerequisite": True,
+                    "mainCourse_id": request.data['course_id'],
+                    "secondCourse_id": i
+
+                }
+                serializer = CourseRelationSerializer(data)
+                serializer.is_valid()
+                serializer.save()
+        if len(corequisites>0):
+            for i in corequisites:
+                data = {
+                    "isPrerequisite": False,
+                    "mainCourse_id": request.data['course_id'],
+                    "secondCourse_id": i
+
+                }
+                serializer = CourseRelationSerializer(data)
+                serializer.is_valid()
+                serializer.save()

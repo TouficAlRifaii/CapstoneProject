@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 # Create your models here.
 
+
 class User(AbstractUser):
     name = models.CharField(max_length=255)
     email = models.CharField(max_length=255, unique=True)
@@ -11,12 +12,23 @@ class User(AbstractUser):
 
 
 class Course(models.Model):
+    class Meta:
+        unique_together = ("subject", "courseNumber")
+
     subject = models.CharField(max_length=255)
-    courseNumber  = models.CharField(max_length=5)
+    courseNumber = models.CharField(max_length=5)
     title = models.CharField(max_length=255)
     creditsNumber = models.IntegerField()
     campus = models.IntegerField()
-    prerequisites = models.ManyToManyField('self' , blank=True)
-    corequisites = models.ManyToManyField('self' , blank=True)
+
+    def __str__(self):
+        return f"{self.subject}{self.courseNumber}"
 
 
+class CourseRelationShip(models.Model):
+    mainCourse = models.ForeignKey(
+        "backend.Course", on_delete=models.CASCADE, related_name="mainCourse")
+    secondCourse = models.ForeignKey(
+        "backend.Course", on_delete=models.CASCADE, related_name="secondCourse")
+    # true if prerequisite and false if coreq
+    isPrerequisite = models.BooleanField()
