@@ -2,10 +2,12 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
-from .serializers import UserSerializer, CourseSerializer , CourseRelationSerializer
-from .models import User, Course
+from .serializers import UserSerializer, CourseSerializer , CourseRelationSerializer , StudentSerializer
+from .models import User, Course , Student
+from .excelOps import readExcel
 import jwt
 import datetime
+
 # Create your views here.
 
 
@@ -153,3 +155,37 @@ class RequisitesApi(APIView):
                 serializer = CourseRelationSerializer(data)
                 serializer.is_valid()
                 serializer.save()
+
+class StudentsApi(APIView):
+    def post(self, request):
+        Student.objects.all().delete()
+        existing_courses = Course.objects.filter(subject="CSC")
+        serializedCourses = CourseSerializer(existing_courses, many=True)
+        serializedCourses = serializedCourses.data
+        
+        students = readExcel()
+        
+        for student in students:
+            data = {} 
+            data['takenCredits'] = student['Total Earned Credits']
+            data['remainingCredits'] = student['Remaining Credits']
+            courses = []
+
+            for course in student['courses']:
+                courseNumber = course[3:]
+                existingCourse = [d for d in serializedCourses if d.get('courseNumber') == courseNumber]
+                course_id = existingCourse[0]["id"]
+                courses.append(course_id)
+            data["courses"] = courses
+
+            serializedStudent = StudentSerializer(data=data)
+            serializedStudent.is_valid()
+            serializedStudent.save()
+
+        return Response({
+            "message" : "success"
+        })
+
+                
+
+
