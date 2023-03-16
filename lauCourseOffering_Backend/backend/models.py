@@ -32,3 +32,9 @@ class CourseRelationShip(models.Model):
         "backend.Course", on_delete=models.CASCADE, related_name="secondCourse")
     # true if prerequisite and false if coreq
     isPrerequisite = models.BooleanField()
+
+
+class Student(models.Model):
+    takenCredits = models.IntegerField()
+    remainingCredits = models.IntegerField()
+    courses = models.ManyToManyField("backend.Course" ,blank=True)
