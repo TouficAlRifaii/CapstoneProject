@@ -52,11 +52,14 @@ const Users = ({users, setUsers}) =>{
             <td>{user.email}</td>
             <td>{user.authorizationLevel}</td>
             <td>  <button onClick={() => handleDelete(user.name)}>Delete</button></td>
+            <Link to={`/edituser/${user.name}`}> <button>Edit user</button> </Link>
+
           </tr>
         ))}
       </tbody>
     </table>
     <Link to="/AddUser"> <button>Add user</button> </Link>
+
   </div>
 );
           

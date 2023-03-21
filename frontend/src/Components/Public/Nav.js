@@ -1,11 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import '../../CSS/Nav.css'; // Import your CSS file for navbar styling
 
 function Nav() {
   return (
-    <nav>
+    <nav className="navbar"> {/* Add a class name for styling */}
       <div className="logo">
-          TESTT
+        TESTT
       </div>
       <ul className="nav-links">
         <li>

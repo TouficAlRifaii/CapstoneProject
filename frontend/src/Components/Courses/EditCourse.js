@@ -1,33 +1,24 @@
 import React, { useState } from "react";
-import DropListCourses from "./DropListCourses";
-import { Link, Navigate, useNavigate} from 'react-router-dom';
 
 const AddCourse = ({ courses, setCourses }) => {
   const [subject, setSubject] = useState("");
   const [courseNumber, setCourseNumber] = useState("");
   const [title, setTitle] = useState("");
   const [creditsNbr, setCreditsNbr] = useState("");
-  const [preReq, setPreReq] = useState([""]);
-  const [coReq, setCoReq] = useState([""]);
+  const [preReq, setPreReq] = useState("");
+  const [coReq, setCoReq] = useState("");
 
   const handleSubmit = (event) => {
-
-
     event.preventDefault();
-
-    const newCourse = { subject, courseNumber, title, creditsNbr, 
-      preReq: preReq.filter((pr) => pr !== ""), // Remove any empty strings from the preReq array
-      coReq: coReq.filter((cr) => cr !== "") };
+    
+    const newCourse = { subject, courseNumber, title, creditsNbr, preReq, coReq };
     setCourses([...courses, newCourse]);
     setSubject("");
     setCourseNumber("");
     setTitle("");
     setCreditsNbr("");
-    setPreReq([""]);
-    setCoReq([""]);
-
-    console.log(subject, courseNumber, title, creditsNbr, preReq, coReq)
-
+    setPreReq("");
+    setCoReq("");
   };
 
   return (
@@ -72,19 +63,26 @@ const AddCourse = ({ courses, setCourses }) => {
       </div>
       <div>
         <label htmlFor="pre-req">Pre requisites:</label>
-        <DropListCourses elementCourse={preReq} setElementCourse={setPreReq} courses={courses}/>    
+        <button> + </button>
+        <input
+          type="text"
+          id="pre-req"
+          value={preReq}
+          onChange={(event) => setPreReq(event.target.value)}
+        />
       </div>
       <div>
         <label htmlFor="co-req">Co requisites:</label>
-        <DropListCourses elementCourse={coReq} setElementCourse={setCoReq} courses={courses}/>    
-
+        <input
+          type="text"
+          id="co-req"
+          value={coReq}
+          onChange={(event) => setCoReq(event.target.value)}
+        />
       </div>
-
-      <div> 
-
-    </div>
-      <button type="submit" onClick={handleSubmit}>Add Course</button>    </form>
- );
+      <button type="submit">Add Course</button>
+    </form>
+  );
 };
 
 export default AddCourse;

@@ -57,6 +57,7 @@ const AddUser = ({users, setUsers}) => {
         />
       </div>
       <button type="submit">Add User</button>
+
     </form>
   );
 };

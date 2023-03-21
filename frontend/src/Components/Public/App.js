@@ -6,6 +6,7 @@ import Users from '../Users/Users';
 import Header from './Header';
 import Footer from './Footer';
 import Missing from './Missing';
+import EditUser from '../Users/EditUser';
 import {Route, Routes, useNavigate, BrowserRouter as Router } from 'react-router-dom';
 import { useState, useEffect} from 'react' ;
 import AddUser from '../Users/AddUser';
@@ -34,27 +35,35 @@ function App() {
   ]);
   const [courses, setCourses] = useState([
     {
-      semester: "Fall 2022",
-      subject: "Computer Science",
-      courseNumber: "CS101",
+      subject: "CSC",
+      courseNumber: "101",
       section: "001",
-      title: "Introduction to Computer Science"
+      title: "Introduction to Computer Science",
+      creditsNbr: 4,
+      preReq: [],
+      coReq: ["MATH101"]
     },
     {
-      semester: "Spring 2023",
-      subject: "English",
-      courseNumber: "ENG201",
+      subject: "ENG",
+      courseNumber: "202",
       section: "002",
-      title: "Shakespearean Tragedies"
+      title: "Shakespearean Tragedies",
+      creditsNbr: 3,
+      preReq: ["ENG101", "MTH23"],
+      coReq: []
     },
     {
-      semester: "Fall 2023",
-      subject: "Mathematics",
-      courseNumber: "MATH301",
+      subject: "MTH",
+      courseNumber: "301",
       section: "003",
-      title: "Calculus III"
+      title: "Calculus III",
+      creditsNbr: 4,
+      preReq: ["MATH201", "MATH202"],
+      coReq: ["PHYS101", "PHYS102"]
     }
   ]);
+  
+  
   
   return (
     <div className="App">
@@ -67,6 +76,8 @@ function App() {
 
           <Route exact path="users" element={<Users users={users} setUsers={setUsers}/>} />
           <Route exact path="adduser" element={<AddUser users={users} setUsers={setUsers}/>} />
+          <Route path="/edituser/:name" element={<EditUser users={users} setUsers={setUsers}/>} />
+
          
           <Route path="about" element={<About />} />
           <Route path="*" element={<Missing />} />
