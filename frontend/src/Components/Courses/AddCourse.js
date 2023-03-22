@@ -14,7 +14,17 @@ const AddCourse = ({ courses, setCourses }) => {
   const [coReq1, setCoReq1] = useState("");
   const [coReq2, setCoReq2] = useState("");
 
+  function isValidCourseNumber(courseNumber) {
+    const regex = /^[0-9]{3}[A-Z]?[A-Z]?$/;
+    return regex.test(courseNumber);
+  }
+
   const handleSubmit = (event) => {
+    if (subject === "" || !isValidCourseNumber(courseNumber) || title === "" || creditsNbr === "" || creditsNbr<0 || creditsNbr>5) {
+      event.preventDefault(); 
+      return ; // Return early if any of the state variables are empty
+    }
+    
     let preReq = [preReq1, preReq2]
     let coReq = [coReq1, coReq2]
 
@@ -28,12 +38,12 @@ const AddCourse = ({ courses, setCourses }) => {
     setCourseNumber("");
     setTitle("");
     setCreditsNbr("");
-    setPreReq1([""]);
-    setCoReq1([""]);
-
-    console.log(subject, courseNumber, title, creditsNbr, preReq1, coReq1)
-
+    setPreReq1("");
+    setCoReq1("");
+    setPreReq2("");
+    setCoReq2("");
   };
+
 
   return (
     <form onSubmit={handleSubmit}>
@@ -60,6 +70,7 @@ const AddCourse = ({ courses, setCourses }) => {
           //   border-color: red;
           // }
         />
+        <label> Format Example: 498 or 498A or 498AA</label>
       </div>
       <div>
         <label htmlFor="title">Title:</label>
