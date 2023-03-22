@@ -7,26 +7,31 @@ const AddCourse = ({ courses, setCourses }) => {
   const [courseNumber, setCourseNumber] = useState("");
   const [title, setTitle] = useState("");
   const [creditsNbr, setCreditsNbr] = useState("");
-  const [preReq, setPreReq] = useState([""]);
-  const [coReq, setCoReq] = useState([""]);
+
+  const [preReq1, setPreReq1] = useState("");
+  const [preReq2, setPreReq2] = useState("");
+
+  const [coReq1, setCoReq1] = useState("");
+  const [coReq2, setCoReq2] = useState("");
 
   const handleSubmit = (event) => {
-
+    let preReq = [preReq1, preReq2]
+    let coReq = [coReq1, coReq2]
 
     event.preventDefault();
 
     const newCourse = { subject, courseNumber, title, creditsNbr, 
-      preReq: preReq.filter((pr) => pr !== ""), // Remove any empty strings from the preReq array
+      preReq: preReq.filter((pr) => pr !== ""), // Remove any empty strings from the preReq1 array
       coReq: coReq.filter((cr) => cr !== "") };
     setCourses([...courses, newCourse]);
     setSubject("");
     setCourseNumber("");
     setTitle("");
     setCreditsNbr("");
-    setPreReq([""]);
-    setCoReq([""]);
+    setPreReq1([""]);
+    setCoReq1([""]);
 
-    console.log(subject, courseNumber, title, creditsNbr, preReq, coReq)
+    console.log(subject, courseNumber, title, creditsNbr, preReq1, coReq1)
 
   };
 
@@ -50,6 +55,10 @@ const AddCourse = ({ courses, setCourses }) => {
           id="course-number"
           value={courseNumber}
           onChange={(event) => setCourseNumber(event.target.value)}
+          // className={courseNumber === "" ? "red-border" : ""} for later
+          //.red-border {
+          //   border-color: red;
+          // }
         />
       </div>
       <div>
@@ -72,11 +81,14 @@ const AddCourse = ({ courses, setCourses }) => {
       </div>
       <div>
         <label htmlFor="pre-req">Pre requisites:</label>
-        <DropListCourses elementCourse={preReq} setElementCourse={setPreReq} courses={courses}/>    
+        <DropListCourses elementCourse={preReq1} setElementCourse={setPreReq1} courses={courses}/>    
+        <DropListCourses elementCourse={preReq2} setElementCourse={setPreReq2} courses={courses}/>    
+
       </div>
       <div>
         <label htmlFor="co-req">Co requisites:</label>
-        <DropListCourses elementCourse={coReq} setElementCourse={setCoReq} courses={courses}/>    
+        <DropListCourses elementCourse={coReq1} setElementCourse={setCoReq1} courses={courses}/>    
+        <DropListCourses elementCourse={coReq2} setElementCourse={setCoReq2} courses={courses}/>    
 
       </div>
 
