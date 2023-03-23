@@ -8,7 +8,6 @@ const AddUser = ({users, setUsers}) => {
   
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log(name, lastName, email, authorizationLevel);
         const newUser = {name, lastName, email, authorizationLevel}
         const allUsers=[ ...users, newUser]
         setUsers(allUsers)

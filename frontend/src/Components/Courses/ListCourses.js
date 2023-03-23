@@ -59,10 +59,11 @@ const ListCourses = ({courses, setCourses}) =>{
             <tr key={element}>{element}</tr>
           ))} */}
           <td>{course.coReq}</td>
-          {console.log(course.preReq)}
           </td>
-          <td><button onClick={() => handleDeleteCourse(course.courseNumber)}>Delete</button>
-          <button>Edit</button></td>
+          <td>
+          <button onClick={() => handleDeleteCourse(course.courseNumber)}>Delete</button>
+          <Link to={`/editcourse/${course.id}`}>  <button>edit</button> </Link>
+          </td>
         </tr>
         ))}
 

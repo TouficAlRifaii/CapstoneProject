@@ -1,6 +1,6 @@
 const Missing = () => {
     return(
-        <div>Missing</div>
+        <div>ERROR 404 PAGE NOT FOUND</div>
     )
 }
 

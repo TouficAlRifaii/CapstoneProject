@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import DropListCourses from "./DropListCourses";
 import { Link, Navigate, useNavigate} from 'react-router-dom';
+import DropListSubjects from "./DropListSubjects";
 
 const AddCourse = ({ courses, setCourses }) => {
   const [subject, setSubject] = useState("");
@@ -27,10 +28,11 @@ const AddCourse = ({ courses, setCourses }) => {
     
     let preReq = [preReq1, preReq2]
     let coReq = [coReq1, coReq2]
+    
 
     event.preventDefault();
 
-    const newCourse = { subject, courseNumber, title, creditsNbr, 
+    const newCourse = { id: courses.length+1 ,subject, courseNumber, title, creditsNbr, 
       preReq: preReq.filter((pr) => pr !== ""), // Remove any empty strings from the preReq1 array
       coReq: coReq.filter((cr) => cr !== "") };
     setCourses([...courses, newCourse]);
@@ -50,13 +52,7 @@ const AddCourse = ({ courses, setCourses }) => {
       <h1>Add Course</h1>
       <div>
         <label htmlFor="subject">Subject:</label>
-        <select id="subject" value={subject} onChange={(event) => setSubject(event.target.value)}>
-          <option value="">Select a subject</option>
-          <option value="CSC">CSC</option>
-          <option value="MTH">MTH</option>
-          <option value="BIF">BIF</option>
-          <option value="STA">STA</option>
-        </select>
+        <DropListSubjects subject={subject} setSubject={setSubject}/>
       </div>
       <div>
         <label htmlFor="course-number">Course Number:</label>
@@ -88,18 +84,18 @@ const AddCourse = ({ courses, setCourses }) => {
           id="credits-number"
           value={creditsNbr}
           onChange={(event) => setCreditsNbr(event.target.value)}
-        />
+     />
       </div>
       <div>
         <label htmlFor="pre-req">Pre requisites:</label>
-        <DropListCourses elementCourse={preReq1} setElementCourse={setPreReq1} courses={courses}/>    
-        <DropListCourses elementCourse={preReq2} setElementCourse={setPreReq2} courses={courses}/>    
+        <DropListCourses currentCourse={subject+courseNumber} elementCourse={preReq1} setElementCourse={setPreReq1} courses={courses}/>    
+        <DropListCourses currentCourse={subject+courseNumber} elementCourse={preReq2} setElementCourse={setPreReq2} courses={courses}/>    
 
       </div>
       <div>
         <label htmlFor="co-req">Co requisites:</label>
-        <DropListCourses elementCourse={coReq1} setElementCourse={setCoReq1} courses={courses}/>    
-        <DropListCourses elementCourse={coReq2} setElementCourse={setCoReq2} courses={courses}/>    
+        <DropListCourses currentCourse={subject+courseNumber} elementCourse={coReq1} setElementCourse={setCoReq1} courses={courses}/>    
+        <DropListCourses currentCourse={subject+courseNumber} elementCourse={coReq2} setElementCourse={setCoReq2} courses={courses}/>    
 
       </div>
 

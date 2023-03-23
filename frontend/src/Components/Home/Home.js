@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Papa from "papaparse";
 import { saveAs } from "file-saver";
+import UploadCSV from "./UploadCSV";
 
 function Home() {
   // State to store parsed data
@@ -133,7 +134,9 @@ function Home() {
           <button onClick={handleShareByEmail}>Share by Email</button>
           <button onClick={handleAddRow}>Add row</button>
           <button onClick={handleAddColumn}>Add Column</button>
-
+          <div> 
+            <UploadCSV/>
+          </div>
     </div>
   );
 }

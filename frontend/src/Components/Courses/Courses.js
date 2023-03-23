@@ -15,6 +15,7 @@ const Courses = ({ courses, setCourses }) => {
       <h1>Courses</h1>
       <ListCourses courses={courses} setCourses={setCourses}/>
       <Link to="/AddCourse"> <button>Add Course</button> </Link>
+      
     </div>
   );
 }

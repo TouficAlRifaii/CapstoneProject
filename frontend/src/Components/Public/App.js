@@ -7,6 +7,7 @@ import Header from './Header';
 import Footer from './Footer';
 import Missing from './Missing';
 import EditUser from '../Users/EditUser';
+import EditCourse from '../Courses/EditCourse';
 import {Route, Routes, useNavigate, BrowserRouter as Router } from 'react-router-dom';
 import { useState, useEffect} from 'react' ;
 import AddUser from '../Users/AddUser';
@@ -35,6 +36,7 @@ function App() {
   ]);
   const [courses, setCourses] = useState([
     {
+      id: 1,
       subject: "CSC",
       courseNumber: "101",
       section: "001",
@@ -44,6 +46,7 @@ function App() {
       coReq: ["MATH101"]
     },
     {
+      id: 2,
       subject: "ENG",
       courseNumber: "202",
       section: "002",
@@ -53,6 +56,7 @@ function App() {
       coReq: []
     },
     {
+      id: 3,
       subject: "MTH",
       courseNumber: "301",
       section: "003",
@@ -73,6 +77,7 @@ function App() {
 
           <Route exact path="courses" element={<Courses courses={courses} setCourses={setCourses}/>} />
           <Route exact path="addcourse" element={<AddCourse courses={courses} setCourses={setCourses}/>} />
+          <Route exact path="/editcourse/:id" element={<EditCourse courses={courses} setCourses={setCourses}/>} />
 
           <Route exact path="users" element={<Users users={users} setUsers={setUsers}/>} />
           <Route exact path="adduser" element={<AddUser users={users} setUsers={setUsers}/>} />
