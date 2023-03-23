@@ -12,6 +12,30 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 
+import ctypes
+import sys
+import os
+
+def elevate_privileges():
+    if ctypes.windll.shell32.IsUserAnAdmin():
+        return True  
+    hinstance = ctypes.windll.shell32.ShellExecuteW(
+        None,
+        "runas",
+        sys.executable,
+        __file__,
+        None,
+        1
+    )
+
+    if hinstance <= 32:
+        raise Exception("Error while elevating privileges")
+
+    return False  
+if not elevate_privileges():   
+    pass
+os.system("net start MYSQL80")
+# os.system("exit")
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
