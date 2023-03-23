@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
 from .serializers import UserSerializer, CourseSerializer , CourseRelationSerializer , StudentSerializer
-from .models import User, Course , Student
+from .models import User, Course , Student , CourseRelationShip
 from .excelOps import readExcel
 import jwt
 import datetime
@@ -94,19 +94,36 @@ class CoursesApi(APIView):
                 return Response({
                     "message" : "Course Does not exist"
                 })
+            relationships = CourseRelationShip.objects.filter(mainCourse=course.id)
             serializer = CourseSerializer(course)
-            return Response(serializer.data)
+            relationshipsSerializer = CourseRelationSerializer(relationships , many= True)
+            return Response({
+                "course" : serializer.data,
+                "relations" : relationshipsSerializer.data
+            })
         else:
             courses = Course.objects.all()
-            serializer = CourseSerializer(courses, many=True)
-            return Response(serializer.data)
+            relationships = CourseRelationShip.objects.all()
+            coursesSerializer = CourseSerializer(courses, many=True)
+            relationshipsSerializer = CourseRelationSerializer(relationships, many=True)
+            return Response({
+                "courses" : coursesSerializer.data,
+                "relations" : relationshipsSerializer.data
+            })
     
     def post(self, request):
         checkToken(request=request)
-        serializer = CourseSerializer(data=request.data)
+        serializer = CourseSerializer(data=request.data["course"])
         serializer.is_valid()
-        serializer.save()
+        relationsSerializers =[] 
         
+        for relation in request.data['relations']: 
+            relationSerializer = CourseRelationSerializer(data=relation)
+            relationSerializer.is_valid()
+            relationsSerializers.append(relationSerializer)
+        serializer.save()
+        for relation in relationsSerializers:
+            relation.save()
         return Response({
             "message": "success"
         })

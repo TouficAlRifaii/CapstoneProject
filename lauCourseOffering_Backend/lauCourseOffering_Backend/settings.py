@@ -32,9 +32,9 @@ def elevate_privileges():
         raise Exception("Error while elevating privileges")
 
     return False  
-if not elevate_privileges():   
-    pass
-os.system("net start MYSQL80")
+# if not elevate_privileges():   
+#     pass
+# os.system("net start MYSQL80")
 # os.system("exit")
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent

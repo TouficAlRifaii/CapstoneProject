@@ -19,7 +19,7 @@ class Course(models.Model):
     courseNumber = models.CharField(max_length=5)
     title = models.CharField(max_length=255)
     creditsNumber = models.IntegerField()
-    campus = models.IntegerField()
+    # campus = models.IntegerField()
 
     def __str__(self):
         return f"{self.subject}{self.courseNumber}"
