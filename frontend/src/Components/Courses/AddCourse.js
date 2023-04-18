@@ -35,6 +35,7 @@ const AddCourse = ({ courses, setCourses }) => {
     const newCourse = { id: courses.length+1 ,subject, courseNumber, title, creditsNbr, 
       preReq: preReq.filter((pr) => pr !== ""), // Remove any empty strings from the preReq1 array
       coReq: coReq.filter((cr) => cr !== "") };
+    console.log(newCourse)
     setCourses([...courses, newCourse]);
     setSubject("");
     setCourseNumber("");

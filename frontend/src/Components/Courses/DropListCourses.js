@@ -4,7 +4,7 @@ const DropListCourses = ({currentCourse, elementCourse, setElementCourse, course
             <option value="">Select a course</option>
             {courses.map((course) => (
               (currentCourse !== `${course.subject}${course.courseNumber}`) && 
-              <option key={course.id} value={`${course.subject}${course.courseNumber}`}>
+              <option key={course.id} value={course.id}>
                 {`${course.subject} ${course.courseNumber}`}
               </option>
             ))}
