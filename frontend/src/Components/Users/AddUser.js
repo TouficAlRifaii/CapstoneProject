@@ -1,21 +1,22 @@
 import React, { useState } from "react";
+import "../../CSS/forms.css"; // Import your CSS file for navbar styling
 
-const AddUser = ({users, setUsers}) => {
-    const [name, setName] = useState("");
-    const [lastName, setLastName] = useState("");
-    const [email, setEmail] = useState("");
-    const [authorizationLevel, setAuthorizationLevel] = useState("");
-  
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        const newUser = {name, lastName, email, authorizationLevel}
-        const allUsers=[ ...users, newUser]
-        setUsers(allUsers)
-        setName('');
-        setEmail('')
-        setLastName('');
-        setAuthorizationLevel('');
-      };
+const AddUser = ({ users, setUsers }) => {
+  const [name, setName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [authorizationLevel, setAuthorizationLevel] = useState("");
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const newUser = { name, lastName, email, authorizationLevel };
+    const allUsers = [...users, newUser];
+    setUsers(allUsers);
+    setName("");
+    setEmail("");
+    setLastName("");
+    setAuthorizationLevel("");
+  };
   return (
     <form onSubmit={handleSubmit}>
       <h1>Add User</h1>
@@ -56,7 +57,6 @@ const AddUser = ({users, setUsers}) => {
         />
       </div>
       <button type="submit">Add User</button>
-
     </form>
   );
 };
