@@ -180,17 +180,13 @@ class StudentsApi(APIView):
         existing_courses = Course.objects.filter(subject="CSC")
         serializedCourses = CourseSerializer(existing_courses, many=True)
         serializedCourses = serializedCourses.data
-        
         students = readExcel()
-        sections = {}
-        
-        
+
         for student in students:
             data = {} 
             data['takenCredits'] = student['Total Earned Credits']
             data['remainingCredits'] = student['Remaining Credits']
             courses = []
-
             for course in student['courses']:
                 courseNumber = course[3:]
                 existingCourse = [d for d in serializedCourses if d.get('courseNumber') == courseNumber]
@@ -201,26 +197,7 @@ class StudentsApi(APIView):
             serializedStudent = StudentSerializer(data=data)
             serializedStudent.is_valid()
             serializedStudent.save()
-        #     for course in courses:
-        #         key = course
-        #         if key in sections.keys():
-        #             sections[key]['numOfStudents'] = sections[key]['numOfStudents'] + 1
-        #             sections[key]['numOfSections'] = sections[key]['numOfSections'] + ((sections[key]['numOfStudents']//40 - sections[key]['numOfSections']) if (sections[key]['numOfStudents']//40 - sections[key]['numOfSections'] > 0) else 0 ) 
-                    
-        #         else : 
-        #             value = {}
-        #             value['numOfStudents'] = 1
-        #             value['numOfSections'] = 1
-        #             value['campus'] = "Byblos"
-        #             value['course'] = course
-                    
-        #             sections[key] = value
-
-            
-        # for section in sections:
-        #     sectionSerializer = SectionSerializer(data=sections[section])
-        #     sectionSerializer.is_valid()
-        #     sectionSerializer.save()
+        
         return Response({
             "message" : "success"
         })
@@ -230,22 +207,14 @@ class SectionsApi(APIView):
         Section.objects.all().delete()
     # Loop through all courses
         for course in Course.objects.all():
-            # Get the prerequisite and co-requisite courses
-            prerequisites = CourseRelationShip.objects.filter(mainCourse=course, isPrerequisite=True)
-            corequisites = CourseRelationShip.objects.filter(mainCourse=course, isPrerequisite=False)
-            
-            # Loop through all students
             for student in Student.objects.all():
                 # Get the courses the student has already taken
                 taken_courses = student.courses.all()
-                
                 # Check if the student is eligible to take the course
                 if course not in taken_courses:
                     if isEligible(course, taken_courses):
-                            
                             # Get or create the section for the course
                             section , created= Section.objects.get_or_create(course=course, defaults={'numOfSections': 1, 'numOfStudents': 0, 'campus': 'Byblos'})
-                            
                             # Increment the number of students in the section
                             section.numOfStudents = F('numOfStudents') + 1
                             section.save(update_fields=['numOfStudents'])
