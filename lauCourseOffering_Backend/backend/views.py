@@ -1,9 +1,10 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.db.models import Q , F
 from rest_framework.exceptions import AuthenticationFailed
-from .serializers import UserSerializer, CourseSerializer , CourseRelationSerializer , StudentSerializer
-from .models import User, Course , Student , CourseRelationShip
+from .serializers import UserSerializer, CourseSerializer , CourseRelationSerializer , StudentSerializer , SectionSerializer
+from .models import User, Course , Student , CourseRelationShip , Section
 from .excelOps import readExcel
 import jwt
 import datetime
@@ -181,6 +182,8 @@ class StudentsApi(APIView):
         serializedCourses = serializedCourses.data
         
         students = readExcel()
+        sections = {}
+        
         
         for student in students:
             data = {} 
@@ -198,11 +201,88 @@ class StudentsApi(APIView):
             serializedStudent = StudentSerializer(data=data)
             serializedStudent.is_valid()
             serializedStudent.save()
+        #     for course in courses:
+        #         key = course
+        #         if key in sections.keys():
+        #             sections[key]['numOfStudents'] = sections[key]['numOfStudents'] + 1
+        #             sections[key]['numOfSections'] = sections[key]['numOfSections'] + ((sections[key]['numOfStudents']//40 - sections[key]['numOfSections']) if (sections[key]['numOfStudents']//40 - sections[key]['numOfSections'] > 0) else 0 ) 
+                    
+        #         else : 
+        #             value = {}
+        #             value['numOfStudents'] = 1
+        #             value['numOfSections'] = 1
+        #             value['campus'] = "Byblos"
+        #             value['course'] = course
+                    
+        #             sections[key] = value
 
+            
+        # for section in sections:
+        #     sectionSerializer = SectionSerializer(data=sections[section])
+        #     sectionSerializer.is_valid()
+        #     sectionSerializer.save()
         return Response({
             "message" : "success"
         })
-
+    
+class SectionsApi(APIView):
+    def post(self, request):
+        Section.objects.all().delete()
+    # Loop through all courses
+        for course in Course.objects.all():
+            # Get the prerequisite and co-requisite courses
+            prerequisites = CourseRelationShip.objects.filter(mainCourse=course, isPrerequisite=True)
+            corequisites = CourseRelationShip.objects.filter(mainCourse=course, isPrerequisite=False)
+            
+            # Loop through all students
+            for student in Student.objects.all():
+                # Get the courses the student has already taken
+                taken_courses = student.courses.all()
                 
+                # Check if the student is eligible to take the course
+                if course not in taken_courses:
+                    if isEligible(course, taken_courses):
+                            
+                            # Get or create the section for the course
+                            section , created= Section.objects.get_or_create(course=course, defaults={'numOfSections': 1, 'numOfStudents': 0, 'campus': 'Byblos'})
+                            
+                            # Increment the number of students in the section
+                            section.numOfStudents = F('numOfStudents') + 1
+                            section.save(update_fields=['numOfStudents'])
+                        
+                            
+                    
+        sections = Section.objects.all()
+        for section in sections: 
+            students = section.numOfStudents
+            numOfSections = section.numOfSections
+            flag = (students//40 - numOfSections) >0
+            if flag: 
+                numOfSections += students//40 - numOfSections
+            section.numOfSections = numOfSections
+            section.save(update_fields=["numOfSections"])
+        return Response({
+
+            "message" : "success"
+        })
+              
 
 
+def isEligible(course, takenCourses):
+    if course in takenCourses:
+        return False
+    else: 
+        prerequisites = CourseRelationShip.objects.filter(mainCourse=course , isPrerequisite = True)
+        corequisites = CourseRelationShip.objects.filter(mainCourse=course , isPrerequisite = False)
+        if  prerequisites.filter(~Q(secondCourse__in=takenCourses)).count() == 0:
+            if corequisites.filter(~Q(secondCourse__in=takenCourses)).count() == 0:
+                return True
+            else:
+                for coreq in corequisites:
+                    coCourse = coreq.secondCourse
+                    if coCourse not in takenCourses:
+                        if not isEligible(course=coCourse, takenCourses=takenCourses):
+                            return False
+                return True        
+        else:
+            return False

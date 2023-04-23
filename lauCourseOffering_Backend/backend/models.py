@@ -38,3 +38,10 @@ class Student(models.Model):
     takenCredits = models.IntegerField()
     remainingCredits = models.IntegerField()
     courses = models.ManyToManyField("backend.Course" ,blank=True)
+
+
+class Section(models.Model):
+    campus = models.CharField(max_length=7)
+    numOfStudents = models.IntegerField()
+    numOfSections = models.IntegerField()
+    course =  models.ForeignKey(to=Course , on_delete=models.CASCADE)
