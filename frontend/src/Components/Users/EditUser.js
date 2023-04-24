@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import "../../CSS/forms.css"; // Import your CSS file for navbar styling
 
 const EditUser = ({ users, setUsers }) => {
   const navigate = useNavigate();
@@ -21,7 +20,7 @@ const EditUser = ({ users, setUsers }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="add-form">
       <h1>Edit User</h1>
       <div>
         <label htmlFor="name">Name:</label>

@@ -2,6 +2,9 @@
 * {
   margin: 0;
 }
+footer {
+  background-color: red;
+}
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -19,7 +22,7 @@
 .nav-links {
   display: flex;
   justify-content: space-between;
-  width: 40rem;
+  align-items: flex-end;
   list-style: none;
 }
 
@@ -31,7 +34,7 @@
 }
 
 .nav-links li a:hover {
-  background-color: #555;
+  color: #555;
 }
 
 @media screen and (max-width: 768px) {

@@ -1,7 +1,5 @@
 const Footer = () => {
-    return(
-        <div>Frontend by the one and only Amine Jamal</div>
-    )
-}
+  return <footer>Frontend by the one and only Amine Jamal</footer>;
+};
 
 export default Footer;

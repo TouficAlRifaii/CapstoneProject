@@ -1,0 +1,14 @@
+select {
+  padding: 0.3rem;
+  font-size: 1rem;
+  border: 0.17rem solid #ccc;
+  border-radius: 0.5rem;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 0.6rem;
+}
+
+select option {
+  padding: 0.5rem;
+  font-size: 1rem;
+}
