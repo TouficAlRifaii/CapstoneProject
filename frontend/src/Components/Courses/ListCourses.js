@@ -5,7 +5,7 @@ const ListCourses = ({ courses, setCourses }) => {
   const [searchResults, setSearchResults] = useState([]);
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   useEffect(() => {
     const filteredResults = courses.filter(
@@ -19,10 +19,8 @@ const ListCourses = ({ courses, setCourses }) => {
     setCurrentPage(1);
   }, [courses, search]);
 
-  const handleDeleteCourse = (courseNumber) => {
-    const coursesList = courses.filter(
-      (course) => course.courseNumber !== courseNumber
-    );
+  const handleDeleteCourse = (courseId) => {
+    const coursesList = courses.filter((course) => course.id !== courseId);
     setCourses(coursesList);
   };
 
@@ -49,7 +47,7 @@ const ListCourses = ({ courses, setCourses }) => {
         />
       </div>
 
-      <table className="list-table">
+      <table className="list-table courses">
         <thead>
           <tr>
             <th>Subject</th>
@@ -66,13 +64,13 @@ const ListCourses = ({ courses, setCourses }) => {
             <tr key={course} className="list-row">
               <td>{course.subject}</td>
               <td>{course.courseNumber}</td>
-              <td>{course.title}</td> display40 character perline
+              <td>{course.title}</td>
               <td>{course.creditsNbr}</td>
               <td>{course.preReq.join(" - ")}</td>
-              <td>{course.coReq}</td>
+              <td>{course.coReq.join(" - ")}</td>
               <td>
                 <button
-                  onClick={() => handleDeleteCourse(course.courseNumber)}
+                  onClick={() => handleDeleteCourse(course.id)}
                   className="delete-btn"
                 >
                   Delete

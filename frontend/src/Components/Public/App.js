@@ -8,6 +8,8 @@ import Footer from "./Footer";
 import Missing from "./Missing";
 import EditUser from "../Users/EditUser";
 import EditCourse from "../Courses/EditCourse";
+import RandomDropdownList from "../Courses/DropListCourses";
+
 import {
   Route,
   Routes,
@@ -17,7 +19,7 @@ import {
 import { useState, useEffect } from "react";
 import AddUser from "../Users/AddUser";
 import AddCourse from "../Courses/AddCourse";
-
+import Login from "./Login";
 function App() {
   const [users, setUsers] = useState([
     {
@@ -233,12 +235,48 @@ function App() {
       coReq: [],
     },
   ]);
+  const [doctors, setDoctors] = useState([
+    {
+      id: 1,
+      drName: "Sara",
+      courses: ["ENG 101", "ENG 205"],
+      title: "English Professor",
+      sessions: [
+        { days: "MWF", start: "10:00", end: "10:50" },
+        { days: "TR", start: "13:00", end: "13:50" },
+      ],
+    },
+    {
+      id: 2,
+      drName: "Ahmed",
+      courses: ["BIO 101", "BIO 245"],
+      title: "Biology Professor",
+      sessions: [
+        { days: "MWF", start: "11:00", end: "11:50" },
+        { days: "TR", start: "14:00", end: "14:50" },
+      ],
+    },
+    {
+      id: 3,
+      drName: "Fatima",
+      courses: ["PHI 101", "PHI 205"],
+      title: "Philosophy Professor",
+      sessions: [
+        { days: "MWF", start: "13:00", end: "13:50" },
+        { days: "TR", start: "09:00", end: "09:50" },
+      ],
+    },
+  ]);
 
   return (
     <div className="App">
       <Nav />
       <Routes>
         <Route exact path="/" element={<Home />} />
+        <Route exact path="login" element={<Login />} />
+
+        <Route exact path="testing" element={<RandomDropdownList />} />
+
         <Route
           exact
           path="adduser"
@@ -273,7 +311,6 @@ function App() {
         <Route path="about" element={<About />} />
         <Route path="*" element={<Missing />} />
       </Routes>
-      <Footer />
     </div>
   );
 }

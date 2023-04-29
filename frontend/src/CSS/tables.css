@@ -8,36 +8,59 @@
   align-content: center;
   justify-content: center;
   flex-direction: column;
-  flex-wrap: wrap-reverse;
+  flex-wrap: wrap;
 }
 
 .list-table {
-  border-collapse: separate;
+  width: 700px;
+  table-layout: fixed;
   border-spacing: 0;
   border: 2px solid black;
   border-radius: 1rem;
-  width: 100%;
-  max-width: 70%;
 }
 
 .list-table th,
 .list-table td {
-  padding: 0.2rem;
+  padding-top: 0.3rem;
+  padding-bottom: 0.2rem;
+  padding-left: 0.2rem;
+  padding-right: 0.3rem;
+
   text-align: left;
   border: 0.1rem solid lightgray;
+  width: 100px;
+}
+.list-table th:nth-child(3) {
+  width: 15rem; /* set desired width here */
+}
+.list-table th:nth-child(5) {
+  width: 8.5rem; /* set desired width here */
 }
 
+.list-table.courses th:nth-child(3) {
+  width: 10rem; /* set desired width here */
+}
+.list-table.courses th:nth-child(1) {
+  width: 4rem; /* set desired width here */
+}
+.list-table.courses th:nth-child(2) {
+  width: 4rem; /* set desired width here */
+}
+.list-table.courses th:nth-child(4) {
+  width: 3.2rem; /* set desired width here */
+}
+.list-table.courses th:nth-child(7) {
+  width: 8.5rem; /* set desired width here */
+}
 .list-table th {
   font-weight: bold;
 }
 
-/* Other styles */
 .list-section {
   margin: 2rem;
 }
 
 .nav-search {
-  display: flex;
   align-items: center;
   justify-content: flex-start;
   margin-bottom: 1rem;
@@ -97,7 +120,6 @@
   background-color: #111;
 }
 
-/* Optional styles */
 .delete-btn,
 .edit-btn,
 .add-link-icon {
@@ -129,7 +151,6 @@
   height: 2.5rem;
 }
 
-/* Positioning for icons */
 .actions {
   display: flex;
   justify-content: space-between;
@@ -156,7 +177,7 @@
   }
 
   .search-input {
-    width: 100%;
+    width: 60%;
   }
 
   .add-link-btn {
@@ -176,14 +197,13 @@
   }
 }
 
-/* Tablet styles */
 @media only screen and (min-width: 768px) and (max-width: 1024px) {
   .list-table {
     border-collapse: separate;
     border-spacing: 0;
     border: 2px solid black;
     border-radius: 1rem;
-    width: 100%;
+    width: 10%;
   }
   .list-table th,
   .list-table td {
@@ -191,7 +211,7 @@
   }
 
   .search-input {
-    width: 50%;
+    width: 20%;
   }
 
   .add-link-btn {

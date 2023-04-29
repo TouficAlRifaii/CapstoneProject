@@ -1,27 +1,38 @@
+import { useState } from "react";
 import "../../CSS/DropList.css";
 
-const DropListCourses = ({
-  currentCourse,
-  elementCourse,
-  setElementCourse,
-  courses,
-}) => {
+const DropListCourses = ({ elementCourses, setElementCourses, courses }) => {
+  const addCoursesList = () => {
+    setElementCourses([...elementCourses, ""]);
+  };
+
+  const handleChangeCourses = (indexCourses, newCourse) => {
+    const newCourses = [...elementCourses];
+    newCourses[indexCourses] = newCourse;
+    setElementCourses(newCourses);
+  };
+
   return (
-    <select
-      id="pre-req"
-      value={elementCourse}
-      onChange={(event) => setElementCourse(event.target.value)}
-    >
-      <option value="">Select a course</option>
-      {courses.map(
-        (course) =>
-          currentCourse !== `${course.subject}${course.courseNumber}` && (
-            <option key={course.id} value={course.id}>
-              {`${course.subject} ${course.courseNumber}`}
-            </option>
-          )
-      )}
-    </select>
+    <div>
+      <div>
+        {elementCourses.map((selectedCourse, index) => (
+          <select
+            key={index}
+            value={selectedCourse}
+            onChange={(event) => handleChangeCourses(index, event.target.value)}
+          >
+            <option value="">None</option>
+
+            {courses.map((course) => (
+              <option key={course.id} value={course.id}>
+                {`${course.subject} ${course.courseNumber}`}
+              </option>
+            ))}
+          </select>
+        ))}
+        <button onClick={addCoursesList}>+</button>
+      </div>
+    </div>
   );
 };
 

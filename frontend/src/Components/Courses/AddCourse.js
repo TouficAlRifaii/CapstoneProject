@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import DropListCourses from "./DropListCourses";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import DropListSubjects from "./DropListSubjects";
+import DropListCourses from "./DropListCourses";
 
 const AddCourse = ({ courses, setCourses }) => {
   const [subject, setSubject] = useState("");
@@ -11,6 +11,9 @@ const AddCourse = ({ courses, setCourses }) => {
 
   const [preReq1, setPreReq1] = useState("");
   const [preReq2, setPreReq2] = useState("");
+
+  const [preReqs, setPreReqs] = useState([""]);
+  const [coReqs, setCoReqs] = useState([""]);
 
   const [coReq1, setCoReq1] = useState("");
   const [coReq2, setCoReq2] = useState("");
@@ -33,9 +36,6 @@ const AddCourse = ({ courses, setCourses }) => {
       return; // Return early if any of the state variables are empty
     }
 
-    let preReq = [preReq1, preReq2];
-    let coReq = [coReq1, coReq2];
-
     event.preventDefault();
 
     const newCourse = {
@@ -44,8 +44,8 @@ const AddCourse = ({ courses, setCourses }) => {
       courseNumber,
       title,
       creditsNbr,
-      preReq: preReq.filter((pr) => pr !== ""), // Remove any empty strings from the preReq1 array
-      coReq: coReq.filter((cr) => cr !== ""),
+      preReq: preReqs.filter((pr) => pr !== ""), // Remove any empty strings from the preReq1 array
+      coReq: coReqs.filter((cr) => cr !== ""),
     };
     console.log(newCourse);
     setCourses([...courses, newCourse]);
@@ -100,30 +100,16 @@ const AddCourse = ({ courses, setCourses }) => {
       <div className="add-form-input">
         <label htmlFor="pre-req">Pre requisites:</label>
         <DropListCourses
-          currentCourse={subject + courseNumber}
-          elementCourse={preReq1}
-          setElementCourse={setPreReq1}
-          courses={courses}
-        />
-        <DropListCourses
-          currentCourse={subject + courseNumber}
-          elementCourse={preReq2}
-          setElementCourse={setPreReq2}
+          elementCourses={preReqs}
+          setElementCourses={setPreReqs}
           courses={courses}
         />
       </div>
       <div className="add-form-input">
         <label htmlFor="co-req">Co requisites:</label>
         <DropListCourses
-          currentCourse={subject + courseNumber}
-          elementCourse={coReq1}
-          setElementCourse={setCoReq1}
-          courses={courses}
-        />
-        <DropListCourses
-          currentCourse={subject + courseNumber}
-          elementCourse={coReq2}
-          setElementCourse={setCoReq2}
+          elementCourses={coReqs}
+          setElementCourses={setCoReqs}
           courses={courses}
         />
       </div>

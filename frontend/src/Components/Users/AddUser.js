@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "../../CSS/AddForms.css"; // Import your CSS file for navbar styling
+import "../../CSS/Forms.css"; // Import your CSS file for navbar styling
 import {
   faCheck,
   faTimes,
