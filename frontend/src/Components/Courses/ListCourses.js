@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import ListCourseId from "./ListCourseId";
 import { Link } from "react-router-dom";
 
 const ListCourses = ({ courses, setCourses }) => {
@@ -66,8 +67,8 @@ const ListCourses = ({ courses, setCourses }) => {
               <td>{course.courseNumber}</td>
               <td>{course.title}</td>
               <td>{course.creditsNbr}</td>
-              <td>{course.preReq.join(" - ")}</td>
-              <td>{course.coReq.join(" - ")}</td>
+              <ListCourseId course={course.preReq} courses={courses} />{" "}
+              <ListCourseId course={course.coReq} courses={courses} />{" "}
               <td>
                 <button
                   onClick={() => handleDeleteCourse(course.id)}

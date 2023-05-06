@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-
+import ListCourseId from "../Courses/ListCourseId";
+import ListDoctorSession from "./ListDoctorSession";
 const Doctors = ({ doctors, setDoctors, courses }) => {
   const [searchResults, setSearchResults] = useState([]);
   const [search, setSearch] = useState("");
@@ -67,43 +68,8 @@ const Doctors = ({ doctors, setDoctors, courses }) => {
               <td>{doctor.name}</td>
               <td>{doctor.lastName}</td>
               <td>{doctor.title}</td>
-              {doctor.tCourses
-                .map((courseId) => {
-                  const cId = courseId;
-                  const course = courses.find(
-                    (c) => c.id === parseInt(courseId)
-                  );
-                  console.log("Course ID:", courseId);
-                  console.log("Course Object:", course);
-                  return course
-                    ? `${course.subject}${course.courseNumber}`
-                    : "";
-                })
-                .join(" - ")}
-              <td>
-                <div>
-                  <h4>MWF</h4>
-                  {doctor.sessions
-                    .filter((session) => session.days === "MWF")
-                    .sort((a, b) => (a.start > b.start ? 1 : -1))
-                    .map((session, index) => (
-                      <div key={index}>
-                        {session.start} - {session.end}
-                      </div>
-                    ))}
-                </div>
-                <div>
-                  <h4>TR</h4>
-                  {doctor.sessions
-                    .filter((session) => session.days === "TR")
-                    .sort((a, b) => (a.start > b.start ? 1 : -1))
-                    .map((session, index) => (
-                      <div key={index}>
-                        {session.start} - {session.end}
-                      </div>
-                    ))}
-                </div>
-              </td>
+              <ListCourseId course={doctor.tCourses} courses={courses} />
+              <ListDoctorSession doctor={doctor} />
               <td>
                 <button
                   onClick={() => handleDelete(doctor.id)}
