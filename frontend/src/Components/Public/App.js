@@ -27,6 +27,7 @@ import "../../CSS/Nav.css";
 import "../../CSS/DropList.css";
 
 function App() {
+  //coreq - preReq ids
   const [users, setUsers] = useState([
     {
       name: "John",
