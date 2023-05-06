@@ -9,14 +9,8 @@ const AddCourse = ({ courses, setCourses }) => {
   const [title, setTitle] = useState("");
   const [creditsNbr, setCreditsNbr] = useState("");
 
-  const [preReq1, setPreReq1] = useState("");
-  const [preReq2, setPreReq2] = useState("");
-
   const [preReqs, setPreReqs] = useState([""]);
   const [coReqs, setCoReqs] = useState([""]);
-
-  const [coReq1, setCoReq1] = useState("");
-  const [coReq2, setCoReq2] = useState("");
 
   function isValidCourseNumber(courseNumber) {
     const regex = /^[0-9]{3}[A-Z]?[A-Z]?$/;
@@ -53,10 +47,8 @@ const AddCourse = ({ courses, setCourses }) => {
     setCourseNumber("");
     setTitle("");
     setCreditsNbr("");
-    setPreReq1("");
-    setCoReq1("");
-    setPreReq2("");
-    setCoReq2("");
+    setCoReqs([""]);
+    setPreReqs([""]);
   };
 
   return (

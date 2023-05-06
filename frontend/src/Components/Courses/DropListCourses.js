@@ -2,7 +2,8 @@ import { useState } from "react";
 import "../../CSS/DropList.css";
 
 const DropListCourses = ({ elementCourses, setElementCourses, courses }) => {
-  const addCoursesList = () => {
+  const addCoursesList = (event) => {
+    event.preventDefault();
     setElementCourses([...elementCourses, ""]);
   };
 

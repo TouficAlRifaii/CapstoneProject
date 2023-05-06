@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import ListCourses from "./ListCourses";
-import "../../CSS/tables.css";
 // semester: "Fall 2022",
 // subject: "Computer Science",
 // courseNumber: "CS101",

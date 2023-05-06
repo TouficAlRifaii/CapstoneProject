@@ -17,6 +17,9 @@ function Nav() {
             <Link to="/courses">Courses</Link>
           </li>
           <li>
+            <Link to="/doctors">Doctors</Link>
+          </li>
+          <li>
             <Link to="/users">Users</Link>
           </li>
           <li>
