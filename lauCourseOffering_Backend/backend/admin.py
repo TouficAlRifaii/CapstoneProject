@@ -1,5 +1,5 @@
 from django.contrib import admin
-from backend.models import User, Course, CourseRelationShip , Student
+from backend.models import User, Course, CourseRelationShip, Student
 # Register your models here.
 from django.contrib import admin
 from .models import CourseRelationShip

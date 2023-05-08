@@ -3,8 +3,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.db.models import Q , F
 from rest_framework.exceptions import AuthenticationFailed
-from .serializers import UserSerializer, CourseSerializer , CourseRelationSerializer , StudentSerializer , SectionSerializer
-from .models import User, Course , Student , CourseRelationShip , Section
+from .serializers import UserSerializer, CourseSerializer , CourseRelationSerializer, StudentSerializer , SectionSerializer
+from .models import User, Course , CourseRelationShip , Section , Student
 from .excelOps import readExcel
 import jwt
 import datetime
@@ -67,7 +67,6 @@ class LoginApi(APIView):
 
 class UsersListApi(APIView):
     def get(self, request):
-        checkToken(request)
 
         users = User.objects.all()
         serializer = UserSerializer(users, many=True)
@@ -87,7 +86,6 @@ class LogoutView(APIView):
 
 class CoursesApi(APIView):
     def get(self, request):
-        checkToken(request=request)
         if 'course_id' in request.data:
             course = Course.objects.get(
                 id=request.data['course_id'])
@@ -113,7 +111,6 @@ class CoursesApi(APIView):
             })
     
     def post(self, request):
-        checkToken(request=request)
         serializer = CourseSerializer(data=request.data["course"])
         serializer.is_valid()
         relationsSerializers =[] 

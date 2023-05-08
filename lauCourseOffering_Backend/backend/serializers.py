@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User , Course , CourseRelationShip , Student , Section
+from .models import User , Course , CourseRelationShip, Student , Section, Major
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -35,9 +35,14 @@ class CourseRelationSerializer(serializers.ModelSerializer):
 class StudentSerializer(serializers.ModelSerializer):
     class Meta: 
         model = Student
-        fields = ['id' , 'takenCredits' , 'remainingCredits' , 'courses' ]
+        fields = ['id' , 'takenCredits' , 'remainingCredits' , 'courses', 'campus' , 'major']
 
 class SectionSerializer(serializers.ModelSerializer):
     class Meta: 
         model = Section
         fields = ['id' , 'campus' , 'numOfStudents' , 'numOfSections' , 'course']
+
+class MajorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Major
+        fields = ['id' , 'title' , 'credits' , 'courses']

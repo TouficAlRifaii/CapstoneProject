@@ -37,9 +37,16 @@ class CourseRelationShip(models.Model):
 class Student(models.Model):
     takenCredits = models.IntegerField()
     remainingCredits = models.IntegerField()
+    major = models.ForeignKey("backend.Major", on_delete=models.CASCADE)
+    campus = models.CharField(max_length=6)
     courses = models.ManyToManyField("backend.Course" ,blank=True)
 
 
+class Major(models.Model):
+    title = models.CharField(max_length=255 , unique=True)
+    credits = models.IntegerField()
+    courses = models.ManyToManyField(Course, related_name="majors" , blank=True)
+    
 class Section(models.Model):
     campus = models.CharField(max_length=7)
     numOfStudents = models.IntegerField()

@@ -1,6 +1,6 @@
 from django.urls import path
-from .views import CreateUserApi , LoginApi, UsersListApi, LogoutView , CoursesApi , BulkCourse , StudentsApi, SectionsApi
-
+from .views import CreateUserApi , LoginApi, UsersListApi, LogoutView , CoursesApi , BulkCourse, StudentsApi, SectionsApi
+from .Views.Major_Views import MajorApi
 urlpatterns = [
     path("createUser", CreateUserApi.as_view()),
     path("login", LoginApi.as_view()),
@@ -10,4 +10,5 @@ urlpatterns = [
     path("multicourses", BulkCourse.as_view()),
     path("excel" , StudentsApi.as_view() ),
     path("sections" , SectionsApi.as_view()),
+    path("major" , MajorApi.as_view()),
 ]
