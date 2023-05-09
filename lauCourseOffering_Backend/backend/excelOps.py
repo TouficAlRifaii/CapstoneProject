@@ -1,9 +1,9 @@
 from openpyxl import load_workbook
 
 
-def readExcel():
+def readExcel(path):
 
-    book = load_workbook("C:/Users/altou/OneDrive/Desktop/Capstone/lauCourseOffering_Backend/backend/sample.xlsx")
+    book = load_workbook("C:/Users/altou/OneDrive/Desktop/Capstone/lauCourseOffering_Backend/backend/Students _Courses.xlsx")
     sheet = book.active
 
 
@@ -17,11 +17,11 @@ def readExcel():
 
         for title, cell in zip(headers, row): 
             index = row.index(cell)
-            if index>0 and index < 3: 
+            if index>0 and index <= 3: 
                 data[title] = cell.value    
                 
-            elif index >= 3: 
-                if cell.value == "Y":
+            elif index > 3: 
+                if cell.value == 1 or cell.value == 0:
                     courses.append(title)
         
         data['courses'] = courses

@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from django.db.models import Q , F
 from rest_framework.exceptions import AuthenticationFailed
 from .serializers import UserSerializer, CourseSerializer , CourseRelationSerializer, StudentSerializer , SectionSerializer
-from .models import User, Course , CourseRelationShip , Section , Student
+from .models import User, Course , CourseRelationShip , Section , Student, Major
 from .excelOps import readExcel
 import jwt
 import datetime
@@ -174,27 +174,43 @@ class RequisitesApi(APIView):
 class StudentsApi(APIView):
     def post(self, request):
         Student.objects.all().delete()
-        existing_courses = Course.objects.filter(subject="CSC")
+        existing_courses = Course.objects.all()
         serializedCourses = CourseSerializer(existing_courses, many=True)
         serializedCourses = serializedCourses.data
-        students = readExcel()
+        students = readExcel(request.path)
 
         for student in students:
             data = {} 
-            data['takenCredits'] = student['Total Earned Credits']
-            data['remainingCredits'] = student['Remaining Credits']
+            major = Major.objects.filter(title=student['Program']).first()
+            data['major'] = major.id
+            data['takenCredits'] = eval(student['Earned Credits'])
+            data['remainingCredits'] = major.credits - data['takenCredits']
+            data['campus'] = student['Campus']
             courses = []
             for course in student['courses']:
-                courseNumber = course[3:]
-                existingCourse = [d for d in serializedCourses if d.get('courseNumber') == courseNumber]
-                course_id = existingCourse[0]["id"]
-                courses.append(course_id)
+                courseSubject = course[0:3]
+                number = course[3:]
+                print(courseSubject + "  " + number)
+                existingCourse = [d for d in serializedCourses if d.get('courseNumber') == number and d.get("subject") == courseSubject] 
+                if existingCourse:
+                    course_id = existingCourse[0]["id"]
+                    courses.append(course_id)
+                else:
+                    courseInfo = {
+                        "subject" : courseSubject,
+                        "courseNumber" : number,
+                        "title" : "TBA",
+                        "creditsNumber" : 3
+                    }
+                    serializer = CourseSerializer(data=courseInfo)
+                    serializer.is_valid(raise_exception=True)
+                    serializer.save()
+                    course = Course.objects.filter(subject=courseSubject,courseNumber=number).first()
+                    courses.append(course.id)
             data["courses"] = courses
-
             serializedStudent = StudentSerializer(data=data)
-            serializedStudent.is_valid()
+            serializedStudent.is_valid(raise_exception=True)
             serializedStudent.save()
-        
         return Response({
             "message" : "success"
         })
