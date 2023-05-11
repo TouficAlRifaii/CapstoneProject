@@ -33,14 +33,44 @@ const AddSession = ({ sessions, setSessions }) => {
         <div key={index}>
           <h3>Session {index + 1}:</h3>
           <label htmlFor="days">
-            Pick days{" "}
-            <CheckboxDay
-              day="M"
-              isChecked={session.days.includes("M")}
-              onChange={(event) =>
-                updateSession(index, "days", event.target.value)
-              }
-            />
+            Pick days:
+            <div>
+              <CheckboxDay
+                day="M"
+                isChecked={session.days.includes("M")}
+                onChange={(event) =>
+                  updateSession(index, "days", event.target.value)
+                }
+              />
+              <CheckboxDay
+                day="T"
+                isChecked={session.days.includes("T")}
+                onChange={(event) =>
+                  updateSession(index, "days", event.target.value)
+                }
+              />
+              <CheckboxDay
+                day="W"
+                isChecked={session.days.includes("W")}
+                onChange={(event) =>
+                  updateSession(index, "days", event.target.value)
+                }
+              />
+              <CheckboxDay
+                day="R"
+                isChecked={session.days.includes("R")}
+                onChange={(event) =>
+                  updateSession(index, "days", event.target.value)
+                }
+              />
+              <CheckboxDay
+                day="F"
+                isChecked={session.days.includes("F")}
+                onChange={(event) =>
+                  updateSession(index, "days", event.target.value)
+                }
+              />
+            </div>
           </label>
           <label htmlFor="appt">
             Choose start time:{" "}
