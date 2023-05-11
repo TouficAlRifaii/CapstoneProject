@@ -1,6 +1,7 @@
 import "../../CSS/DropList.css";
 
 const DropListSubjects = ({ disabled, subject, setSubject }) => {
+  console.log(subject);
   return (
     <select
       disabled={disabled}
