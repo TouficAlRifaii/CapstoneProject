@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-# Create your models here.
 
 
 class User(AbstractUser):
@@ -19,6 +18,7 @@ class Course(models.Model):
     courseNumber = models.CharField(max_length=5)
     title = models.CharField(max_length=255)
     creditsNumber = models.IntegerField()
+
     # campus = models.IntegerField()
 
     def __str__(self):
@@ -39,16 +39,17 @@ class Student(models.Model):
     remainingCredits = models.IntegerField()
     major = models.ForeignKey("backend.Major", on_delete=models.CASCADE)
     campus = models.CharField(max_length=6)
-    courses = models.ManyToManyField("backend.Course" ,blank=True)
+    courses = models.ManyToManyField("backend.Course", blank=True)
 
 
 class Major(models.Model):
-    title = models.CharField(max_length=255 , unique=True)
+    title = models.CharField(max_length=255, unique=True)
     credits = models.IntegerField()
-    courses = models.ManyToManyField(Course, related_name="majors" , blank=True)
-    
+    courses = models.ManyToManyField(Course, related_name="majors", blank=True)
+
+
 class Section(models.Model):
     campus = models.CharField(max_length=7)
     numOfStudents = models.IntegerField()
     numOfSections = models.IntegerField()
-    course =  models.ForeignKey(to=Course , on_delete=models.CASCADE)
+    course = models.ForeignKey(to=Course, on_delete=models.CASCADE)
