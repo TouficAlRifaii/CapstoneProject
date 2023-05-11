@@ -9,16 +9,14 @@ const AddSession = ({ sessions, setSessions }) => {
     const updatedSessions = [...sessions];
     const session = updatedSessions[index];
     if (field === "days") {
-      console.log("DAYS " + value);
       const selectedDays = [...session.days];
-      console.log("Selected DAys " + selectedDays);
       const dayIndex = selectedDays.includes(value);
-      console.log(dayIndex);
+      console.log(selectedDays);
       if (dayIndex === false) {
         selectedDays.push(value);
       } else {
-        console.log("it already exists");
-        selectedDays.pop(value);
+        const newIndex = selectedDays.indexOf(value);
+        selectedDays.splice(newIndex, 1);
       }
       session.days = selectedDays.join("");
     } else {
@@ -27,12 +25,17 @@ const AddSession = ({ sessions, setSessions }) => {
     setSessions(updatedSessions);
   };
 
+  const removeSession = (index) => {
+    const updatedSessions = sessions.filter((session, i) => i !== index);
+    setSessions(updatedSessions);
+  };
+
   return (
     <div>
       {sessions.map((session, index) => (
-        <div key={index}>
+        <div key={index} className="session">
           <h3>Session {index + 1}:</h3>
-          <label htmlFor="days">
+          <label htmlFor="days" className="session-days">
             Pick days:
             <div>
               <CheckboxDay
@@ -72,7 +75,7 @@ const AddSession = ({ sessions, setSessions }) => {
               />
             </div>
           </label>
-          <label htmlFor="appt">
+          <label htmlFor="appt" className="session-start">
             Choose start time:{" "}
             <input
               type="time"
@@ -84,7 +87,7 @@ const AddSession = ({ sessions, setSessions }) => {
               timeFormat="24-hour"
             />
           </label>
-          <label htmlFor="appt">
+          <label htmlFor="appt" className="session-end">
             Choose end time:{" "}
             <input
               type="time"
@@ -96,9 +99,17 @@ const AddSession = ({ sessions, setSessions }) => {
               timeFormat="24-hour"
             />
           </label>
+          <button
+            className="remove-session-btn"
+            onClick={() => removeSession(index)}
+          >
+            Remove Session
+          </button>
         </div>
       ))}
-      <button onClick={addNewSession}>Add Session</button>
+      <button onClick={addNewSession} className="add-session-btn">
+        Add Session
+      </button>
     </div>
   );
 };

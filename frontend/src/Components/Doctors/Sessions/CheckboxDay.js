@@ -3,7 +3,7 @@ import React from "react";
 const CheckboxDay = ({ day, isChecked, onChange }) => {
   return (
     <>
-      <span>{day}</span>
+      <span className="day">{day}</span>
       <input
         type="checkbox"
         name={`days-${day}`}

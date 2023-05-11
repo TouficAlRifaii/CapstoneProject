@@ -53,6 +53,94 @@ label {
 .add-form-submit:hover {
   background-color: #111;
 }
+/*
+==============================Sessions==================================
+*/
+/* Style for sessions container */
+.session-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Style for individual session */
+.session {
+  margin: 1rem 0;
+  padding: 1rem;
+  border: 0.1rem solid #ccc;
+  border-radius: 0.5rem;
+}
+
+/* Style for session title */
+.session h3 {
+  margin-top: 0;
+}
+
+/* Style for session days label */
+.session label.session-days {
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.session-days {
+  margin: 0.3rem;
+}
+/* Style for day checkboxes */
+.session label.session-days div {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.session label.session-days div input[type="checkbox"] {
+  margin-right: 1rem;
+}
+
+/* Style for start and end time labels */
+.session label.session-start,
+.session label.session-end {
+  display: block;
+  margin-bottom: 1rem;
+}
+
+/* Style for add session button */
+.add-session-btn {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.remove-session-btn {
+  padding: 0.4rem;
+  background-color: #ff0000;
+  color: #fff;
+  border: none;
+  border-radius: 0.4rem;
+  cursor: pointer;
+}
+
+.remove-session-btn:hover {
+  padding: 0.4rem;
+  background-color: #e92424;
+  color: #fff;
+  border: none;
+  border-radius: 0.4rem;
+  cursor: pointer;
+}
+
+.add-session-btn:hover {
+  background-color: #0069d9;
+}
+
+.day {
+  margin: 0.1rem;
+}
+/*
+======================================JS===========================
+*/
 
 .hide {
   display: none;
@@ -84,36 +172,4 @@ label {
 .offscreen {
   position: absolute;
   left: -9999px;
-}
-
-@media (max-width: 768px) {
-  .add-form {
-    width: 90%;
-  }
-}
-.list-section {
-  align-content: center;
-  margin: 0;
-}
-
-@media (max-width: 576px) {
-  .add-form {
-    padding: 1rem;
-  }
-
-  .add-form-title {
-    font-size: 1.8rem;
-  }
-
-  label {
-    font-size: 1rem;
-  }
-
-  .add-input-field {
-    font-size: 1rem;
-  }
-
-  .add-form-submit {
-    font-size: 1rem;
-  }
 }

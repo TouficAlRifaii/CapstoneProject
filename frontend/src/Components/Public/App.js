@@ -25,6 +25,7 @@ import "../../CSS/Tables.css";
 import "../../CSS/Forms.css";
 import "../../CSS/Nav.css";
 import "../../CSS/DropList.css";
+import EditDoctor from "../Doctors/EditDoctor";
 
 function App() {
   //coreq - preReq ids
@@ -125,7 +126,6 @@ function App() {
       id: 1,
       subject: "CSC",
       courseNumber: "101",
-      section: "001",
       title: "Introduction to Computer Science",
       creditsNbr: 4,
       preReq: [],
@@ -135,7 +135,6 @@ function App() {
       id: 2,
       subject: "CSC",
       courseNumber: "102",
-      section: "001",
       title: "Programming Fundamentals",
       creditsNbr: 4,
       preReq: ["1"],
@@ -145,7 +144,6 @@ function App() {
       id: 3,
       subject: "CSC",
       courseNumber: "201",
-      section: "001",
       title: "Data Structures and Algorithms",
       creditsNbr: 4,
       preReq: ["2"],
@@ -155,7 +153,6 @@ function App() {
       id: 4,
       subject: "MTH",
       courseNumber: "201",
-      section: "001",
       title: "Discrete Mathematics",
       creditsNbr: 4,
       preReq: [],
@@ -165,7 +162,6 @@ function App() {
       id: 5,
       subject: "CSC",
       courseNumber: "301",
-      section: "001",
       title: "Software Engineering",
       creditsNbr: 4,
       preReq: ["3"],
@@ -175,7 +171,6 @@ function App() {
       id: 6,
       subject: "CSC",
       courseNumber: "302",
-      section: "001",
       title: "Database Systems",
       creditsNbr: 4,
       preReq: ["3"],
@@ -185,7 +180,6 @@ function App() {
       id: 7,
       subject: "CSC",
       courseNumber: "401",
-      section: "001",
       title: "Computer Networks",
       creditsNbr: 4,
       preReq: ["3"],
@@ -195,7 +189,6 @@ function App() {
       id: 8,
       subject: "CSC",
       courseNumber: "402",
-      section: "001",
       title: "Operating Systems",
       creditsNbr: 4,
       preReq: ["3"],
@@ -205,7 +198,6 @@ function App() {
       id: 9,
       subject: "CSC",
       courseNumber: "501",
-      section: "001",
       title: "Artificial Intelligence",
       creditsNbr: 4,
       preReq: ["3"],
@@ -215,7 +207,6 @@ function App() {
       id: 10,
       subject: "CSC",
       courseNumber: "502",
-      section: "001",
       title: "Machine Learning",
       creditsNbr: 4,
       preReq: ["9"],
@@ -225,7 +216,6 @@ function App() {
       id: 11,
       subject: "CSC",
       courseNumber: "601",
-      section: "001",
       title: "Computer Graphics",
       creditsNbr: 4,
       preReq: ["3"],
@@ -235,7 +225,6 @@ function App() {
       id: 12,
       subject: "CSC",
       courseNumber: "602",
-      section: "001",
       title: "Computer Vision",
       creditsNbr: 4,
       preReq: ["9"],
@@ -245,34 +234,45 @@ function App() {
   const [doctors, setDoctors] = useState([
     {
       id: 1,
-      name: "Sara",
-      lastName: "Sara",
-      tCourses: ["1", "3"],
-      title: "English Professor",
-      sessions: [
-        { days: "MWF", start: "10:00", end: "10:50" },
-        { days: "TR", start: "13:00", end: "13:50" },
-        { days: "MWF", start: "10:00", end: "11:50" },
-        { days: "TR", start: "13:00", end: "17:50" },
-      ],
+      name: "John",
+      lastName: "Doe",
+      tCourses: ["1", "2"],
+      title: "Pediatrician",
+      sessions: [{ days: "MRF", start: "9:00", end: "11:00" }],
     },
     {
       id: 2,
-      name: "Ahmed",
-      lastName: "Ersel",
-      tCourses: ["5", "6"],
-      title: "Biology Professor",
-      sessions: [{ days: "MWF", start: "11:00", end: "11:50" }],
+      name: "Jane",
+      lastName: "Smith",
+      tCourses: ["2", "4"],
+      title: "Dentist",
+      sessions: [
+        { days: "M", start: "11:00", end: "13:00" },
+        { days: "W", start: "12:00", end: "14:00" },
+        { days: "F", start: "11:00", end: "13:00" },
+      ],
     },
     {
       id: 3,
-      name: "Fatima",
-      lastName: "Al cheikh",
-      tCourses: ["7", "12"],
-      title: "Philosophy Professor",
+      name: "David",
+      lastName: "Lee",
+      tCourses: ["3"],
+      title: "Psychologist",
       sessions: [
-        { days: "MWF", start: "13:00", end: "13:50" },
-        { days: "TR", start: "09:00", end: "09:50" },
+        { days: "T", start: "13:00", end: "15:00" },
+        { days: "R", start: "14:00", end: "16:00" },
+      ],
+    },
+    {
+      id: 4,
+      name: "Mary",
+      lastName: "Johnson",
+      tCourses: ["1", "4"],
+      title: "Family Doctor",
+      sessions: [
+        { days: "M", start: "8:00", end: "10:00" },
+        { days: "W", start: "10:00", end: "12:00" },
+        { days: "F", start: "8:00", end: "10:00" },
       ],
     },
   ]);
@@ -305,6 +305,17 @@ function App() {
           path="AddDoctor"
           element={
             <AddDoctor
+              doctors={doctors}
+              setDoctors={setDoctors}
+              courses={courses}
+            />
+          }
+        />
+        <Route
+          exact
+          path="EditDoctor/:id"
+          element={
+            <EditDoctor
               doctors={doctors}
               setDoctors={setDoctors}
               courses={courses}

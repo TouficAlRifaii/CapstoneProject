@@ -77,7 +77,7 @@ const ListCourses = ({ courses, setCourses }) => {
                   Delete
                 </button>
                 <Link to={`/editcourse/${course.id}`}>
-                  <button className="edit-btn">!!!!</button>
+                  <button className="edit-btn">Edit </button>
                 </Link>
               </td>
             </tr>

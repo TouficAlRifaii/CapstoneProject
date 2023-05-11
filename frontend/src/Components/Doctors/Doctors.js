@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import ListCourseId from "../Courses/ListCourseId";
-import ListDoctorSession from "./ListDoctorSession";
+import ListDoctorSession from "./Sessions/ListDoctorSession";
 const Doctors = ({ doctors, setDoctors, courses }) => {
   const [searchResults, setSearchResults] = useState([]);
   const [search, setSearch] = useState("");
@@ -55,18 +55,18 @@ const Doctors = ({ doctors, setDoctors, courses }) => {
         <thead>
           <tr>
             <th>Name</th>
-            <th>LastName</th>
             <th>Title</th>
             <th>Courses</th>
-            <th>Sessions</th>
+            <th>Available Sessions</th>
             <th></th>
           </tr>
         </thead>
         <tbody>
           {currentDoctors.map((doctor) => (
             <tr key={doctor.id} className="list-row">
-              <td>{doctor.name}</td>
-              <td>{doctor.lastName}</td>
+              <td>
+                {doctor.name} {doctor.lastName}
+              </td>
               <td>{doctor.title}</td>
               <ListCourseId course={doctor.tCourses} courses={courses} />
               <ListDoctorSession doctor={doctor} />
@@ -77,7 +77,9 @@ const Doctors = ({ doctors, setDoctors, courses }) => {
                 >
                   Delete
                 </button>
-                <button className="edit-btn">!!!!</button>
+                <Link to={`/editDoctor/${doctor.id}`}>
+                  <button className="edit-btn"> Edit </button>
+                </Link>
               </td>
             </tr>
           ))}
@@ -96,7 +98,7 @@ const Doctors = ({ doctors, setDoctors, courses }) => {
         ))}
       </div>
       <Link to="/addDoctor" className="add-user-link">
-        <button>Add Doctor</button>
+        <button className="add-link-btn">Add Doctor</button>
       </Link>
     </section>
   );

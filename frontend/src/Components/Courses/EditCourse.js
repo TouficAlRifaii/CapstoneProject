@@ -61,61 +61,75 @@ const EditCourse = ({ courses, setCourses }) => {
   };
 
   return (
-    <div>
-      <h1>Edit Course</h1>
+    <div className="add-form">
+      <h1 className="add-form-title">Edit Course</h1>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="subject">Subject:</label>
-        <DropListSubjects subject={subject} setSubject={setSubject} />
-        <br />
-        <label htmlFor="courseNumber">Course Number:</label>
-        <input
-          type="text"
-          id="courseNumber"
-          value={courseNumber}
-          onChange={(event) =>
-            setCourseNumber(event.target.value.toUpperCase())
-          }
-        />
-        {isValidCourseNumber(courseNumber) ? null : (
-          <span className="error">Invalid course number format.</span>
-        )}
-        <br />
-        <label htmlFor="title">Title:</label>
-        <input
-          type="text"
-          id="title"
-          value={title}
-          onChange={(event) => setTitle(event.target.value)}
-        />
-        <br />
-        <label htmlFor="creditsNbr">Credits:</label>
-        <input
-          type="number"
-          id="creditsNbr"
-          value={creditsNbr}
-          onChange={(event) => setCreditsNbr(event.target.value)}
-          min="0"
-          max="5"
-        />
-        {creditsNbr === "" || (creditsNbr >= 0 && creditsNbr <= 5) ? null : (
-          <span className="error">Credits must be between 0 and 5.</span>
-        )}
-        <br />
-        <label htmlFor="preReqs">Prerequisites:</label>
-        <DropListCourses
-          elementCourses={coReqs}
-          setElementCourses={setCoReqs}
-          courses={courses}
-        />
-        <br />
-        <label htmlFor="coReqs">Corequisites:</label>
-        <DropListCourses
-          elementCourses={preReqs}
-          setElementCourses={setPreReqs}
-          courses={courses}
-        />
-        <br />
-        <button type="submit">Save</button>
+        <div className="add-form-input">
+          <label htmlFor="subject">Subject:</label>
+          <DropListSubjects subject={subject} setSubject={setSubject} />
+        </div>
+        <div className="add-form-input">
+          <label htmlFor="course-number">Course Number:</label>
+          <input
+            type="text"
+            id="course-number"
+            value={courseNumber}
+            onChange={(event) =>
+              setCourseNumber(event.target.value.toUpperCase())
+            }
+            className="add-input-field"
+          />
+          {isValidCourseNumber(courseNumber) ? null : (
+            <span className="error">Invalid course number format.</span>
+          )}
+          <label> Format Example: 498 or 498A or 498AA</label>
+        </div>
+        <div className="add-form-input">
+          <label htmlFor="title">Title:</label>
+          <input
+            type="text"
+            id="title"
+            value={title}
+            onChange={(event) => setTitle(event.target.value)}
+            className="add-input-field"
+          />
+        </div>
+        <div className="add-form-input">
+          <label htmlFor="credits-number">Credits:</label>
+          <input
+            type="number"
+            id="credits-number"
+            value={creditsNbr}
+            onChange={(event) => setCreditsNbr(event.target.value)}
+            min="0"
+            max="5"
+            className="add-input-field"
+          />
+          {creditsNbr === "" || (creditsNbr >= 0 && creditsNbr <= 5) ? null : (
+            <span className="error">Credits must be between 0 and 5.</span>
+          )}
+        </div>
+        <div className="add-form-input">
+          <label htmlFor="pre-req">Prerequisites:</label>
+          <DropListCourses
+            elementCourses={coReqs}
+            setElementCourses={setCoReqs}
+            courses={courses}
+          />
+        </div>
+        <div className="add-form-input">
+          <label htmlFor="co-req">Corequisites:</label>
+          <DropListCourses
+            elementCourses={preReqs}
+            setElementCourses={setPreReqs}
+            courses={courses}
+          />
+        </div>
+        <div className="add-form-input">
+          <button type="submit" className="add-form-submit">
+            Save
+          </button>
+        </div>
       </form>
     </div>
   );
