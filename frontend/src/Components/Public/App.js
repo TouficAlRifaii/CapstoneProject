@@ -262,10 +262,7 @@ function App() {
       lastName: "Ersel",
       tCourses: ["5", "6"],
       title: "Biology Professor",
-      sessions: [
-        { days: "MWF", start: "11:00", end: "11:50" },
-        { days: "TR", start: "14:00", end: "14:50" },
-      ],
+      sessions: [{ days: "MWF", start: "11:00", end: "11:50" }],
     },
     {
       id: 3,

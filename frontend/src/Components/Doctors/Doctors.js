@@ -77,6 +77,7 @@ const Doctors = ({ doctors, setDoctors, courses }) => {
                 >
                   Delete
                 </button>
+                <button className="edit-btn">!!!!</button>
               </td>
             </tr>
           ))}

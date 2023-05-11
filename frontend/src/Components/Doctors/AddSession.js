@@ -1,3 +1,5 @@
+import CheckboxDay from "./CheckboxDay";
+
 const AddSession = ({ sessions, setSessions }) => {
   const addNewSession = () => {
     setSessions([...sessions, { days: "", start: "", end: "" }]);
@@ -5,7 +7,23 @@ const AddSession = ({ sessions, setSessions }) => {
 
   const updateSession = (index, field, value) => {
     const updatedSessions = [...sessions];
-    updatedSessions[index][field] = value;
+    const session = updatedSessions[index];
+    if (field === "days") {
+      console.log("DAYS " + value);
+      const selectedDays = [...session.days];
+      console.log("Selected DAys " + selectedDays);
+      const dayIndex = selectedDays.includes(value);
+      console.log(dayIndex);
+      if (dayIndex === false) {
+        selectedDays.push(value);
+      } else {
+        console.log("it already exists");
+        selectedDays.pop(value);
+      }
+      session.days = selectedDays.join("");
+    } else {
+      session[field] = value;
+    }
     setSessions(updatedSessions);
   };
 
@@ -15,27 +33,14 @@ const AddSession = ({ sessions, setSessions }) => {
         <div key={index}>
           <h3>Session {index + 1}:</h3>
           <label htmlFor="days">
-            Pick days
-            <input
-              type="radio"
-              name={`days-${index}`}
-              value="MWF"
+            Pick days{" "}
+            <CheckboxDay
+              day="M"
+              isChecked={session.days.includes("M")}
               onChange={(event) =>
                 updateSession(index, "days", event.target.value)
               }
-              checked={session.days === "MWF"}
             />
-            MWF
-            <input
-              type="radio"
-              name={`days-${index}`}
-              value="TR"
-              onChange={(event) =>
-                updateSession(index, "days", event.target.value)
-              }
-              checked={session.days === "TR"}
-            />
-            TR
           </label>
           <label htmlFor="appt">
             Choose start time:{" "}
