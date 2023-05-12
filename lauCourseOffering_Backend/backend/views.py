@@ -256,7 +256,12 @@ class SectionsApi(APIView):
 def isEligible(course, takenCourses):
     if course in takenCourses:
         return False
+
     else:
+        substitutes = course.substitutes
+        for substitute in substitutes:
+            if substitute in takenCourses:
+                return False
         prerequisites = CourseRelationShip.objects.filter(mainCourse=course, isPrerequisite=True)
         corequisites = CourseRelationShip.objects.filter(mainCourse=course, isPrerequisite=False)
         if prerequisites.filter(~Q(secondCourse__in=takenCourses)).count() == 0:

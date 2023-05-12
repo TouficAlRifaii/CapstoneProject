@@ -18,6 +18,7 @@ class Course(models.Model):
     courseNumber = models.CharField(max_length=5)
     title = models.CharField(max_length=255)
     creditsNumber = models.IntegerField()
+    substitutes = models.ManyToManyField("backend.Course", blank=True)
 
     # campus = models.IntegerField()
 
