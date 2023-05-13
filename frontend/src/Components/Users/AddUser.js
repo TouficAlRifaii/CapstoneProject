@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "../../CSS/Forms.css"; // Import your CSS file for navbar styling
+import "../../CSS/Forms.css";
 import {
   faCheck,
   faTimes,
@@ -24,7 +24,7 @@ const AddUser = ({ users, setUsers }) => {
   useEffect(() => {
     const result = EMAIL_REGEX.test(email);
     setValidEmail(result);
-  }, [email]); //user in the array, every time it changes it will check the validation of that field - used to apply CSS
+  }, [email]); //user in the array, ever  y time it changes it will check the validation of that field - used to apply CSS
 
   useEffect(() => {
     setErrMsg("");
@@ -33,6 +33,7 @@ const AddUser = ({ users, setUsers }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const v1 = EMAIL_REGEX.test(email);
+
     if (!v1) {
       setErrMsg("Invalid Entry, check email");
       setEmailFocus(false);
@@ -87,7 +88,6 @@ const AddUser = ({ users, setUsers }) => {
         </label>
         <input
           type="text"
-          id="email"
           value={email}
           onChange={(event) => setEmail(event.target.value)}
           required

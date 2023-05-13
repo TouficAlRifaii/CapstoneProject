@@ -2,10 +2,17 @@ import React, { useState } from "react";
 import DropListCourses from "../Courses/DropListCourses";
 import AddSession from "./Sessions/AddSession";
 
+const EMAIL_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
+
 const AddDoctor = ({ doctors, setDoctors, courses, close }) => {
   const [name, setName] = useState("");
+  const [validName, setValidName] = useState(false);
+  const [emailFocus, setEmailFocus] = useState(false);
+
   const [lastName, setLastName] = useState("");
+
   const [title, setTitle] = useState("");
+
   const [tCourses, setTCourses] = useState([""]);
   const [sessions, setSessions] = useState([{ days: "", start: "", end: "" }]);
 

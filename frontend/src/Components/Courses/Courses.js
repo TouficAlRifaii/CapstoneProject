@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-import ListCourses from "./ListCourses";
 import ListCourseId from "./ListCourseId";
 import Popup from "reactjs-popup";
 

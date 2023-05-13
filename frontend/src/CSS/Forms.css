@@ -1,5 +1,6 @@
 .add-form {
-  width: 30rem;
+  font-size: 1.3rem;
+  width: 80%;
   margin: 2rem auto;
   padding: 1.5rem;
   border: 1px solid #ddd;
@@ -34,7 +35,7 @@ label {
   width: 100%;
   padding: 0.5rem;
   border-radius: 0.3rem;
-  border: 1px solid #ddd;
+  border: 1px solid #a59e9e;
 }
 
 .add-form-submit {
@@ -179,7 +180,6 @@ label {
   height: 800px;
   padding: 0%;
   margin-top: 20px;
-  background-color: red;
 }
 .popup-close {
   position: absolute;
