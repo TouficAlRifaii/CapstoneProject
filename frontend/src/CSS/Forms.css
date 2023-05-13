@@ -104,8 +104,7 @@ label {
 
 /* Style for add session button */
 .add-session-btn {
-  margin-top: 1rem;
-  padding: 1rem;
+  padding: 0.6rem;
   background-color: #007bff;
   color: #fff;
   border: none;
@@ -172,4 +171,31 @@ label {
 .offscreen {
   position: absolute;
   left: -9999px;
+}
+
+/*=============================== POPUP ================================*/
+.popup {
+  overflow-y: auto;
+  height: 800px;
+  padding: 0%;
+  margin-top: 20px;
+  background-color: red;
+}
+.popup-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+.close-icon {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #ccc;
+}
+.popup-overlay {
+  background-color: rgba(0, 0, 0, 0.5) !important;
 }

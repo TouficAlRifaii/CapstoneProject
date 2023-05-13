@@ -3,8 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import DropListSubjects from "./DropListSubjects";
 import DropListCourses from "./DropListCourses";
 
-const EditCourse = ({ courses, setCourses }) => {
-  const { id } = useParams();
+const EditCourse = ({ courses, setCourses, id, close }) => {
   const history = useNavigate();
 
   const course = courses.find((course) => course.id === parseInt(id));
@@ -128,6 +127,9 @@ const EditCourse = ({ courses, setCourses }) => {
         <div className="add-form-input">
           <button type="submit" className="add-form-submit">
             Save
+          </button>
+          <button className="close-btn" onClick={close}>
+            Close
           </button>
         </div>
       </form>

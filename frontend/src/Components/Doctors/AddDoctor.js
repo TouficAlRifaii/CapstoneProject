@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import DropListCourses from "../Courses/DropListCourses";
 import AddSession from "./Sessions/AddSession";
 
-const AddDoctor = ({ doctors, setDoctors, courses }) => {
+const AddDoctor = ({ doctors, setDoctors, courses, close }) => {
   const [name, setName] = useState("");
   const [lastName, setLastName] = useState("");
   const [title, setTitle] = useState("");
@@ -11,7 +11,17 @@ const AddDoctor = ({ doctors, setDoctors, courses }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (!name || !lastName || !title || tCourses.length === 0) {
+    const lastSession = sessions[sessions.length - 1];
+
+    if (
+      !name ||
+      !lastName ||
+      !title ||
+      tCourses.length === 0 ||
+      !lastSession.days ||
+      !lastSession.start ||
+      !lastSession.end
+    ) {
       // Do not submit if any field is empty
       return;
     }
@@ -41,7 +51,8 @@ const AddDoctor = ({ doctors, setDoctors, courses }) => {
 
   return (
     <form onSubmit={handleSubmit} className="add-form">
-      <h1 className="add-form-title">Add Doctor</h1>
+      <h1 className="add-form-title">Add Doctor </h1>
+
       <div className="add-form-input">
         <label htmlFor="subject">Name:</label>
         <input
@@ -80,8 +91,12 @@ const AddDoctor = ({ doctors, setDoctors, courses }) => {
           courses={courses}
         />
       </div>
+      <label htmlFor=""> Available Sessions</label>
       <AddSession sessions={sessions} setSessions={setSessions} />
-      <button className="add-form-submit">Add Course</button>
+      <button className="add-form-submit">Add Doctor</button>
+      <button className="close-btn" onClick={close}>
+        Close
+      </button>
     </form>
   );
 };

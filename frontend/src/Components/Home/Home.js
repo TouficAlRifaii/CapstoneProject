@@ -2,6 +2,7 @@ import { useState } from "react";
 import Papa from "papaparse";
 import { saveAs } from "file-saver";
 import UploadCSV from "./UploadCSV";
+import PopUp from "../Public/PopUp";
 
 function Home() {
   // State to store parsed data
@@ -61,28 +62,34 @@ function Home() {
     const csv = Papa.unparse(parsedData);
     const subject = "Shared CSV file";
     const body = "Please find the CSV file attached.";
-    const uri = "mailto:?subject=" + encodeURIComponent(subject)
-      + "&body=" + encodeURIComponent(body)
-      + "&attachment=" + "data:text/csv;charset=utf-8," + encodeURIComponent(csv);
+    const uri =
+      "mailto:?subject=" +
+      encodeURIComponent(subject) +
+      "&body=" +
+      encodeURIComponent(body) +
+      "&attachment=" +
+      "data:text/csv;charset=utf-8," +
+      encodeURIComponent(csv);
     window.location.href = uri;
   };
 
   const handleAddRow = () => {
     const newValues = [...values];
-    newValues.push(Array(tableRows.length).fill(''));
+    newValues.push(Array(tableRows.length).fill(""));
     setValues(newValues);
   };
 
   const handleAddColumn = () => {
-    const newColumn = prompt('Enter column name');
+    const newColumn = prompt("Enter column name");
     const newTableRows = [...tableRows, newColumn];
-    const newValues = values.map((row) => [...row, '']);
+    const newValues = values.map((row) => [...row, ""]);
     setTableRows(newTableRows);
     setValues(newValues);
   };
 
   return (
     <div>
+      <PopUp />
       {/* File Uploader */}
       <input
         type="file"
@@ -129,14 +136,14 @@ function Home() {
         </tbody>
       </table>
       {/* Download and Share by email buttons */}
-    
-          <button onClick={handleDownload}>Download CSV</button>
-          <button onClick={handleShareByEmail}>Share by Email</button>
-          <button onClick={handleAddRow}>Add row</button>
-          <button onClick={handleAddColumn}>Add Column</button>
-          <div> 
-            <UploadCSV/>
-          </div>
+
+      <button onClick={handleDownload}>Download CSV</button>
+      <button onClick={handleShareByEmail}>Share by Email</button>
+      <button onClick={handleAddRow}>Add row</button>
+      <button onClick={handleAddColumn}>Add Column</button>
+      <div>
+        <UploadCSV />
+      </div>
     </div>
   );
 }

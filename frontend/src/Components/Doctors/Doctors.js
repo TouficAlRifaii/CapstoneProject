@@ -2,6 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import ListCourseId from "../Courses/ListCourseId";
 import ListDoctorSession from "./Sessions/ListDoctorSession";
+import Popup from "reactjs-popup";
+import AddDoctor from "./AddDoctor";
+import EditDoctor from "./EditDoctor";
+
 const Doctors = ({ doctors, setDoctors, courses }) => {
   const [searchResults, setSearchResults] = useState([]);
   const [search, setSearch] = useState("");
@@ -77,9 +81,22 @@ const Doctors = ({ doctors, setDoctors, courses }) => {
                 >
                   Delete
                 </button>
-                <Link to={`/editDoctor/${doctor.id}`}>
-                  <button className="edit-btn"> Edit </button>
-                </Link>
+                <Popup
+                  trigger={<button className="edit-btn">Edit</button>}
+                  modal
+                  lockScroll={true}
+                >
+                  {(close) => (
+                    <div className="popup">
+                      <EditDoctor
+                        doctors={doctors}
+                        setDoctors={setDoctors}
+                        courses={courses}
+                        id={doctor.id}
+                      />
+                    </div>
+                  )}
+                </Popup>
               </td>
             </tr>
           ))}
@@ -97,9 +114,22 @@ const Doctors = ({ doctors, setDoctors, courses }) => {
           </button>
         ))}
       </div>
-      <Link to="/addDoctor" className="add-user-link">
-        <button className="add-link-btn">Add Doctor</button>
-      </Link>
+      {/* modal: A boolean value that determines whether the popup is a modal (blocks interaction with the rest of the page) or not. */}
+      <Popup
+        trigger={<button>Add doctor</button>}
+        modal
+        nested
+        lockScroll={true}
+      >
+        {(close) => (
+          <AddDoctor
+            doctors={doctors}
+            setDoctors={setDoctors}
+            courses={courses}
+            close={close}
+          />
+        )}
+      </Popup>
     </section>
   );
 };

@@ -280,78 +280,80 @@ function App() {
   return (
     <div className="App">
       <Nav />
-      <Routes>
-        <Route exact path="/" element={<Home />} />
-        <Route exact path="login" element={<Login />} />
+      <body>
+        <Routes>
+          <Route exact path="/" element={<Home />} />
+          <Route exact path="login" element={<Login />} />
 
-        <Route
-          exact
-          path="adduser"
-          element={<AddUser users={users} setUsers={setUsers} />}
-        />
-        <Route
-          exact
-          path="doctors"
-          element={
-            <Doctors
-              doctors={doctors}
-              setDoctors={setDoctors}
-              courses={courses}
-            />
-          }
-        />
-        <Route
-          exact
-          path="AddDoctor"
-          element={
-            <AddDoctor
-              doctors={doctors}
-              setDoctors={setDoctors}
-              courses={courses}
-            />
-          }
-        />
-        <Route
-          exact
-          path="EditDoctor/:id"
-          element={
-            <EditDoctor
-              doctors={doctors}
-              setDoctors={setDoctors}
-              courses={courses}
-            />
-          }
-        />
+          <Route
+            exact
+            path="adduser"
+            element={<AddUser users={users} setUsers={setUsers} />}
+          />
+          <Route
+            exact
+            path="doctors"
+            element={
+              <Doctors
+                doctors={doctors}
+                setDoctors={setDoctors}
+                courses={courses}
+              />
+            }
+          />
+          <Route
+            exact
+            path="AddDoctor"
+            element={
+              <AddDoctor
+                doctors={doctors}
+                setDoctors={setDoctors}
+                courses={courses}
+              />
+            }
+          />
+          <Route
+            exact
+            path="EditDoctor/:id"
+            element={
+              <EditDoctor
+                doctors={doctors}
+                setDoctors={setDoctors}
+                courses={courses}
+              />
+            }
+          />
 
-        <Route
-          exact
-          path="users"
-          element={<Users users={users} setUsers={setUsers} />}
-        />
-        <Route
-          exact
-          path="courses"
-          element={<Courses courses={courses} setCourses={setCourses} />}
-        />
-        <Route
-          exact
-          path="addcourse"
-          element={<AddCourse courses={courses} setCourses={setCourses} />}
-        />
-        <Route
-          exact
-          path="/editcourse/:id"
-          element={<EditCourse courses={courses} setCourses={setCourses} />}
-        />
+          <Route
+            exact
+            path="users"
+            element={<Users users={users} setUsers={setUsers} />}
+          />
+          <Route
+            exact
+            path="courses"
+            element={<Courses courses={courses} setCourses={setCourses} />}
+          />
+          <Route
+            exact
+            path="addcourse"
+            element={<AddCourse courses={courses} setCourses={setCourses} />}
+          />
+          <Route
+            exact
+            path="/editcourse/:id"
+            element={<EditCourse courses={courses} setCourses={setCourses} />}
+          />
 
-        <Route
-          path="/edituser/:name"
-          element={<EditUser users={users} setUsers={setUsers} />}
-        />
+          <Route
+            path="/edituser/:name"
+            element={<EditUser users={users} setUsers={setUsers} />}
+          />
 
-        <Route path="about" element={<About />} />
-        <Route path="*" element={<Missing />} />
-      </Routes>
+          <Route path="about" element={<About />} />
+          <Route path="*" element={<Missing />} />
+        </Routes>
+      </body>
     </div>
   );
 }

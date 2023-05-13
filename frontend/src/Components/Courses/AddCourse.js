@@ -3,7 +3,7 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import DropListSubjects from "./DropListSubjects";
 import DropListCourses from "./DropListCourses";
 
-const AddCourse = ({ courses, setCourses }) => {
+const AddCourse = ({ courses, setCourses, close }) => {
   const [subject, setSubject] = useState("");
   const [courseNumber, setCourseNumber] = useState("");
   const [title, setTitle] = useState("");
@@ -108,7 +108,10 @@ const AddCourse = ({ courses, setCourses }) => {
       <div></div>
       <button type="submit" onClick={handleSubmit} className="add-form-submit">
         Add Course
-      </button>{" "}
+      </button>
+      <button className="close-btn" onClick={close}>
+        Close
+      </button>
     </form>
   );
 };

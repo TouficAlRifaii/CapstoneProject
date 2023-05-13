@@ -3,8 +3,7 @@ import DropListCourses from "../Courses/DropListCourses";
 import AddSession from "./Sessions/AddSession";
 import { useParams, useNavigate } from "react-router-dom";
 
-const EditDoctor = ({ doctors, setDoctors, courses }) => {
-  const { id } = useParams();
+const EditDoctor = ({ doctors, setDoctors, courses, id }) => {
   const doctor = doctors.find((doctor) => doctor.id === parseInt(id));
 
   const [name, setName] = useState(doctor.name);
