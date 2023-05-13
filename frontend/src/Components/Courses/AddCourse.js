@@ -8,7 +8,6 @@ import {
   faInfoCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { isDisabled } from "@testing-library/user-event/dist/utils";
 
 const courseNumberRegex = /^[0-9]{3}[A-Z]?[A-Z]?$/;
 
