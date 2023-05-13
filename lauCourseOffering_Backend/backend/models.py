@@ -48,6 +48,9 @@ class Major(models.Model):
     credits = models.IntegerField()
     courses = models.ManyToManyField(Course, related_name="majors", blank=True)
 
+    def __str__(self):
+        return f"{self.title}"
+
 
 class Section(models.Model):
     campus = models.CharField(max_length=7)
