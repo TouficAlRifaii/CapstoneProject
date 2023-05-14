@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import DropListSubjects from "./DropListSubjects";
 import DropListCourses from "./DropListCourses";
+import axios from "axios";
 import {
   faCheck,
   faTimes,
@@ -51,7 +52,7 @@ const AddCourse = ({ courses, setCourses, close }) => {
     setErrMsg("");
   }, [courseNumber, title, creditsNumber]);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     if (subject === "") {
@@ -67,7 +68,6 @@ const AddCourse = ({ courses, setCourses, close }) => {
     }
 
     const newCourse = {
-      id: courses.length + 1,
       subject,
       courseNumber,
       title,
@@ -75,14 +75,56 @@ const AddCourse = ({ courses, setCourses, close }) => {
       preReq: preReqs.filter((pr) => pr !== ""), // Remove any empty strings from the preReq1 array
       coReq: coReqs.filter((cr) => cr !== ""),
     };
-    setCourses([...courses, newCourse]);
-    setSubject("");
-    setCourseNumber("");
-    setTitle("");
-    setCreditsNumber("");
-    setCoReqs([""]);
-    setPreReqs([""]);
-    setErrMsg("");
+    console.log(newCourse);
+    // const data = new FormData();
+    const course = {};
+    const relations = []
+    preReqs.forEach(element => {
+        if (element !== ""){
+          relations.push({
+            "secondCourse_id": parseInt(element),
+            "isPrerequisite" : true
+          })
+        }
+      
+    });
+    coReqs.forEach(element => {
+      if (element !== ""){
+        relations.push({
+          "secondCourse_id": parseInt(element),
+          "isPrerequisite" : false
+        })
+      }
+    
+  });
+    course["subject"] = subject;
+    course["courseNumber"] = courseNumber;
+    course["title"] = title;
+    course["creditsNumber"] = parseInt(creditsNumber);
+    console.log("course: " , course)
+    const data = {"course" : course , "relations": relations};
+    // data.append("course" , course)
+    // data.append("relations" , relations)
+    console.log(JSON.stringify(data))
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:8000/api/courses",
+        data
+      );
+      if (response.data["message"] === "success") {
+        setCourses([...courses, newCourse]);
+        setSubject("");
+        setCourseNumber("");
+        setTitle("");
+        setCreditsNumber("");
+        setCoReqs([""]);
+        setPreReqs([""]);
+        setErrMsg("");
+        close();
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

@@ -12,13 +12,12 @@ import EditCourse from "./EditCourse";
 // section: "001",
 // title: "Introduction to Computer Science"
 
-const getCourses = async (courses, setCourses) => {
+const getCourses = async (setCourses) => {
   try {
     const response = await axios.get("http://127.0.0.1:8000/api/courses");
     if (response.data["message"] === "success") {
-      console.log(response.data)
+      console.log(response.data);
       setCourses(response.data["courses"]);
-      
     }
   } catch (exception) {
     console.log("test");
@@ -45,7 +44,7 @@ const Courses = () => {
   }, [courses, search]);
 
   useEffect(() => {
-    getCourses(courses , setCourses);
+    getCourses(setCourses);
     // console.log(courses);
   }, []);
 
