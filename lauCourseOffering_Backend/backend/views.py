@@ -265,7 +265,7 @@ class StudentsApi(APIView):
 
 class SectionsApi(APIView):
     def post(self, request):
-        Section.objects.delete()
+        Section.objects.all().delete()
         # Loop through all courses
         for course in Course.objects.all():
             for student in Student.objects.all():
