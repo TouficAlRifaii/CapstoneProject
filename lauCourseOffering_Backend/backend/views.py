@@ -217,11 +217,13 @@ class RequisitesApi(APIView):
 
 class StudentsApi(APIView):
     def post(self, request):
-        Student.objects.delete()
+        Student.objects.all().delete()
         existing_courses = Course.objects.all()
         serializedCourses = CourseSerializer(existing_courses, many=True)
         serializedCourses = serializedCourses.data
-        students = readExcel(request.path)
+        print(request.FILES)
+        print(request.data)
+        students = readExcel(request.FILES.get("excel"))
 
         for student in students:
             data = {}

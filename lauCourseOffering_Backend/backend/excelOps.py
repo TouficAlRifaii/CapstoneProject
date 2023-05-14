@@ -1,9 +1,8 @@
 from openpyxl import load_workbook
 
 
-def readExcel(path):
-    book = load_workbook(
-        "C:/Users/altou/OneDrive/Desktop/Capstone/lauCourseOffering_Backend/backend/Students _Courses.xlsx")
+def readExcel(file):
+    book = load_workbook(file)
     sheet = book.active
 
     rows = sheet.rows
