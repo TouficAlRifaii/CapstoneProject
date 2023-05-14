@@ -85,6 +85,10 @@ class LogoutView(APIView):
         return response
 
 
+def delete(request):
+    course = request.data[id]
+
+
 class CoursesApi(APIView):
     def get(self, request):
         if 'course_id' in request.data:
@@ -131,8 +135,6 @@ class CoursesApi(APIView):
     def post(self, request):
         serializer = CourseSerializer(data=request.data["course"])
         serializer.is_valid(raise_exception=True)
-        relationsSerializers = []
-
         with connection.cursor() as cursor:
             cursor.execute("SET information_schema_stats_expiry = 0;")
             cursor.execute(f"SHOW TABLE STATUS FROM capstoneproject LIKE 'backend_course'")
@@ -142,75 +144,29 @@ class CoursesApi(APIView):
         serializer.save()
         for relation in request.data['relations']:
             relation["mainCourse_id"] = next_id
-            print(relation)
-
             relationSerializer = CourseRelationSerializer(data=relation)
-
             if relationSerializer.is_valid():
                 relationSerializer.save()
-            # else:
-            #     print(ser)
-            print(relationSerializer.validated_data)
-            relationsSerializers.append(relationSerializer)
-
-        # for relation in relationsSerializers:
 
         return Response({
             "message": "success"
         })
-        # data = {}
-        # data["subject"] = request.data["subject"]
-        # data["courseNumber"] = request.data["courseNumber"]
-        # data["title"] = request.data["title"]
-        # data["creditsNumber"] = request.data["creditsNumber"]
-        # serializer = CourseSerializer(data=data)
-        # serializer.is_valid(raise_exception=True)
-        # relationsSerializers = []
-        # table_name = "backend_course"
-        # flag = False
-        # with connection.cursor() as cursor:
-        #     cursor.execute("SET information_schema_stats_expiry = 0;")
-        #     cursor.execute(f"SHOW TABLE STATUS FROM capstoneproject LIKE '{table_name}'")
-        #     table_status = cursor.fetchone()
-        #     auto_increment = table_status[10]
-        #     next_id = int(auto_increment)
-        #     # print(next_id)
-        #     serializer.save()
-        #     for coreq in request.data["coReq"]:
-        #         relation = {"mainCourse_id": next_id, "secondCourse_id": coreq, "isPrerequisite": False}
-        #         # print(relation)
-        #         relationSerializer = CourseRelationSerializer(data=relation)
-        #         if relationSerializer.is_valid():
-        #
-        #             relationSerializer.save()
-        #             relationsSerializers.append(relationSerializer)
-        #
-        #             print("valid")
-        #         else:
-        #             print(relationSerializer.errors)
-        #     for prereq in request.data["preReq"]:
-        #         relation = {"mainCourse_id": next_id, "secondCourse_id": prereq, "isPrerequisite": True}
-        #         # print(relation)
-        #         relationSerializer = CourseRelationSerializer(data=relation)
-        #         if relationSerializer.is_valid():
-        #             relationSerializer.save()
-        #             relationsSerializers.append(relationSerializer)
-        #
-        #             print("valid")
-        #         else:
-        #             flag = True
-        #             print(relationSerializer.errors)
-        #     if not flag:
-        #
-        #         # for relation in relationsSerializers:
-        #         #     relation.save()
-        #         return Response({
-        #             "message": "success"
-        #         })
-        #     if flag:
-        #         return Response({
-        #             "message": "success"
-        #         })
+
+
+class DeleteCourse(APIView):
+    def post(self, request):
+
+        course = Course.objects.filter(id=request.data['id']).first()
+        if course:
+
+            course.delete()
+            return Response({
+                "message": "success"
+            })
+        else:
+            return Response({
+                "message": "Course does not exist"
+            })
 
 
 class BulkCourse(APIView):
@@ -261,7 +217,7 @@ class RequisitesApi(APIView):
 
 class StudentsApi(APIView):
     def post(self, request):
-        Student.objects.all().delete()
+        Student.objects.delete()
         existing_courses = Course.objects.all()
         serializedCourses = CourseSerializer(existing_courses, many=True)
         serializedCourses = serializedCourses.data
@@ -307,7 +263,7 @@ class StudentsApi(APIView):
 
 class SectionsApi(APIView):
     def post(self, request):
-        Section.objects.all().delete()
+        Section.objects.delete()
         # Loop through all courses
         for course in Course.objects.all():
             for student in Student.objects.all():
