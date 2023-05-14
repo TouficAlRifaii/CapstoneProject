@@ -2,6 +2,7 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.db.models import Q, F
+from django.db import connection
 from rest_framework.exceptions import AuthenticationFailed
 from .serializers import UserSerializer, CourseSerializer, CourseRelationSerializer, StudentSerializer, \
     SectionSerializer
@@ -129,19 +130,87 @@ class CoursesApi(APIView):
 
     def post(self, request):
         serializer = CourseSerializer(data=request.data["course"])
-        serializer.is_valid()
+        serializer.is_valid(raise_exception=True)
         relationsSerializers = []
 
-        for relation in request.data['relations']:
-            relationSerializer = CourseRelationSerializer(data=relation)
-            relationSerializer.is_valid()
-            relationsSerializers.append(relationSerializer)
+        with connection.cursor() as cursor:
+            cursor.execute("SET information_schema_stats_expiry = 0;")
+            cursor.execute(f"SHOW TABLE STATUS FROM capstoneproject LIKE 'backend_course'")
+            table_status = cursor.fetchone()
+            auto_increment = table_status[10]
+            next_id = int(auto_increment)
         serializer.save()
-        for relation in relationsSerializers:
-            relation.save()
+        for relation in request.data['relations']:
+            relation["mainCourse_id"] = next_id
+            print(relation)
+
+            relationSerializer = CourseRelationSerializer(data=relation)
+
+            if relationSerializer.is_valid():
+                relationSerializer.save()
+            # else:
+            #     print(ser)
+            print(relationSerializer.validated_data)
+            relationsSerializers.append(relationSerializer)
+
+        # for relation in relationsSerializers:
+
         return Response({
             "message": "success"
         })
+        # data = {}
+        # data["subject"] = request.data["subject"]
+        # data["courseNumber"] = request.data["courseNumber"]
+        # data["title"] = request.data["title"]
+        # data["creditsNumber"] = request.data["creditsNumber"]
+        # serializer = CourseSerializer(data=data)
+        # serializer.is_valid(raise_exception=True)
+        # relationsSerializers = []
+        # table_name = "backend_course"
+        # flag = False
+        # with connection.cursor() as cursor:
+        #     cursor.execute("SET information_schema_stats_expiry = 0;")
+        #     cursor.execute(f"SHOW TABLE STATUS FROM capstoneproject LIKE '{table_name}'")
+        #     table_status = cursor.fetchone()
+        #     auto_increment = table_status[10]
+        #     next_id = int(auto_increment)
+        #     # print(next_id)
+        #     serializer.save()
+        #     for coreq in request.data["coReq"]:
+        #         relation = {"mainCourse_id": next_id, "secondCourse_id": coreq, "isPrerequisite": False}
+        #         # print(relation)
+        #         relationSerializer = CourseRelationSerializer(data=relation)
+        #         if relationSerializer.is_valid():
+        #
+        #             relationSerializer.save()
+        #             relationsSerializers.append(relationSerializer)
+        #
+        #             print("valid")
+        #         else:
+        #             print(relationSerializer.errors)
+        #     for prereq in request.data["preReq"]:
+        #         relation = {"mainCourse_id": next_id, "secondCourse_id": prereq, "isPrerequisite": True}
+        #         # print(relation)
+        #         relationSerializer = CourseRelationSerializer(data=relation)
+        #         if relationSerializer.is_valid():
+        #             relationSerializer.save()
+        #             relationsSerializers.append(relationSerializer)
+        #
+        #             print("valid")
+        #         else:
+        #             flag = True
+        #             print(relationSerializer.errors)
+        #     if not flag:
+        #
+        #         # for relation in relationsSerializers:
+        #         #     relation.save()
+        #         return Response({
+        #             "message": "success"
+        #         })
+        #     if flag:
+        #         return Response({
+        #             "message": "success"
+        #         })
 
 
 class BulkCourse(APIView):

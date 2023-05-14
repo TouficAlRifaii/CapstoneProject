@@ -27,10 +27,17 @@ class CourseSerializer(serializers.ModelSerializer):
                   'creditsNumber']
 
 
-class CourseRelationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CourseRelationShip
-        fields = ['id', 'mainCourse_id', 'secondCourse_id', 'isPrerequisite']
+class CourseRelationSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
+    mainCourse_id = serializers.IntegerField()
+    secondCourse_id = serializers.IntegerField()
+    isPrerequisite = serializers.BooleanField()
+
+    def create(self, validated_data):
+        main_course_id = validated_data.pop('mainCourse_id')
+        instance = CourseRelationShip(mainCourse_id=main_course_id, **validated_data)
+        instance.save()
+        return instance
 
 
 class StudentSerializer(serializers.ModelSerializer):
