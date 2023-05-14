@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import ListCourseId from "./ListCourseId";
 import Popup from "reactjs-popup";
-
+import axios from "axios";
 import AddCourse from "./AddCourse";
 import EditCourse from "./EditCourse";
 // semester: "Fall 2022",
@@ -11,11 +11,26 @@ import EditCourse from "./EditCourse";
 // courseNumber: "CS101",
 // section: "001",
 // title: "Introduction to Computer Science"
-const Courses = ({ courses, setCourses }) => {
+
+const getCourses = async (courses, setCourses) => {
+  try {
+    const response = await axios.get("http://127.0.0.1:8000/api/courses");
+    if (response.data["message"] === "success") {
+      console.log(response.data)
+      setCourses(response.data["courses"]);
+      
+    }
+  } catch (exception) {
+    console.log("test");
+  }
+};
+
+const Courses = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [courses, setCourses] = useState([]);
 
   useEffect(() => {
     const filteredResults = courses.filter(
@@ -28,6 +43,11 @@ const Courses = ({ courses, setCourses }) => {
     setSearchResults(filteredResults.reverse());
     setCurrentPage(1);
   }, [courses, search]);
+
+  useEffect(() => {
+    getCourses(courses , setCourses);
+    // console.log(courses);
+  }, []);
 
   const handleDeleteCourse = (courseId) => {
     const coursesList = courses.filter((course) => course.id !== courseId);
@@ -76,7 +96,7 @@ const Courses = ({ courses, setCourses }) => {
                 <td>{course.subject}</td>
                 <td>{course.courseNumber}</td>
                 <td>{course.title}</td>
-                <td>{course.creditsNbr}</td>
+                <td>{course.creditsNumber}</td>
                 <ListCourseId course={course.preReq} courses={courses} />{" "}
                 <ListCourseId course={course.coReq} courses={courses} />{" "}
                 <td>
