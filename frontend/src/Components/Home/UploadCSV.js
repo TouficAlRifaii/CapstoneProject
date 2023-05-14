@@ -32,9 +32,23 @@ const UploadCSV = () => {
         }
       );
 
-      if (response.data['message'] === "success") {
+      if (response.data["message"] === "success") {
         // handle success
+
         alert("CSV files uploaded successfully!");
+        try {
+          const sectionsResponse = await axios.post(
+            "http://127.0.0.1:8000/api/sections"
+          );
+          if (sectionsResponse.data["message"] === "success") {
+            alert("Sections Created Sucessfully");
+          }
+          else {
+            alert("Sections failed")
+          }
+        } catch (error) {
+          console.log(error);
+        }
       } else {
         // handle error
         alert("Error uploading CSV files. hahah");
