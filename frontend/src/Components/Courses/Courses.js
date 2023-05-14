@@ -48,9 +48,22 @@ const Courses = () => {
     // console.log(courses);
   }, []);
 
-  const handleDeleteCourse = (courseId) => {
-    const coursesList = courses.filter((course) => course.id !== courseId);
-    setCourses(coursesList);
+  const handleDeleteCourse = async (courseId) => {
+    console.log(courseId);
+    const data = new FormData();
+    data.append("id", courseId);
+    const url = "http://127.0.0.1:8000/api/courses/delete";
+    try {
+      console.log(data);
+      const response = await axios.post(url, data);
+
+      if (response.data["message"] === "success") {
+        const coursesList = courses.filter((course) => course.id !== courseId);
+        setCourses(coursesList);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const indexOfLastItem = currentPage * itemsPerPage;

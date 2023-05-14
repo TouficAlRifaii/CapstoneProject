@@ -66,7 +66,6 @@ const AddCourse = ({ courses, setCourses, close }) => {
     ) {
       return; // Return early if any of the state variables are empty
     }
-
     const newCourse = {
       subject,
       courseNumber,
@@ -75,37 +74,29 @@ const AddCourse = ({ courses, setCourses, close }) => {
       preReq: preReqs.filter((pr) => pr !== ""), // Remove any empty strings from the preReq1 array
       coReq: coReqs.filter((cr) => cr !== ""),
     };
-    console.log(newCourse);
-    // const data = new FormData();
     const course = {};
-    const relations = []
-    preReqs.forEach(element => {
-        if (element !== ""){
-          relations.push({
-            "secondCourse_id": parseInt(element),
-            "isPrerequisite" : true
-          })
-        }
-      
-    });
-    coReqs.forEach(element => {
-      if (element !== ""){
+    const relations = [];
+    preReqs.forEach((element) => {
+      if (element !== "") {
         relations.push({
-          "secondCourse_id": parseInt(element),
-          "isPrerequisite" : false
-        })
+          secondCourse_id: parseInt(element),
+          isPrerequisite: true,
+        });
       }
-    
-  });
+    });
+    coReqs.forEach((element) => {
+      if (element !== "") {
+        relations.push({
+          secondCourse_id: parseInt(element),
+          isPrerequisite: false,
+        });
+      }
+    });
     course["subject"] = subject;
     course["courseNumber"] = courseNumber;
     course["title"] = title;
     course["creditsNumber"] = parseInt(creditsNumber);
-    console.log("course: " , course)
-    const data = {"course" : course , "relations": relations};
-    // data.append("course" , course)
-    // data.append("relations" , relations)
-    console.log(JSON.stringify(data))
+    const data = { course: course, relations: relations };
     try {
       const response = await axios.post(
         "http://127.0.0.1:8000/api/courses",
