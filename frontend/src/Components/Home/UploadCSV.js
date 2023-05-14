@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import axios from "axios";
 
 const UploadCSV = () => {
-  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [selectedFiles, setSelectedFiles] = useState();
 
   const handleFileSelect = (event) => {
     const files = Array.from(event.target.files);
@@ -9,22 +10,38 @@ const UploadCSV = () => {
   };
 
   const handleFileUpload = async () => {
+    if (!selectedFiles || selectedFiles.length === 0) {
+      alert("Please select at least one file.");
+      return;
+    }
+    console.log(selectedFiles);
     const formData = new FormData();
     selectedFiles.forEach((file) => {
-      formData.append('csv', file);
+      formData.append("excel", file);
     });
+    console.log(selectedFiles[0]);
 
-    const response = await fetch('/api/upload-csv', {
-      method: 'POST',
-      body: formData,
-    });
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:8000/api/excel",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
-    if (response.ok) {
-      // handle success
-      alert('CSV files uploaded successfully!');
-    } else {
+      if (response.data['message'] === "success") {
+        // handle success
+        alert("CSV files uploaded successfully!");
+      } else {
+        // handle error
+        alert("Error uploading CSV files. hahah");
+      }
+    } catch (error) {
       // handle error
-      alert('Error uploading CSV files.');
+      alert("Error uploading CSV files.");
     }
   };
 
@@ -35,6 +52,6 @@ const UploadCSV = () => {
       <button onClick={handleFileUpload}>Upload</button>
     </div>
   );
-}
+};
 
-export default UploadCSV
+export default UploadCSV;
