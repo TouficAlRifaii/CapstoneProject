@@ -101,13 +101,30 @@ class CoursesApi(APIView):
                 "relations": relationshipsSerializer.data
             })
         else:
+            coursesDictionary = list()
             courses = Course.objects.all()
             relationships = CourseRelationShip.objects.all()
-            coursesSerializer = CourseSerializer(courses, many=True)
-            relationshipsSerializer = CourseRelationSerializer(relationships, many=True)
+            for course in courses:
+                dictionary = {}
+                dictionary["id"] = course.id
+                dictionary["subject"] = course.subject
+                dictionary["courseNumber"] = course.courseNumber
+                dictionary["title"] = course.title
+                dictionary["creditsNumber"] = course.creditsNumber
+                preReq = []
+                coReq = []
+                for relationship in relationships:
+                    if relationship.mainCourse_id == course.id:
+                        if relationship.isPrerequisite:
+                            preReq.append(relationship.secondCourse_id)
+                        else:
+                            coReq.append(relationship.secondCourse_id)
+                dictionary["preReq"] = preReq
+                dictionary["coReq"] = coReq
+                coursesDictionary.append(dictionary)
             return Response({
-                "courses": coursesSerializer.data,
-                "relations": relationshipsSerializer.data
+                "message": "success",
+                "courses": coursesDictionary
             })
 
     def post(self, request):
@@ -231,9 +248,10 @@ class SectionsApi(APIView):
                 if course not in taken_courses:
                     if isEligible(course, taken_courses):
                         # Get or create the section for the course
-                        section, created = Section.objects.get_or_create(course=course, defaults={'numOfSections': 1,
-                                                                                                  'numOfStudents': 0,
-                                                                                                  'campus': 'Byblos'})
+                        section, created = Section.objects.get_or_create(course=course, campus=student.campus,
+                                                                         defaults={'numOfSections': 1,
+                                                                                   'numOfStudents': 0,
+                                                                                   'campus': student.campus})
                         # Increment the number of students in the section
                         section.numOfStudents = F('numOfStudents') + 1
                         section.save(update_fields=['numOfStudents'])
@@ -258,7 +276,7 @@ def isEligible(course, takenCourses):
         return False
 
     else:
-        substitutes = course.substitutes
+        substitutes = course.substitutes.all()
         for substitute in substitutes:
             if substitute in takenCourses:
                 return False
