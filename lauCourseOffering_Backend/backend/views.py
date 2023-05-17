@@ -266,22 +266,25 @@ class StudentsApi(APIView):
 class SectionsApi(APIView):
     def post(self, request):
         Section.objects.all().delete()
+
         # Loop through all courses
         for course in Course.objects.all():
             for student in Student.objects.all():
                 # Get the courses the student has already taken
                 taken_courses = student.courses.all()
-                # Check if the student is eligible to take the course
-                if course not in taken_courses:
-                    if isEligible(course, taken_courses):
-                        # Get or create the section for the course
-                        section, created = Section.objects.get_or_create(course=course, campus=student.campus,
-                                                                         defaults={'numOfSections': 1,
-                                                                                   'numOfStudents': 0,
-                                                                                   'campus': student.campus})
-                        # Increment the number of students in the section
-                        section.numOfStudents = F('numOfStudents') + 1
-                        section.save(update_fields=['numOfStudents'])
+                student_major = student.major
+
+                # Check if the student's major requires the course
+                if student_major.courses.filter(id=course.id).exists():
+                    # Check if the student is eligible to take the course
+                    if course not in taken_courses:
+                        if isEligible(course, taken_courses):
+                            section, created = Section.objects.get_or_create(course=course, campus=student.campus,
+                                                                             defaults={'numOfSections': 1,
+                                                                                       'numOfStudents': 0,
+                                                                                       'campus': student.campus})
+                            section.numOfStudents = F('numOfStudents') + 1
+                            section.save(update_fields=['numOfStudents'])
 
         sections = Section.objects.all()
         for section in sections:
@@ -292,8 +295,8 @@ class SectionsApi(APIView):
                 numOfSections += students // 40 - numOfSections
             section.numOfSections = numOfSections
             section.save(update_fields=["numOfSections"])
-        return Response({
 
+        return Response({
             "message": "success"
         })
 
