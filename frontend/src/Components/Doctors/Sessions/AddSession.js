@@ -114,7 +114,7 @@ const AddSession = ({ sessions, setSessions }) => {
         </div>
       ))}
       <button onClick={addNewSession} className="add-session-btn">
-        Add Session
+        Add another session
       </button>
     </div>
   );

@@ -9,7 +9,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const TITLEREGEX = /^.{10,255}$/;
 
-const CREDITSNUMBERREGEX = /^[1-9][0-9]?$|^100$/;
+const CREDITSNUMBERREGEX = /^[1-5]$/;
 
 const AddMajor = ({ majors, setMajors, courses, close }) => {
   const [title, setTitle] = useState("");
@@ -23,8 +23,9 @@ const AddMajor = ({ majors, setMajors, courses, close }) => {
   const [majorCourses, setMajorCourses] = useState([]);
 
   const [errMsg, setErrMsg] = useState("");
-
+  const [emptyFields, setEmptyFields] = useState(false);
   const [displayMessage, setDisplayMessage] = useState(false);
+
   useEffect(() => {
     setValidTitle(TITLEREGEX.test(title));
   }, [title]);
@@ -45,6 +46,12 @@ const AddMajor = ({ majors, setMajors, courses, close }) => {
       majorCourses.length === 0
     ) {
       setErrMsg("Please fill out all fields.");
+      setEmptyFields(true);
+
+      setTimeout(() => {
+        setEmptyFields(false);
+      }, 400);
+
       return;
     }
 
@@ -54,24 +61,26 @@ const AddMajor = ({ majors, setMajors, courses, close }) => {
       majorCredits: parseInt(creditsNumber),
       majorCourses,
     };
+    setMajors([...majors, newMajor]);
 
     setErrMsg("");
     setTitle("");
     setCreditsNumber("");
     setMajorCourses([]);
     setDisplayMessage(true);
-
-    setMajors([...majors, newMajor]);
   };
   const handleClose = () => {
     close();
   };
 
-  const handleAddAnotherMajor = () => {
+  const handleDisplay = () => {
     setDisplayMessage(false);
   };
   return (
-    <form onSubmit={handleSubmit} className="add-form">
+    <form
+      onSubmit={handleSubmit}
+      className={`add-form ${emptyFields ? "empty-fields" : ""}`}
+    >
       {displayMessage ? (
         <div>
           <div className="message-container">
@@ -81,14 +90,13 @@ const AddMajor = ({ majors, setMajors, courses, close }) => {
             <button onClick={handleClose} className="close-btn">
               close
             </button>
-            <button onClick={handleAddAnotherMajor} className="add-form-submit">
+            <button onClick={handleDisplay} className="add-form-submit">
               Add Another Major
             </button>
           </div>
         </div>
       ) : (
         <div>
-          {" "}
           <h1 className="add-form-title">Add Major</h1>
           <p className={errMsg ? "errmsg" : "offscreen"}>{errMsg}</p>
           <div className="add-form-input">
@@ -139,7 +147,7 @@ const AddMajor = ({ majors, setMajors, courses, close }) => {
               />
             </label>
             <input
-              id="creditsNumber"
+              type="text"
               value={creditsNumber}
               onChange={(event) => setCreditsNumber(event.target.value)}
               onFocus={() => setCreditsNumberFocus(true)}
@@ -149,7 +157,7 @@ const AddMajor = ({ majors, setMajors, courses, close }) => {
             <p
               id="uidnote"
               className={
-                creditsNumberFocus && !creditsNumber
+                creditsNumberFocus && !validCreditsNumber
                   ? "instructions"
                   : "offscreen"
               }

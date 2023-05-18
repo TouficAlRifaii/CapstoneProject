@@ -49,7 +49,6 @@ const Courses = () => {
   }, []);
 
   const handleDeleteCourse = async (courseId) => {
-    console.log(courseId);
     const data = new FormData();
     data.append("id", courseId);
     const url = "http://127.0.0.1:8000/api/courses/delete";
@@ -93,47 +92,69 @@ const Courses = () => {
         <table className="list-table courses">
           <thead>
             <tr>
-              <th>Subject</th>
-              <th>Course Number</th>
-              <th>Title</th>
-              <th>Credits</th>
-              <th>Prerequisites</th>
-              <th>Corequisites</th>
+              <th>
+                <div className="table-data">Subject</div>
+              </th>
+              <th>
+                <div className="table-data">Course Number</div>
+              </th>
+              <th>
+                <div className="table-data">Title</div>
+              </th>
+              <th>
+                <div className="table-data">Credits</div>
+              </th>
+              <th>
+                <div className="table-data">Prerequisites</div>
+              </th>
+              <th>
+                <div className="table-data">Corequisites</div>
+              </th>
               <th></th>
             </tr>
           </thead>
           <tbody>
             {currentItems.map((course) => (
               <tr key={course} className="list-row">
-                <td>{course.subject}</td>
-                <td>{course.courseNumber}</td>
-                <td>{course.title}</td>
-                <td>{course.creditsNumber}</td>
+                <td>
+                  <div className="table-data">{course.subject}</div>
+                </td>
+                <td>
+                  <div className="table-data">{course.courseNumber}</div>
+                </td>
+                <td>
+                  <div className="table-data">{course.title}</div>
+                </td>
+                <td>
+                  <div className="table-data">{course.creditsNumber}</div>
+                </td>
                 <ListCourseId course={course.preReq} courses={courses} />{" "}
                 <ListCourseId course={course.coReq} courses={courses} />{" "}
                 <td>
-                  <button
-                    onClick={() => handleDeleteCourse(course.id)}
-                    className="delete-btn"
-                  >
-                    Delete
-                  </button>
-                  <Popup
-                    trigger={<button className="edit-btn">Edt</button>}
-                    modal
-                    lockScroll={true}
-                  >
-                    {(close) => (
-                      <div className="popup">
-                        <EditCourse
-                          courses={courses}
-                          setCourses={setCourses}
-                          id={course.id}
-                          close={close}
-                        />
-                      </div>
-                    )}
-                  </Popup>
+                  <div className="table-btns">
+                    <button
+                      onClick={() => handleDeleteCourse(course.id)}
+                      className="delete-btn"
+                    >
+                      Delete
+                    </button>
+                    <Popup
+                      trigger={<button className="edit-btn">Edt</button>}
+                      modal
+                      lockScroll={true}
+                    >
+                      {(close) => (
+                        <div className="popup">
+                          <EditCourse
+                            courses={courses}
+                            setCourses={setCourses}
+                            id={course.id}
+                            close={close}
+                          />
+                        </div>
+                      )}
+                    </Popup>
+                  </div>
                 </td>
               </tr>
             ))}

@@ -6,52 +6,82 @@
 .list-section {
   display: flex;
   align-content: center;
-  justify-content: center;
+  justify-content: flex-start;
   flex-direction: column;
   flex-wrap: wrap;
 }
 
-.list-table {
-  width: 900px;
+.table {
   table-layout: fixed;
   border-spacing: 0;
   border: 2px solid black;
   border-radius: 0.3rem;
 }
 
-.list-table th,
-.list-table td {
+.table th,
+.table td {
   padding-top: 0.3rem;
   padding-bottom: 0.2rem;
   padding-left: 0.2rem;
   padding-right: 0.3rem;
   text-align: left;
-  border: 0.1rem solid rgb(201, 190, 190);
+  border: 0.01rem solid rgb(201, 190, 190);
   width: 100px;
 }
-
-.list-table th:nth-child(3) {
-  width: 15rem; /* set desired width here */
+/* MAJORS WIDTH*/
+.table.majors th:nth-child(1) {
+  width: 8.75rem;
 }
-.list-table th:nth-child(5) {
-  width: 8.5rem; /* set desired width here */
+.table.majors th:nth-child(2) {
+  width: 7rem;
+}
+.table.majors th:nth-child(3) {
+  width: 28.75rem;
 }
 
+/*Doctors width*/
+.table.doctors th:nth-child(1) {
+  width: 8.75rem;
+}
+.table.doctors th:nth-child(2) {
+  width: 4rem;
+}
+.table.doctors th:nth-child(3) {
+  width: 18rem;
+}
+.table.doctors th:nth-child(4) {
+  width: 14rem;
+}
+.table-data-sessions {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 0.3rem;
+  margin-top: 0.1rem;
+  margin-left: 0.3rem;
+}
+
+/*       COURSES WIDTH */
 .list-table.courses th:nth-child(3) {
-  width: 10rem; /* set desired width here */
+  width: 10rem;
 }
 .list-table.courses th:nth-child(1) {
-  width: 4rem; /* set desired width here */
+  width: 4rem;
 }
 .list-table.courses th:nth-child(2) {
-  width: 4rem; /* set desired width here */
+  width: 4rem;
 }
 .list-table.courses th:nth-child(4) {
-  width: 3.2rem; /* set desired width here */
+  width: 3.2rem;
 }
 .list-table.courses th:nth-child(7) {
-  width: 8.5rem; /* set desired width here */
+  width: 8.5rem;
 }
+
+/*============================================================*/
+.table th:last-child {
+  width: 10rem;
+}
+
 .list-table th {
   font-weight: bold;
 }
@@ -60,19 +90,15 @@
   margin: 2rem;
 }
 
-.nav-search {
-  align-items: center;
-  justify-content: flex-start;
-  margin-bottom: 1rem;
-  margin-top: 1rem;
-}
+/*=============================Others===========================================*/
 
 .search-input {
   padding: 0.5rem;
   border: none;
-  border-bottom: 2px solid black;
-  margin-right: 1rem;
-  width: 20rem;
+  border-bottom: 3px solid black;
+  margin-top: 0.3rem;
+  margin-bottom: 1rem;
+  width: 15rem;
   font-size: 1rem;
 }
 
@@ -155,7 +181,7 @@
 
 .table-data {
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
 }
 
 .table-btns {

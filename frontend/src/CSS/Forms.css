@@ -1,5 +1,5 @@
 .add-form {
-  font-size: 2rem;
+  font-size: 1.5rem;
   width: 80%;
   margin: 2rem auto;
   padding: 1.5rem;
@@ -32,7 +32,7 @@ label {
 }
 
 .add-input-field {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   width: 100%;
   padding: 0.5rem;
   border-radius: 0.3rem;
@@ -219,8 +219,8 @@ label {
 
 /*=============================== POPUP ================================*/
 .popup {
-  overflow-y: auto;
-  height: 800px;
+  overflow-y: scroll;
+  height: 40rem;
   padding: 0%;
   margin-top: 20px;
 }
@@ -243,6 +243,12 @@ label {
   background-color: rgba(0, 0, 0, 0.5) !important;
 }
 
+.empty-fields {
+  transition: red 0.5s ease-in-out;
+  border-color: red;
+  border-width: 0.5rem;
+  border-radius: 0.4rem;
+}
 /*=============================== Successful submission ================================*/
 
 .message-container {

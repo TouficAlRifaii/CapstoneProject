@@ -18,11 +18,13 @@ const DisplayDoctorSessions = ({ doctor, day }) => {
   }
 
   return (
-    <div>
-      <h4>{day}</h4>
+    <div className="table-data-sessions">
+      <h4>
+        {day}:<br />
+      </h4>
       {sessions.map((session, index) => (
-        <div key={index}>
-          {formatTime(session.start)} - {formatTime(session.end)}
+        <div className="table-sessions-time" key={index}>
+          {formatTime(session.start)} to {formatTime(session.end)}
         </div>
       ))}
     </div>

@@ -13,11 +13,14 @@ select option {
   font-size: 1.5rem;
 }
 .add-list-btn {
-  padding: 10px 20px;
-  font-size: 16px;
-  background-color: #4caf50;
+  padding: 0.3rem 0.7rem;
+  font-size: 1.5rem;
+  background-color: #abb1ab;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+}
+.add-list-btn:hover {
+  background-color: rgb(88, 87, 87);
 }

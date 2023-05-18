@@ -14,7 +14,7 @@ const courseNumberRegex = /^[0-9]{3}[A-Z]?[A-Z]?$/;
 
 const titleRegex = /^.{10,255}$/;
 
-const creditsNumberRegex = /^[1-5]$/;
+const CREDITSNUMBERREGEX = /^[1-5]$/;
 
 const AddCourse = ({ courses, setCourses, close }) => {
   const [subject, setSubject] = useState("");
@@ -45,7 +45,7 @@ const AddCourse = ({ courses, setCourses, close }) => {
   }, [title]);
 
   useEffect(() => {
-    setValidCreditsNumber(creditsNumberRegex.test(creditsNumber));
+    setValidCreditsNumber(CREDITSNUMBERREGEX.test(creditsNumber));
   }, [creditsNumber]);
 
   useEffect(() => {
@@ -62,7 +62,7 @@ const AddCourse = ({ courses, setCourses, close }) => {
       subject === "" ||
       !courseNumberRegex.test(courseNumber) ||
       !titleRegex.test(title) ||
-      !creditsNumberRegex.test(creditsNumber)
+      !CREDITSNUMBERREGEX.test(creditsNumber)
     ) {
       return; // Return early if any of the state variables are empty
     }

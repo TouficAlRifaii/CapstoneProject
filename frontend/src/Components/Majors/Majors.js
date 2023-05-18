@@ -12,13 +12,12 @@ const Majors = ({ courses, majors, setMajors }) => {
   const [majorsPerPage, setMajorsPerPage] = useState(8);
 
   useEffect(() => {
-    const filteredResults = majors.filter(
-      (major) =>
-        major.majorTitle.toLowerCase().includes(search.toLowerCase()) ||
-        major.courses.toLowerCase().includes(search.toLowerCase())
+    const filteredResults = majors.filter((major) =>
+      major.majorTitle.toLowerCase().includes(search.toLowerCase())
     );
 
     setSearchResults(filteredResults);
+    setCurrentPage(1);
   }, [majors, search]);
 
   const handleDelete = (id) => {
@@ -54,7 +53,7 @@ const Majors = ({ courses, majors, setMajors }) => {
           />
         </div>
 
-        <table className="list-table">
+        <table className="table majors">
           <thead>
             <tr>
               <th>
@@ -66,17 +65,14 @@ const Majors = ({ courses, majors, setMajors }) => {
               <th>
                 <div className="table-data"> Courses</div>
               </th>
-              <th>
-                <div> </div>{" "}
-              </th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
             {currentMajors.map((major) => (
               <tr key={major.id} className="list-row">
                 <td>
-                  {" "}
-                  <div className="table-data"> {major.majorTitle} </div>{" "}
+                  <div className="table-data"> {major.majorTitle} </div>
                 </td>
                 <td>
                   <div className="table-data">{major.majorCredits}</div>
@@ -125,7 +121,7 @@ const Majors = ({ courses, majors, setMajors }) => {
             </button>
           ))}
         </div>
-        {/* modal: A boolean value that determines whether the popup is a modal (blocks interaction with the rest of the page) or not. */}
+
         <Popup
           trigger={<button className="add-link-btn">Add major</button>}
           modal
