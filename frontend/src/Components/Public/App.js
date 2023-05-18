@@ -21,7 +21,7 @@ import AddUser from "../Users/AddUser";
 import AddCourse from "../Courses/AddCourse";
 import Login from "./Login";
 
-import "../../CSS/tables.css";
+import "../../CSS/Tables.css";
 import "../../CSS/Forms.css";
 import "../../CSS/Nav.css";
 import "../../CSS/DropList.css";
