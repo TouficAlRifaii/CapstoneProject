@@ -290,14 +290,17 @@ class SectionsApi(APIView):
         for section in sections:
             students = section.numOfStudents
             numOfSections = section.numOfSections
-            flag = (students // 40 - numOfSections) > 0
+            flag = (students // section.capacity - numOfSections) > 0
             if flag:
-                numOfSections += students // 40 - numOfSections
+                numOfSections += students // section.capacity - numOfSections
             section.numOfSections = numOfSections
             section.save(update_fields=["numOfSections"])
 
+        allSections = Section.objects.all()
+        sectionsSerializer = SectionSerializer(allSections, many=True)
         return Response({
-            "message": "success"
+            "message": "success",
+            "sections": sectionsSerializer.data
         })
 
 

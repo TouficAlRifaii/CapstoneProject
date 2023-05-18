@@ -49,7 +49,7 @@ class StudentSerializer(serializers.ModelSerializer):
 class SectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Section
-        fields = ['id', 'campus', 'numOfStudents', 'numOfSections', 'course']
+        fields = ['id', 'campus', 'numOfStudents', 'numOfSections', 'course', 'capacity']
 
 
 class MajorSerializer(serializers.ModelSerializer):

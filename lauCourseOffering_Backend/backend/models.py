@@ -57,3 +57,4 @@ class Section(models.Model):
     numOfStudents = models.IntegerField()
     numOfSections = models.IntegerField()
     course = models.ForeignKey(to=Course, on_delete=models.CASCADE)
+    capacity = models.IntegerField(default=40)
