@@ -16,7 +16,7 @@
   table-layout: fixed;
   border-spacing: 0;
   border: 2px solid black;
-  border-radius: 1rem;
+  border-radius: 0.3rem;
 }
 
 .list-table th,
@@ -26,8 +26,7 @@
   padding-left: 0.2rem;
   padding-right: 0.3rem;
   text-align: left;
-  border: 0.1rem solid lightgray;
-  border-bottom: none;
+  border: 0.1rem solid rgb(201, 190, 190);
   width: 100px;
 }
 
@@ -132,7 +131,7 @@
 }
 
 .delete-btn:hover {
-  background-color: #cc0000;
+  background-color: #a10a0a;
 }
 
 .edit-btn {
@@ -154,13 +153,25 @@
   width: 4rem;
 }
 
+.table-data {
+  display: flex;
+  justify-content: center;
+}
+
+.table-btns {
+  display: flex;
+  justify-content: center;
+  justify-content: space-evenly;
+
+  align-items: center;
+  flex-wrap: wrap;
+}
+
 .add-link-icon {
   background-color: black;
   color: white;
   font-size: 1.5rem;
   display: flex;
-  justify-content: center;
-  align-items: center;
   width: 2.5rem;
   height: 2.5rem;
 }
@@ -174,62 +185,4 @@
 
 .actions button {
   margin-right: 0.5rem;
-}
-
-@media only screen and (max-width: 768px) {
-  .list-table {
-    border-collapse: separate;
-    border-spacing: 0;
-    border: 2px solid black;
-    border-radius: 1rem;
-    width: 100%;
-  }
-
-  .list-table th,
-  .list-table td {
-    font-size: 0.9rem;
-  }
-
-  .search-input {
-    width: 60%;
-  }
-
-  .add-link-btn {
-    font-size: 0.9rem;
-    padding: 0.8rem 1.5rem;
-    margin-top: 1rem;
-  }
-
-  .add-link-icon {
-    font-size: 1.2rem;
-    width: 2rem;
-    height: 2rem;
-  }
-
-  .actions button {
-    margin-right: 0.2rem;
-  }
-}
-
-@media only screen and (min-width: 768px) and (max-width: 1024px) {
-  .list-table {
-    border-collapse: separate;
-    border-spacing: 0;
-    border: 2px solid black;
-    border-radius: 1rem;
-    width: 10%;
-  }
-  .list-table th,
-  .list-table td {
-    font-size: 1rem;
-  }
-
-  .search-input {
-    width: 20%;
-  }
-
-  .add-link-btn {
-    font-size: 1rem;
-    padding: 1rem 2rem;
-  }
 }

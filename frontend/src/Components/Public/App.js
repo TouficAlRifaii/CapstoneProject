@@ -2,14 +2,10 @@ import About from "../About";
 import Courses from "../Courses/Courses";
 import Home from "../Home/Home";
 import Nav from "./Nav";
-import Users from "../Users/Users";
-import Header from "./Header";
-import Footer from "./Footer";
+import Majors from "../Majors/Majors";
 import Missing from "./Missing";
-import EditUser from "../Users/EditUser";
-import EditCourse from "../Courses/EditCourse";
+
 import Doctors from "../Doctors/Doctors";
-import AddDoctor from "../Doctors/AddDoctor";
 import {
   Route,
   Routes,
@@ -277,18 +273,43 @@ function App() {
     },
   ]);
 
+  const [majors, setMajors] = useState([
+    {
+      id: "0",
+      majorTitle: "Computer science",
+      majorCredits: "89",
+      majorCourses: ["2", "4", "5", "6", "8"],
+    },
+    {
+      id: "1",
+      majorTitle: "Literature",
+      majorCredits: "89",
+      majorCourses: ["2", "4", "5", "6", "8"],
+    },
+    {
+      id: "2",
+      majorTitle: "Literature",
+      majorCredits: "89",
+      majorCourses: ["13", "3", "7", "6", "8"],
+    },
+  ]);
+
   return (
     <div className="App">
       <Nav />
       <body>
         <Routes>
           <Route exact path="/" element={<Home />} />
-          <Route exact path="login" element={<Login />} />
-
           <Route
             exact
-            path="adduser"
-            element={<AddUser users={users} setUsers={setUsers} />}
+            path="doctors"
+            element={
+              <Doctors
+                doctors={doctors}
+                setDoctors={setDoctors}
+                courses={courses}
+              />
+            }
           />
           <Route
             exact
@@ -303,9 +324,9 @@ function App() {
           />
           <Route
             exact
-            path="AddDoctor"
+            path="doctors"
             element={
-              <AddDoctor
+              <Doctors
                 doctors={doctors}
                 setDoctors={setDoctors}
                 courses={courses}
@@ -314,40 +335,15 @@ function App() {
           />
           <Route
             exact
-            path="EditDoctor/:id"
+            path="majors"
             element={
-              <EditDoctor
-                doctors={doctors}
-                setDoctors={setDoctors}
-                courses={courses}
-              />
+              <Majors majors={majors} setMajors={setMajors} courses={courses} />
             }
-          />
-
-          <Route
-            exact
-            path="users"
-            element={<Users users={users} setUsers={setUsers} />}
           />
           <Route
             exact
             path="courses"
             element={<Courses courses={courses} setCourses={setCourses} />}
-          />
-          <Route
-            exact
-            path="addcourse"
-            element={<AddCourse courses={courses} setCourses={setCourses} />}
-          />
-          <Route
-            exact
-            path="/editcourse/:id"
-            element={<EditCourse courses={courses} setCourses={setCourses} />}
-          />
-
-          <Route
-            path="/edituser/:name"
-            element={<EditUser users={users} setUsers={setUsers} />}
           />
 
           <Route path="about" element={<About />} />

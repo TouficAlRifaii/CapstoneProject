@@ -20,7 +20,7 @@ function Nav() {
             <Link to="/doctors">Doctors</Link>
           </li>
           <li>
-            <Link to="/users">Users</Link>
+            <Link to="/majors">Majors</Link>
           </li>
           <li>
             <Link to="/about">About</Link>

@@ -24,14 +24,20 @@ const DropListCourses = ({ elementCourses, setElementCourses, courses }) => {
           >
             <option value="">None</option>
 
-            {courses.map((course) => (
-              <option key={course.id} value={course.id}>
-                {`${course.subject} ${course.courseNumber}`}
-              </option>
-            ))}
+            {courses
+              .sort((courses, NCourse) =>
+                courses.subject.localeCompare(NCourse.subject)
+              )
+              .map((course) => (
+                <option key={course.id} value={course.id}>
+                  {`${course.subject} ${course.courseNumber}`}
+                </option>
+              ))}
           </select>
         ))}
-        <button onClick={addCoursesList}>+</button>
+        <button className="add-list-btn" onClick={addCoursesList}>
+          +
+        </button>
       </div>
     </div>
   );

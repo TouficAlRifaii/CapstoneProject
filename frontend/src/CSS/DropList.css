@@ -1,6 +1,6 @@
 select {
   padding: 0.3rem;
-  font-size: 1rem;
+  font-size: 1.5rem;
   border: 0.17rem solid #ccc;
   border-radius: 0.5rem;
   width: 100%;
@@ -10,5 +10,14 @@ select {
 
 select option {
   padding: 0.5rem;
-  font-size: 1rem;
+  font-size: 1.5rem;
+}
+.add-list-btn {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
