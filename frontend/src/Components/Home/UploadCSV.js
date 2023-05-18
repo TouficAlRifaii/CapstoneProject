@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-const UploadCSV = () => {
+const UploadCSV = ({ active, setActive }) => {
   const [selectedFiles, setSelectedFiles] = useState();
 
   const handleFileSelect = (event) => {
@@ -9,6 +9,9 @@ const UploadCSV = () => {
     setSelectedFiles(files);
   };
 
+  const handleActive = () => {
+    setActive(false);
+  };
   const handleFileUpload = async () => {
     if (!selectedFiles || selectedFiles.length === 0) {
       alert("Please select at least one file.");
@@ -42,9 +45,8 @@ const UploadCSV = () => {
           );
           if (sectionsResponse.data["message"] === "success") {
             alert("Sections Created Sucessfully");
-          }
-          else {
-            alert("Sections failed")
+          } else {
+            alert("Sections failed");
           }
         } catch (error) {
           console.log(error);
@@ -61,9 +63,20 @@ const UploadCSV = () => {
 
   return (
     <div>
-      <h2>Upload CSV files</h2>
-      <input type="file" onChange={handleFileSelect} multiple />
-      <button onClick={handleFileUpload}>Upload</button>
+      {active && (
+        <section className="home-section">
+          <div className="container">
+            <div className="browse">
+              <h2>Upload CSV files</h2>
+
+              <input type="file" onChange={handleFileSelect} multiple />
+              <button onClick={handleActive} className="generate-btn">
+                Upload
+              </button>
+            </div>
+          </div>
+        </section>
+      )}
     </div>
   );
 };

@@ -1,151 +1,81 @@
 import { useState } from "react";
-import Papa from "papaparse";
-import { saveAs } from "file-saver";
 import UploadCSV from "./UploadCSV";
-import PopUp from "../Public/PopUp";
-
-function Home() {
-  // State to store parsed data
-  const [parsedData, setParsedData] = useState([]);
-
-  //State to store table Column name
-  const [tableRows, setTableRows] = useState([]);
-
-  //State to store the values
-  const [values, setValues] = useState([]);
-
-  const changeHandler = (event) => {
-    // Passing file data (event.target.files[0]) to parse using Papa.parse
-    Papa.parse(event.target.files[0], {
-      header: true,
-      skipEmptyLines: true,
-      complete: function (results) {
-        const rowsArray = [];
-        const valuesArray = [];
-
-        // Iterating data to get column name and their values
-        results.data.map((d) => {
-          rowsArray.push(Object.keys(d));
-          valuesArray.push(Object.values(d));
-        });
-
-        // Parsed Data Response in array format
-        setParsedData(results.data);
-
-        // Filtered Column Names
-        setTableRows(rowsArray[0]);
-
-        // Filtered Values
-        setValues(valuesArray);
-      },
-    });
-  };
-
-  const handleCellChange = (rowIndex, columnIndex, value) => {
-    const newValues = [...values];
-    newValues[rowIndex][columnIndex] = value;
-    setValues(newValues);
-  };
-
-  const handleDownload = () => {
-    // Converting data into CSV format
-    const csv = Papa.unparse(parsedData);
-
-    // Creating a Blob object to save the CSV file
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
-
-    // Saving the file using file-saver.js
-    saveAs(blob, "data.csv");
-  };
-
-  const handleShareByEmail = () => {
-    const csv = Papa.unparse(parsedData);
-    const subject = "Shared CSV file";
-    const body = "Please find the CSV file attached.";
-    const uri =
-      "mailto:?subject=" +
-      encodeURIComponent(subject) +
-      "&body=" +
-      encodeURIComponent(body) +
-      "&attachment=" +
-      "data:text/csv;charset=utf-8," +
-      encodeURIComponent(csv);
-    window.location.href = uri;
-  };
-
-  const handleAddRow = () => {
-    const newValues = [...values];
-    newValues.push(Array(tableRows.length).fill(""));
-    setValues(newValues);
-  };
-
-  const handleAddColumn = () => {
-    const newColumn = prompt("Enter column name");
-    const newTableRows = [...tableRows, newColumn];
-    const newValues = values.map((row) => [...row, ""]);
-    setTableRows(newTableRows);
-    setValues(newValues);
-  };
+import CourseOffering from "./CourseOffering";
+import "../../CSS/Home.css";
+const Home = ({ courses }) => {
+  const [sections, setSections] = useState([
+    {
+      id: 1,
+      campus: "Byblos",
+      numOfStudents: 21,
+      numOfSections: 1,
+      course: 1,
+      capacity: 40,
+    },
+    {
+      id: 1143,
+      campus: "Beirut",
+      numOfStudents: 31,
+      numOfSections: 1,
+      course: 43,
+      capacity: 40,
+    },
+    {
+      id: 1144,
+      campus: "Byblos",
+      numOfStudents: 31,
+      numOfSections: 1,
+      course: 44,
+      capacity: 40,
+    },
+    {
+      id: 1145,
+      campus: "Beirut",
+      numOfStudents: 51,
+      numOfSections: 1,
+      course: 44,
+      capacity: 40,
+    },
+    {
+      id: 1146,
+      campus: "Beirut",
+      numOfStudents: 181,
+      numOfSections: 4,
+      course: 45,
+      capacity: 40,
+    },
+    {
+      id: 1147,
+      campus: "Byblos",
+      numOfStudents: 48,
+      numOfSections: 1,
+      course: 45,
+      capacity: 40,
+    },
+    {
+      id: 1148,
+      campus: "Byblos",
+      numOfStudents: 19,
+      numOfSections: 1,
+      course: 46,
+      capacity: 40,
+    },
+  ]);
+  //if true shows upload Exel, else shows CourseOffering
+  const [activeGenerate, setActiveGenerate] = useState(true);
 
   return (
     <div>
-      <PopUp />
-      {/* File Uploader */}
-      <input
-        type="file"
-        name="file"
-        onChange={changeHandler}
-        accept=".csv"
-        style={{ display: "block", margin: "10px auto" }}
+      <CourseOffering
+        active={activeGenerate}
+        setActive={setActiveGenerate}
+        sections={sections}
+        setSections={setSections}
+        courses={courses}
       />
-      <br />
-      <br />
-      {/* Table */}
-      <table>
-        <thead>
-          <tr>
-            {tableRows.map((rows, index) => {
-              return <th key={index}>{rows}</th>;
-            })}
-          </tr>
-        </thead>
-        <tbody>
-          {values.map((value, rowIndex) => {
-            return (
-              <tr key={rowIndex}>
-                {value.map((val, columnIndex) => {
-                  return (
-                    <td key={columnIndex}>
-                      <input
-                        type="text"
-                        value={val}
-                        onChange={(event) =>
-                          handleCellChange(
-                            rowIndex,
-                            columnIndex,
-                            event.target.value
-                          )
-                        }
-                      />
-                    </td>
-                  );
-                })}
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-      {/* Download and Share by email buttons */}
-
-      <button onClick={handleDownload}>Download CSV</button>
-      <button onClick={handleShareByEmail}>Share by Email</button>
-      <button onClick={handleAddRow}>Add row</button>
-      <button onClick={handleAddColumn}>Add Column</button>
-      <div>
-        <UploadCSV />
-      </div>
+      <UploadCSV active={activeGenerate} setActive={setActiveGenerate} />
     </div>
   );
-}
+};
 
 export default Home;

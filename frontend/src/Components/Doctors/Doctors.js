@@ -78,13 +78,11 @@ const Doctors = ({ doctors, setDoctors, courses }) => {
             {currentDoctors.map((doctor) => (
               <tr key={doctor.id} className="list-row">
                 <td>
-                  {" "}
                   <div className="table-data">
-                    {doctor.name} {doctor.lastName}{" "}
+                    {doctor.name} {doctor.lastName}
                   </div>
                 </td>
                 <td>
-                  {" "}
                   <div className="table-data">{doctor.title} </div>
                 </td>
                 <ListCourseId course={doctor.tCourses} courses={courses} />

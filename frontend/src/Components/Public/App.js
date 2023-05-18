@@ -299,7 +299,7 @@ function App() {
       <Nav />
       <body>
         <Routes>
-          <Route exact path="/" element={<Home />} />
+          <Route exact path="/" element={<Home courses={courses} />} />
           <Route
             exact
             path="doctors"
