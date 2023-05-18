@@ -2,7 +2,7 @@ from django.contrib import admin
 from backend.models import User, Course, Student
 # Register your models here.
 from django.contrib import admin
-from .models import CourseRelationShip, Major
+from .models import CourseRelationShip, Major, Doctor
 
 
 class CourseRelationShipAdmin(admin.ModelAdmin):
@@ -16,3 +16,4 @@ admin.site.register(User)
 admin.site.register(Course)
 admin.site.register(Student)
 admin.site.register(Major)
+admin.site.register(Doctor)

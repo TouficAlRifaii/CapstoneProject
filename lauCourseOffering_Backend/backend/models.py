@@ -58,3 +58,18 @@ class Section(models.Model):
     numOfSections = models.IntegerField()
     course = models.ForeignKey(to=Course, on_delete=models.CASCADE)
     capacity = models.IntegerField(default=40)
+
+
+class Doctor(models.Model):
+    name = models.CharField(max_length=100)
+    title = models.CharField(max_length=100)
+    courses = models.ManyToManyField('Course', related_name='doctors', blank=True)
+    availability = models.ManyToManyField('Availability', related_name='doctors', blank=True)
+
+
+class Availability(models.Model):
+    day = models.CharField(max_length=1)
+    start_time = models.TimeField()
+    end_time = models.TimeField()
+
+

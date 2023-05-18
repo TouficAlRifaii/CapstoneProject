@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Course, CourseRelationShip, Student, Section, Major
+from .models import User, Course, CourseRelationShip, Student, Section, Major, Availability, Doctor
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -56,3 +56,15 @@ class MajorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Major
         fields = ['id', 'title', 'credits', 'courses']
+
+
+class DoctorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Doctor
+        fields = ['id' , 'name', 'title', 'courses', 'availability']
+
+
+class AvailabilitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Availability
+        fields = ['id', 'day', 'start_time', "end_time"]
