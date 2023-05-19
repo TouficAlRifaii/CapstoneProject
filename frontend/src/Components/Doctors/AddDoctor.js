@@ -7,6 +7,7 @@ import {
   faInfoCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import axios from "axios";
 
 const nameRegex = /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)+$/; //will be used for both name and lastname
 const titleRegex = /^[a-zA-Z0-9\s]{2,50}$/;
@@ -24,7 +25,7 @@ const AddDoctor = ({ doctors, setDoctors, courses, close }) => {
   const [validTitle, setValidTitle] = useState(false);
   const [titleFocus, setTitleFocus] = useState(false);
 
-  const [tCourses, setTCourses] = useState([""]);
+  const [tCourses, setTCourses] = useState([]);
   const [sessions, setSessions] = useState([{ days: "", start: "", end: "" }]);
 
   const [errMsg, setErrMsg] = useState("");
@@ -53,7 +54,7 @@ const AddDoctor = ({ doctors, setDoctors, courses, close }) => {
   const handleDisplay = () => {
     setDisplayMessage(false);
   };
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const lastSession = sessions[sessions.length - 1];
 
@@ -82,14 +83,32 @@ const AddDoctor = ({ doctors, setDoctors, courses, close }) => {
       tCourses,
       sessions,
     };
-    setDoctors([...doctors, newDoctor]);
-    setName("");
-    setLastName("");
-    setTitle("");
-    setTCourses([""]);
-    setSessions([{ days: "", start: "", end: "" }]);
-    setErrMsg("");
-    setDisplayMessage(true);
+    console.log(tCourses)
+    const data = {};
+    const doctor = {
+      name: name + lastName,
+      title: title,
+      courses: tCourses.filter((course) => course !== ""),
+    };
+    data["doctor"] = doctor;
+    data["availabilties"] = sessions;
+    console.log(data);
+    try {
+      const response = await axios.post("http://127.0.0.1:8000/api/doctors", data);
+      console.log(response)
+      if (response.data["message"] === "success") {
+        setDoctors([...doctors, newDoctor]);
+        setName("");
+        setLastName("");
+        setTitle("");
+        setTCourses([""]);
+        setSessions([{ day: "", start: "", end: "" }]);
+        setErrMsg("");
+        setDisplayMessage(true);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
