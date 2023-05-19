@@ -1,6 +1,7 @@
 import { useState } from "react";
 import UploadCSV from "./UploadCSV";
 import CourseOffering from "./CourseOffering";
+import TimeTableComponent from "./TimeTable";
 import "../../CSS/Home.css";
 const Home = ({ courses }) => {
   const [sections, setSections] = useState([

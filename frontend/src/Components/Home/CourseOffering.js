@@ -1,7 +1,7 @@
 import ListCourseId from "../Courses/ListCourseId";
 import React, { useState, useEffect } from "react";
 import Download from "./Download";
-
+import TimeTable from "./TimeTable";
 const CourseOffering = ({
   active,
   setActive,
@@ -68,9 +68,7 @@ const CourseOffering = ({
       {!active && (
         <section className="list-section">
           <button onClick={handleActive}> Cancel Operation </button>
-
           <h1>Course Offering</h1>
-
           <div>
             <div className="nav-search">
               <input
@@ -178,8 +176,8 @@ const CourseOffering = ({
               ))}
             </div>
           </div>
-
           <Download elements={sections} />
+          <TimeTable campus="Byblos" />{" "}
         </section>
       )}
     </div>
