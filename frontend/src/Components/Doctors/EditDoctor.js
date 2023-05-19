@@ -13,7 +13,6 @@ const titleRegex = /^[a-zA-Z0-9\s]{2,50}$/;
 
 const EditDoctor = ({ close, doctors, setDoctors, courses, id }) => {
   const doctor = doctors.find((doctor) => doctor.id === parseInt(id));
-
   const [name, setName] = useState(doctor.name);
   const [validName, setValidName] = useState(false);
   const [nameFocus, setNameFocus] = useState(false);
@@ -26,8 +25,9 @@ const EditDoctor = ({ close, doctors, setDoctors, courses, id }) => {
   const [validTitle, setValidTitle] = useState(false);
   const [titleFocus, setTitleFocus] = useState(false);
 
-  const [tCourses, setTCourses] = useState(doctor.tCourses);
+  const [tCourses, setTCourses] = useState(doctor.courses);
   const [sessions, setSessions] = useState(doctor.sessions);
+  console.log(doctor)
 
   const [errMsg, setErrMsg] = useState("");
 
@@ -160,7 +160,7 @@ const EditDoctor = ({ close, doctors, setDoctors, courses, id }) => {
       <div className="add-form-input">
         <label htmlFor="tCourses">Courses:</label>
         <DropListCourses
-          elementCourses={tCourses}
+          elementCourses={[parseInt(tCourses)]}
           setElementCourses={setTCourses}
           courses={courses}
         />

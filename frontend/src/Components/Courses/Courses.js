@@ -12,25 +12,12 @@ import EditCourse from "./EditCourse";
 // section: "001",
 // title: "Introduction to Computer Science"
 
-const getCourses = async (setCourses) => {
-  try {
-    const response = await axios.get("http://127.0.0.1:8000/api/courses");
-    if (response.data["message"] === "success") {
-      console.log(response.data);
-      setCourses(response.data["courses"]);
-    }
-  } catch (exception) {
-    console.log("test");
-  }
-};
-
-const Courses = () => {
+const Courses = ({ courses, setCourses }) => {
   const [searchResults, setSearchResults] = useState([]);
   const [search, setSearch] = useState("");
 
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
-  const [courses, setCourses] = useState([]);
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -51,12 +38,6 @@ const Courses = () => {
     setSearchResults(filteredResults.reverse());
     setCurrentPage(1);
   }, [courses, search]);
-
-  useEffect(() => {
-    getCourses(setCourses);
-    // console.log(courses);
-  }, []);
-
   const handleDeleteCourse = async (courseId) => {
     const data = new FormData();
     data.append("id", courseId);
