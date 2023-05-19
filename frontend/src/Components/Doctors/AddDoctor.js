@@ -83,7 +83,6 @@ const AddDoctor = ({ doctors, setDoctors, courses, close }) => {
       tCourses,
       sessions,
     };
-    console.log(tCourses)
     const data = {};
     const doctor = {
       name: name + lastName,
@@ -92,10 +91,11 @@ const AddDoctor = ({ doctors, setDoctors, courses, close }) => {
     };
     data["doctor"] = doctor;
     data["availabilties"] = sessions;
-    console.log(data);
     try {
-      const response = await axios.post("http://127.0.0.1:8000/api/doctors", data);
-      console.log(response)
+      const response = await axios.post(
+        "http://127.0.0.1:8000/api/doctors",
+        data
+      );
       if (response.data["message"] === "success") {
         setDoctors([...doctors, newDoctor]);
         setName("");
@@ -106,9 +106,7 @@ const AddDoctor = ({ doctors, setDoctors, courses, close }) => {
         setErrMsg("");
         setDisplayMessage(true);
       }
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   return (

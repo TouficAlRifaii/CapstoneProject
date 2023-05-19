@@ -27,7 +27,6 @@ const EditDoctor = ({ close, doctors, setDoctors, courses, id }) => {
 
   const [tCourses, setTCourses] = useState(doctor.courses);
   const [sessions, setSessions] = useState(doctor.sessions);
-  console.log(doctor)
 
   const [errMsg, setErrMsg] = useState("");
 

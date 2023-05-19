@@ -7,28 +7,23 @@ import AddDoctor from "./AddDoctor";
 import EditDoctor from "./EditDoctor";
 import axios from "axios";
 
-const Doctors = ({  courses }) => {
+const Doctors = ({ courses }) => {
   const [searchResults, setSearchResults] = useState([]);
   const [search, setSearch] = useState("");
   const [doctors, setDoctors] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [doctorsPerPage, setDoctorsPerPage] = useState(3);
-  
+
   const getDoctors = async () => {
     try {
-      console.log("AHAH")
       const response = await axios.get("http://127.0.0.1:8000/api/doctors");
       if (response.data["message"] === "success") {
-        console.log(response.data);
         setDoctors(response.data["doctors"]);
       }
-    } catch (exception) {
-      console.log("test");
-    }
+    } catch (exception) {}
   };
   useEffect(() => {
     getDoctors();
-    console.log(doctors);
   }, []);
 
   useEffect(() => {

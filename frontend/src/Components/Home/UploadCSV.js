@@ -23,12 +23,10 @@ const UploadCSV = ({ active, setActive }) => {
       alert("Please select at least one file.");
       return;
     }
-    console.log(selectedFiles);
     const formData = new FormData();
     selectedFiles.forEach((file) => {
       formData.append("excel", file);
     });
-    console.log(selectedFiles[0]);
 
     try {
       const response = await axios.post(
@@ -54,9 +52,7 @@ const UploadCSV = ({ active, setActive }) => {
           } else {
             alert("Sections failed");
           }
-        } catch (error) {
-          console.log(error);
-        }
+        } catch (error) {}
       } else {
         // handle error
         alert("Error uploading CSV files. hahah");

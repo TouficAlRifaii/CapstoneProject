@@ -14,9 +14,7 @@ const AddSession = ({ sessions, setSessions }) => {
     if (field === "days") {
       const selectedDays = [...session.days];
       const dayIndex = selectedDays.includes(value);
-      console.log(session.start);
-      console.log(dayIndex);
-      console.log(selectedDays);
+
       if (dayIndex === false) {
         selectedDays.push(value);
       } else {

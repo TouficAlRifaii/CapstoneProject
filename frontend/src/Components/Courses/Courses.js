@@ -43,16 +43,13 @@ const Courses = ({ courses, setCourses }) => {
     data.append("id", courseId);
     const url = "http://127.0.0.1:8000/api/courses/delete";
     try {
-      console.log(data);
       const response = await axios.post(url, data);
 
       if (response.data["message"] === "success") {
         const coursesList = courses.filter((course) => course.id !== courseId);
         setCourses(coursesList);
       }
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   for (let i = 1; i <= Math.ceil(searchResults.length / itemsPerPage); i++) {

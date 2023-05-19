@@ -12,7 +12,7 @@ const CREDITSNUMBERREGEX = /^[1-9][0-9]?$|^100$/;
 
 const EditMajor = ({ majors, setMajors, id, close, courses }) => {
   const major = majors.find((m) => m.id === id);
-  console.log(majors, major, id);
+
   const [title, setTitle] = useState(major.majorTitle);
   const [validTitle, setValidTitle] = useState(false);
   const [titleFocus, setTitleFocus] = useState(false);

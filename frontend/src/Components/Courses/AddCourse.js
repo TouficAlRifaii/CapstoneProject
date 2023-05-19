@@ -113,9 +113,7 @@ const AddCourse = ({ courses, setCourses, close }) => {
         setErrMsg("");
         close();
       }
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   return (
