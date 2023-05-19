@@ -4,7 +4,7 @@ const Download = ({ elements, courses }) => {
   
   const handleDownload = () => {
 
-    const worksheetData = elements.map((element) => {
+      const worksheetData = elements.map((element) => {
         const course = courses.find((c) => c.id === element.course);
         const courseName = course ? `${course.subject}${course.courseNumber}` : "";
   
