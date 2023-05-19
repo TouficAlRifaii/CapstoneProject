@@ -68,8 +68,8 @@ class Doctor(models.Model):
 
 
 class Availability(models.Model):
-    day = models.CharField(max_length=1)
-    start_time = models.TimeField()
-    end_time = models.TimeField()
+    days = models.CharField(max_length=5)
+    start = models.CharField(max_length=255)
+    end = models.CharField(max_length=255)
 
 

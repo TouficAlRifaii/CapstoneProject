@@ -61,10 +61,10 @@ class MajorSerializer(serializers.ModelSerializer):
 class DoctorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Doctor
-        fields = ['id' , 'name', 'title', 'courses', 'availability']
+        fields = ['id', 'name', 'title', 'courses', 'availability']
 
 
 class AvailabilitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Availability
-        fields = ['id', 'day', 'start_time', "end_time"]
+        fields = ['id', 'days', 'start', "end"]

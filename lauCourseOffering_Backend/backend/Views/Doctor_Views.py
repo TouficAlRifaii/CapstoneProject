@@ -7,16 +7,27 @@ from django.db import connection
 
 class DoctorsApi(APIView):
     def get(self, request):
-        if request.major_id:
-            major = Doctor.objects.filter(id=request.major_id).first()
+        if "doctor_id" in request.data:
+            doctor = Doctor.objects.filter(id=request.doctor_id).first()
             return Response({
-                "major": DoctorSerializer(major).data
+                "message": "success",
+                "doctors": DoctorSerializer(doctor).data
             })
         else:
-            majors = Doctor.objects.all()
-            majorsSerialized = DoctorSerializer(majors, many=True)
+            doctors = Doctor.objects.all()
+            doctorSerializer = DoctorSerializer(doctors, many=True)
+            doctors = doctorSerializer.data
+
+            for doctor in doctors:
+                sessions = []
+                for session in doctor['availability']:
+                    availability = Availability.objects.filter(id=session).first()
+                    availability = AvailabilitySerializer(availability).data
+                    sessions.append(availability)
+                doctor["sessions"] = sessions
             return Response({
-                "majors": majorsSerialized.data
+                "message": "success",
+                "doctors": doctorSerializer.data
             })
 
     def post(self, request):
@@ -26,13 +37,9 @@ class DoctorsApi(APIView):
         for time in times:
             timeSerializer = AvailabilitySerializer(data=time)
             timeSerializer.is_valid(raise_exception=True)
-            with connection.cursor() as cursor:
-                cursor.execute("SET information_schema_stats_expiry = 0;")
-                cursor.execute(f"SHOW TABLE STATUS FROM capstoneproject LIKE 'backend_availability'")
-                table_status = cursor.fetchone()
-                auto_increment = table_status[10]
-                times_ids.append(int(auto_increment))
             timeSerializer.save()
+            print(timeSerializer.data)
+            times_ids.append(timeSerializer.data['id'])
         doctor["availability"] = times_ids
         doctorSerializer = DoctorSerializer(data=doctor)
         doctorSerializer.is_valid(raise_exception=True)

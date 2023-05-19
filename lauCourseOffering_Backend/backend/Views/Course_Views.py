@@ -18,6 +18,7 @@ class CoursesApi(APIView):
             serializer = CourseSerializer(course)
             relationshipsSerializer = CourseRelationSerializer(relationships, many=True)
             return Response({
+                "message": "success",
                 "course": serializer.data,
                 "relations": relationshipsSerializer.data
             })
