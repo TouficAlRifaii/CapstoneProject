@@ -1,14 +1,21 @@
 import * as XLSX from "xlsx";
 
-const Download = ({ elements }) => {
+const Download = ({ elements, courses }) => {
+  
   const handleDownload = () => {
-    const worksheetData = elements.map((element) => ({
-      Campus: element.campus,
-      Course: element.course,
-      "Number of Students": element.numOfStudents,
-      "Number of Sections": element.numOfSections,
-      Capacity: element.capacity,
-    }));
+
+    const worksheetData = elements.map((element) => {
+        const course = courses.find((c) => c.id === element.course);
+        const courseName = course ? `${course.subject}${course.courseNumber}` : "";
+  
+        return {
+          Campus: element.campus,
+          Course: courseName,
+          "Number of Students": element.numOfStudents,
+          "Number of Sections": element.numOfSections,
+          Capacity: element.capacity,
+        };
+      });
 
     const worksheet = XLSX.utils.json_to_sheet(worksheetData); // Convert the array of objects to a worksheet
 
