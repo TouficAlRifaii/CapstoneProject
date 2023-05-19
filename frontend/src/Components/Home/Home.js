@@ -62,18 +62,18 @@ const Home = ({ courses }) => {
     },
   ]);
   //if true shows upload Exel, else shows CourseOffering
-  const [activeGenerate, setActiveGenerate] = useState(true);
+  const [activeOffering, setActiveOffering] = useState(true);
 
   return (
     <div>
       <CourseOffering
-        active={activeGenerate}
-        setActive={setActiveGenerate}
+        active={activeOffering}
+        setActive={setActiveOffering}
         sections={sections}
         setSections={setSections}
         courses={courses}
       />
-      <UploadCSV active={activeGenerate} setActive={setActiveGenerate} />
+      <UploadCSV active={activeOffering} setActive={setActiveOffering} />
     </div>
   );
 };

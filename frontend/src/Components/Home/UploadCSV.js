@@ -1,16 +1,21 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Loading from "./Loading";
+import { wait } from "@testing-library/user-event/dist/utils";
 
 const UploadCSV = ({ active, setActive }) => {
   const [selectedFiles, setSelectedFiles] = useState();
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const handleFileSelect = (event) => {
     const files = Array.from(event.target.files);
     setSelectedFiles(files);
   };
 
   const handleActive = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
     setActive(false);
   };
   const handleFileUpload = async () => {
@@ -78,11 +83,7 @@ const UploadCSV = ({ active, setActive }) => {
           </div>
         </section>
       )}
-      <Loading
-        duration={100000}
-        isLoading={isLoading}
-        setIsLoading={setIsLoading}
-      />
+      <Loading isLoading={isLoading} setIsLoading={setIsLoading} />
     </div>
   );
 };

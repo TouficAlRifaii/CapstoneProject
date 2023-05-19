@@ -1,14 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-const Loading = ({ duration, isLoading, setIsLoading }) => {
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, duration);
-
-    return () => clearTimeout(timer);
-  }, [duration]);
-
+const Loading = ({ isLoading, setIsLoading }) => {
   return (
     <>
       {isLoading && (

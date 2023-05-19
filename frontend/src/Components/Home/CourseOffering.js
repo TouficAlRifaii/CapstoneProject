@@ -59,11 +59,18 @@ const CourseOffering = ({
     setSearchResults(filteredResults.reverse());
   }, [sections, courses, search]);
 
+  const handleActive = () => {
+    setActive(true);
+  };
+
   return (
     <div>
       {!active && (
         <section className="list-section">
+          <button onClick={handleActive}> Cancel Operation </button>
+
           <h1>Course Offering</h1>
+
           <div>
             <div className="nav-search">
               <input
@@ -171,6 +178,7 @@ const CourseOffering = ({
               ))}
             </div>
           </div>
+
           <Download elements={sections} />
         </section>
       )}
