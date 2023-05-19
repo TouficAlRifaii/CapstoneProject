@@ -23,7 +23,11 @@ const Download = ({ elements }) => {
     link.click(); // Trigger the download by simulating a click
   };
 
-  return <button onClick={handleDownload}>Download</button>;
+  return (
+    <button className="add-form-submit" onClick={handleDownload}>
+      Download
+    </button>
+  );
 };
 
 export default Download;
