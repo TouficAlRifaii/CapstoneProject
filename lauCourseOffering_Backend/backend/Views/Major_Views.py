@@ -7,15 +7,17 @@ from ..serializers import MajorSerializer
 
 class MajorApi(APIView):
     def get(self, request):
-        if request.major_id:
+        if "major_id" in request.data:
             major = Major.objects.filter(id=request.major_id).first()
             return Response({
+                "message": "success",
                 "major": MajorSerializer(major).data
             })
         else:
             majors = Major.objects.all()
             majorsSerialized = MajorSerializer(majors, many=True)
             return Response({
+                "message": "success",
                 "majors": majorsSerialized.data
             })
     
