@@ -3,7 +3,7 @@ import axios from "axios";
 import Loading from "./Loading";
 import { wait } from "@testing-library/user-event/dist/utils";
 
-const UploadCSV = ({ active, setActive, sections , setSections }) => {
+const UploadCSV = ({ active, setActive }) => {
   const [selectedFiles, setSelectedFiles] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const handleFileSelect = (event) => {
@@ -13,10 +13,12 @@ const UploadCSV = ({ active, setActive, sections , setSections }) => {
 
   const handleActive = () => {
     setIsLoading(true);
-    setTimeout(() => {}, 1000);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+    setActive(false);
   };
   const handleFileUpload = async () => {
-    setIsLoading(true);
     if (!selectedFiles || selectedFiles.length === 0) {
       alert("Please select at least one file.");
       return;
@@ -46,11 +48,9 @@ const UploadCSV = ({ active, setActive, sections , setSections }) => {
             "http://127.0.0.1:8000/api/sections"
           );
           if (sectionsResponse.data["message"] === "success") {
-            setSections(sectionsResponse.data['sections'])
-            setIsLoading(false);
-            setActive(false);
+            alert("Sections Created Sucessfully");
           } else {
-            setIsLoading(false);
+            alert("Sections failed");
           }
         } catch (error) {}
       } else {
@@ -72,7 +72,7 @@ const UploadCSV = ({ active, setActive, sections , setSections }) => {
               <h2>Upload CSV files</h2>
 
               <input type="file" onChange={handleFileSelect} multiple />
-              <button onClick={handleFileUpload} className="generate-btn">
+              <button onClick={handleActive} className="generate-btn">
                 Upload
               </button>
             </div>

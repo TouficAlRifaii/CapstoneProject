@@ -28,8 +28,8 @@ const CourseOffering = ({
       if (a.campus > b.campus) return 1;
 
       // Sort by numOfStudents if campuses are the same
-      if (a.numOfStudents < b.numOfStudents) return 1;
-      if (a.numOfStudents > b.numOfStudents) return -1;
+      if (a.numOfStudents < b.numOfStudents) return -1;
+      if (a.numOfStudents > b.numOfStudents) return 1;
 
       return 0;
     })
@@ -176,7 +176,7 @@ const CourseOffering = ({
               ))}
             </div>
           </div>
-          <Download elements={sections} courses={courses} />
+          <Download elements={sections} />
           <TimeTable campus="Byblos" />{" "}
         </section>
       )}
