@@ -38,7 +38,6 @@ class DoctorsApi(APIView):
             timeSerializer = AvailabilitySerializer(data=time)
             timeSerializer.is_valid(raise_exception=True)
             timeSerializer.save()
-            print(timeSerializer.data)
             times_ids.append(timeSerializer.data['id'])
         doctor["availability"] = times_ids
         doctorSerializer = DoctorSerializer(data=doctor)
@@ -48,3 +47,34 @@ class DoctorsApi(APIView):
         return Response({
             "message": "success"
         })
+
+
+class DeleteDoctor(APIView):
+    def post(self, request):
+
+        doctor = Doctor.objects.filter(id=request.data['id']).first()
+        if doctor:
+
+            doctor.delete()
+            return Response({
+                "message": "success"
+            })
+        else:
+            return Response({
+                "message": "Course does not exist"
+            })
+
+
+class DoctorUpdate(APIView):
+    def put(self, request):
+        try:
+            doctor = Doctor.objects.get(pk=request.data["id"])
+        except Doctor.DoesNotExist:
+            return Response({"message": "Doctor not found."})
+
+        serializer = DoctorSerializer(doctor, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({
+                "message": "success"
+            })

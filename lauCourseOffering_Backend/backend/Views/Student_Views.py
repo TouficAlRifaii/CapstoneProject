@@ -11,8 +11,6 @@ class StudentsApi(APIView):
         existing_courses = Course.objects.all()
         serializedCourses = CourseSerializer(existing_courses, many=True)
         serializedCourses = serializedCourses.data
-        print(request.FILES)
-        print(request.data)
         students = readExcel(request.FILES.get("excel"))
 
         for student in students:
@@ -26,7 +24,6 @@ class StudentsApi(APIView):
             for course in student['courses']:
                 courseSubject = course[0:3]
                 number = course[3:]
-                print(courseSubject + "  " + number)
                 existingCourse = [d for d in serializedCourses if
                                   d.get('courseNumber') == number and d.get("subject") == courseSubject]
                 if existingCourse:
