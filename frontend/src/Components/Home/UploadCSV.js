@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
+import Loading from "./Loading";
 
 const UploadCSV = ({ active, setActive }) => {
   const [selectedFiles, setSelectedFiles] = useState();
-
+  const [isLoading, setIsLoading] = useState(true);
   const handleFileSelect = (event) => {
     const files = Array.from(event.target.files);
     setSelectedFiles(files);
@@ -77,6 +78,11 @@ const UploadCSV = ({ active, setActive }) => {
           </div>
         </section>
       )}
+      <Loading
+        duration={100000}
+        isLoading={isLoading}
+        setIsLoading={setIsLoading}
+      />
     </div>
   );
 };
