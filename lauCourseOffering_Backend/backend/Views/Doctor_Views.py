@@ -67,7 +67,7 @@ class DeleteDoctor(APIView):
 
 
 class DoctorUpdate(APIView):
-    def put(self, request):
+    def post(self, request):
         try:
             doctor = Doctor.objects.get(pk=request.data["doctor"]["id"])
         except Doctor.DoesNotExist:
