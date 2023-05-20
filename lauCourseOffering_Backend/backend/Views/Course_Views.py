@@ -50,14 +50,16 @@ class CoursesApi(APIView):
             })
 
     def post(self, request):
+        data = request.data['course']
+        subject = data['subject']
+        courseNumber = data['courseNumber']
+        course = Course.objects.filter(subject=subject, courseNumber=courseNumber).first()
+        if course:
+            return Response({
+                "message": "Course Already exist"
+            })
         serializer = CourseSerializer(data=request.data["course"])
         serializer.is_valid(raise_exception=True)
-        # with connection.cursor() as cursor:
-        #     cursor.execute("SET information_schema_stats_expiry = 0;")
-        #     cursor.execute(f"SHOW TABLE STATUS FROM capstoneproject LIKE 'backend_course'")
-        #     table_status = cursor.fetchone()
-        #     auto_increment = table_status[10]
-        #     next_id = int(auto_increment)
         serializer.save()
         next_id = serializer.data['id']
         for relation in request.data['relations']:
