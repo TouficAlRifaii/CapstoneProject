@@ -27,7 +27,6 @@ const Courses = ({ courses, setCourses, getCourses }) => {
   const currentItems = searchResults.slice(indexOfFirstItem, indexOfLastItem);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-  console.log(courses);
   const pageNumbers = [];
   for (let i = 1; i <= Math.ceil(searchResults.length / itemsPerPage); i++) {
     pageNumbers.push(i);
@@ -40,15 +39,14 @@ const Courses = ({ courses, setCourses, getCourses }) => {
         course.subject.toLowerCase().includes(search.toLowerCase()) ||
         course.courseNumber.toLowerCase().includes(search.toLowerCase())
     );
+    setCurrentPage(1);
 
     setSearchResults(filteredResults);
   }, [courses, search]);
-
   //delete
   const handleDeleteCourse = async (courseId) => {
     const data = new FormData();
     data.append("id", courseId);
-    console.log(data);
     const url = "http://127.0.0.1:8000/api/courses/delete";
     try {
       const response = await axios.post(url, data);

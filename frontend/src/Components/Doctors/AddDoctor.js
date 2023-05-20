@@ -9,14 +9,12 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { NAMEREGEX, TITLEREGEX } from "../Public/ValidationRegex";
+import CheckboxDay from "./Sessions/CheckboxDay";
 
 const AddDoctor = ({ doctors, setDoctors, courses, close }) => {
   const [name, setName] = useState("");
   const [validName, setValidName] = useState(false);
   const [nameFocus, setNameFocus] = useState(false);
-
-  const [validLastName, setValidLastName] = useState(false);
-  const [lastNameFocus, setLastNameFocus] = useState(false);
 
   const [title, setTitle] = useState("");
   const [validTitle, setValidTitle] = useState(false);
@@ -24,6 +22,8 @@ const AddDoctor = ({ doctors, setDoctors, courses, close }) => {
 
   const [tCourses, setTCourses] = useState([""]);
   const [sessions, setSessions] = useState([{ days: "", start: "", end: "" }]);
+
+  const [campus, setCampus] = useState("");
 
   const [errMsg, setErrMsg] = useState("");
   const [displayBorderRed, setDisplayBorderRed] = useState(false); //change borders to red
@@ -36,7 +36,10 @@ const AddDoctor = ({ doctors, setDoctors, courses, close }) => {
       }
     } catch (exception) {}
   };
-
+  const handleCheckboxChange = (event) => {
+    const value = event.target.value;
+    setCampus(value);
+  };
   useEffect(() => {
     setValidName(NAMEREGEX.test(name));
   }, [name]);
@@ -78,7 +81,10 @@ const AddDoctor = ({ doctors, setDoctors, courses, close }) => {
       handleInvalidInput("Please enter a valid title");
       return;
     }
-
+    if (!campus) {
+      handleInvalidInput("Please choose a valid campus");
+      return;
+    }
     if (tCourses.length === 0) {
       handleInvalidInput("Please select at least one course");
       return;
@@ -88,14 +94,10 @@ const AddDoctor = ({ doctors, setDoctors, courses, close }) => {
       handleInvalidInput("Please fill all session details");
       return;
     }
-    const newDoctor = {
-      name,
-      title,
-      tCourses,
-      sessions,
-    };
+
     const data = {};
     const doctor = {
+      campus,
       name: name,
       title: title,
       courses: tCourses.filter((course) => course !== ""),
@@ -109,7 +111,6 @@ const AddDoctor = ({ doctors, setDoctors, courses, close }) => {
       );
       if (response.data["message"] === "success") {
         getDoctors();
-        setDoctors([...doctors, newDoctor]);
         setName("");
         setTitle("");
         setTCourses([""]);
@@ -203,6 +204,31 @@ const AddDoctor = ({ doctors, setDoctors, courses, close }) => {
               Title is limited between 10 to 255 character
             </p>
           </div>
+
+          <div className="checkboxes-container">
+            <label className="checkbox-item">
+              <input
+                type="checkbox"
+                name="campus"
+                value="1"
+                checked={campus === "1"}
+                onChange={handleCheckboxChange}
+              />
+              Beirut
+            </label>
+
+            <label className="checkbox-item">
+              <input
+                type="checkbox"
+                name="campus"
+                value="2"
+                checked={campus === "2"}
+                onChange={handleCheckboxChange}
+              />
+              Jbeil
+            </label>
+          </div>
+
           <div className="add-form-input">
             <label htmlFor="tCourses">Courses:</label>
             <DropListCourses

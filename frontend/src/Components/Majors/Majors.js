@@ -43,7 +43,6 @@ const Majors = ({ courses, majors, setMajors }) => {
     setSearchResults(filteredResults);
     setCurrentPage(1);
   }, [majors, search]);
-  console.log(majors);
   return (
     <section className="list-section">
       <h1>Majors</h1>

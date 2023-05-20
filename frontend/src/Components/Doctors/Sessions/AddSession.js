@@ -15,7 +15,7 @@ const AddSession = ({ sessions, setSessions }) => {
       const selectedDays = [...session.days];
       const dayIndex = selectedDays.includes(value);
 
-      if (dayIndex === false) {
+      if (!dayIndex) {
         selectedDays.push(value);
       } else {
         const newIndex = selectedDays.indexOf(value);

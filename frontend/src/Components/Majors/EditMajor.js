@@ -21,7 +21,7 @@ const EditMajor = ({ majors, setMajors, id, close, courses }) => {
   const [creditsNumber, setCreditsNumber] = useState(major.credits);
   const [validCreditsNumber, setValidCreditsNumber] = useState(false);
   const [creditsNumberFocus, setCreditsNumberFocus] = useState(false);
-  console.log(major.courses);
+
   const [majorCourses, setMajorCourses] = useState(major.courses);
 
   const [errMsg, setErrMsg] = useState("");
@@ -104,11 +104,9 @@ const EditMajor = ({ majors, setMajors, id, close, courses }) => {
       .post("http://127.0.0.1:8000/api/majors/update", newMajor)
       .then((response) => {
         // Handle successful response if needed
-        console.log(response.data);
       })
       .catch((error) => {
         // Handle error if needed
-        console.error(error);
       });
     getMajors();
 

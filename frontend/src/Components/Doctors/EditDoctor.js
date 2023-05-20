@@ -26,13 +26,15 @@ const EditDoctor = ({ close, doctors, setDoctors, courses, id }) => {
   const [tCourses, setTCourses] = useState(doctor.courses);
   const [sessions, setSessions] = useState(doctor.sessions);
 
+  const [campus, setCampus] = useState(String(doctor.campus));
+
   const [errMsg, setErrMsg] = useState("");
   const [displayBorderRed, setDisplayBorderRed] = useState(false);
   const [displayMessage, setDisplayMessage] = useState(false);
 
   const getDoctors = async () => {
     try {
-      const response = await axios.get(
+      const response = await axios.post(
         "http://127.0.0.1:8000/api/doctors/update"
       );
       if (response.data["message"] === "success") {
@@ -55,8 +57,9 @@ const EditDoctor = ({ close, doctors, setDoctors, courses, id }) => {
   const handleClose = () => {
     close();
   };
-  const handleDisplay = () => {
-    setDisplayMessage(false);
+  const handleCheckboxChange = (event) => {
+    const value = event.target.value;
+    setCampus(value);
   };
 
   const handleInvalidInput = (errorMsg) => {
@@ -95,22 +98,19 @@ const EditDoctor = ({ close, doctors, setDoctors, courses, id }) => {
     const doctor = {
       id: idDr,
       name: name,
+      campus: parseInt(campus),
       title: title,
       courses: tCourses.filter((course) => course !== ""),
     };
     data["doctor"] = doctor;
     data["availabilities"] = sessions;
     try {
-      console.log("HELLO");
-
       const response = await axios.post(
         "http://127.0.0.1:8000/api/doctors/update",
         data
       );
-      console.log(response);
 
       if (response.data["message"] === "success") {
-        console.log();
         getDoctors();
         setName("");
         setTitle("");
@@ -118,8 +118,10 @@ const EditDoctor = ({ close, doctors, setDoctors, courses, id }) => {
         setSessions([{ days: "", start: "", end: "" }]);
         setErrMsg("");
         setDisplayMessage(true);
+        handleClose();
       }
     } catch (error) {
+      getDoctors();
       console.log(error);
     }
   };
@@ -185,9 +187,33 @@ const EditDoctor = ({ close, doctors, setDoctors, courses, id }) => {
             className={titleFocus && !validTitle ? "instructions" : "offscreen"}
           >
             <FontAwesomeIcon icon={faInfoCircle} />
-            Title is limited between 10 to 255 character
+            Title is limited between 3 to 255 character
           </p>
         </div>
+        <div className="checkboxes-container">
+          <label className="checkbox-item">
+            <input
+              type="checkbox"
+              name="campus"
+              value="1"
+              checked={campus === "1"}
+              onChange={handleCheckboxChange}
+            />
+            Beirut
+          </label>
+
+          <label className="checkbox-item">
+            <input
+              type="checkbox"
+              name="campus"
+              value="2"
+              checked={campus === "2"}
+              onChange={handleCheckboxChange}
+            />
+            Jbeil
+          </label>
+        </div>
+
         <div className="add-form-input">
           <label htmlFor="tCourses">Courses:</label>
           <DropListCourses

@@ -37,9 +37,7 @@ function App() {
       if (response.data["message"] === "success") {
         setCourses(response.data["courses"]);
       }
-    } catch (exception) {
-      console.log(exception);
-    }
+    } catch (exception) {}
   };
 
   useEffect(() => {

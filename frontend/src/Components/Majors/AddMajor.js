@@ -102,11 +102,9 @@ const AddMajor = ({ majors, setMajors, courses, close }) => {
       .post("http://127.0.0.1:8000/api/major", newMajor)
       .then((response) => {
         // Handle successful response if needed
-        console.log(response.data);
       })
       .catch((error) => {
         // Handle error if needed
-        console.error(error);
       });
     getMajors();
 

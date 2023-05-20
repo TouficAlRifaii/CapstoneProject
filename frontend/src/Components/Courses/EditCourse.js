@@ -39,8 +39,6 @@ const EditCourse = ({ courses, setCourses, id, close }) => {
   const [preReqs, setPreReqs] = useState(course.preReq || [""]);
   const [coReqs, setCoReqs] = useState(course.coReq || [""]);
   const [substitute, setSubstitute] = useState(course.subtitutes || [""]);
-  console.log(course);
-  console.log(substitute);
 
   const [errMsg, setErrMsg] = useState("");
   const [displayBorderRed, setDisplayBorderRed] = useState(false); //change borders to red
@@ -52,9 +50,7 @@ const EditCourse = ({ courses, setCourses, id, close }) => {
       if (response.data["message"] === "success") {
         setCourses(response.data["courses"]);
       }
-    } catch (exception) {
-      console.log(exception);
-    }
+    } catch (exception) {}
   };
 
   useEffect(() => {

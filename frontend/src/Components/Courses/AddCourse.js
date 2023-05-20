@@ -45,9 +45,7 @@ const AddCourse = ({ courses, setCourses, close }) => {
       if (response.data["message"] === "success") {
         setCourses(response.data["courses"]);
       }
-    } catch (exception) {
-      console.log(exception);
-    }
+    } catch (exception) {}
   };
   //check valid inputs
   useEffect(() => {

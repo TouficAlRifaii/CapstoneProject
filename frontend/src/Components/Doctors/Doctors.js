@@ -42,7 +42,7 @@ const Doctors = ({ courses }) => {
     const filteredResults = doctors.filter((doctor) =>
       doctor.name.toLowerCase().includes(search.toLowerCase())
     );
-
+    setCurrentPage(1);
     setSearchResults(filteredResults);
   }, [doctors, search]);
 
@@ -89,6 +89,9 @@ const Doctors = ({ courses }) => {
                 <div className="table-data-center">Title </div>
               </th>
               <th>
+                <div className="table-data-center">Campus </div>
+              </th>
+              <th>
                 <div className="table-data-center">Teaching Courses </div>
               </th>
               <th>
@@ -106,7 +109,16 @@ const Doctors = ({ courses }) => {
                 <td>
                   <div className="table-data-name">{doctor.title} </div>
                 </td>
-                <ListCourseId course={[doctor.courses]} courses={courses} />
+                <td>
+                  <div className="table-data-name">
+                    {doctor.campus === 1 ? (
+                      <span>Beirut</span>
+                    ) : (
+                      <span>Byblos</span>
+                    )}
+                  </div>
+                </td>
+                <ListCourseId course={doctor.courses} courses={courses} />
                 <ListDoctorSession doctor={doctor} />
                 <td>
                   <div className="table-btns">

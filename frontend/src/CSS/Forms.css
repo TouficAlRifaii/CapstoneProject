@@ -250,6 +250,20 @@ label {
   border-width: 0.5rem;
   border-radius: 0.4rem;
 }
+
+.checkboxes-container {
+  display: flex;
+}
+
+.checkbox-item {
+  cursor: pointer;
+  padding-right: 10rem;
+  background-color: white;
+}
+.radio-buttons:hover {
+  cursor: pointer;
+}
+
 /*=============================== Successful submission ================================*/
 
 .message-container {

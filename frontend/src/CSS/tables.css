@@ -43,9 +43,12 @@
   width: 13rem;
 }
 .table.doctors th:nth-child(3) {
-  width: 18rem;
+  width: 5rem;
 }
 .table.doctors th:nth-child(4) {
+  width: 18rem;
+}
+.table.doctors th:nth-child(5) {
   width: 14rem;
 }
 .table-data-sessions {
