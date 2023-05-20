@@ -27,7 +27,7 @@ const Courses = ({ courses, setCourses, getCourses }) => {
   const currentItems = searchResults.slice(indexOfFirstItem, indexOfLastItem);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
+  console.log(courses);
   const pageNumbers = [];
   for (let i = 1; i <= Math.ceil(searchResults.length / itemsPerPage); i++) {
     pageNumbers.push(i);
@@ -91,8 +91,12 @@ const Courses = ({ courses, setCourses, getCourses }) => {
               <th>
                 <div className="table-data-center">Pre-requisites</div>
               </th>
+
               <th>
                 <div className="table-data-center">Co-requisites</div>
+              </th>
+              <th>
+                <div className="table-data-center">Substitute</div>
               </th>
               <th></th>
             </tr>
@@ -107,7 +111,7 @@ const Courses = ({ courses, setCourses, getCourses }) => {
                   <div className="table-data-center">{course.courseNumber}</div>
                 </td>
                 <td>
-                  <div className="table-data">{course.title}</div>
+                  <div className="table-data-name">{course.title}</div>
                 </td>
                 <td>
                   <div className="table-data-center">
@@ -116,6 +120,10 @@ const Courses = ({ courses, setCourses, getCourses }) => {
                 </td>
                 <ListCourseId course={course.preReq} courses={courses} />{" "}
                 <ListCourseId course={course.coReq} courses={courses} />{" "}
+                <ListCourseId
+                  course={[String(course.subtitutes)]}
+                  courses={courses}
+                />
                 <td>
                   <div className="table-btns">
                     <button

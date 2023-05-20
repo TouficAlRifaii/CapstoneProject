@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import DropListCourses from "../Courses/DropListCourses";
+import CheckBoxCourses from "../Courses/CheckBoxCourses";
 import { useNavigate } from "react-router-dom";
 import {
   faCheck,
@@ -7,9 +7,9 @@ import {
   faInfoCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-const TITLEREGEX = /^.{10,255}$/;
+import axios from "axios";
 
-const CREDITSNUMBERREGEX = /^[1-5]$/;
+import { TITLEREGEX, CREDITSMAJORREGEX } from "../Public/ValidationRegex";
 
 const AddMajor = ({ majors, setMajors, courses, close }) => {
   const [title, setTitle] = useState("");
@@ -20,55 +20,32 @@ const AddMajor = ({ majors, setMajors, courses, close }) => {
   const [validCreditsNumber, setValidCreditsNumber] = useState(false);
   const [creditsNumberFocus, setCreditsNumberFocus] = useState(false);
 
-  const [majorCourses, setMajorCourses] = useState([]);
+  const [majorCourses, setMajorCourses] = useState([""]);
 
   const [errMsg, setErrMsg] = useState("");
   const [emptyFields, setEmptyFields] = useState(false);
   const [displayMessage, setDisplayMessage] = useState(false);
+
+  const getMajors = async () => {
+    try {
+      const response = await axios.get("http://127.0.0.1:8000/api/major");
+      if (response.data["message"] === "success") {
+        setMajors(response.data["majors"]);
+      }
+    } catch (exception) {}
+  };
 
   useEffect(() => {
     setValidTitle(TITLEREGEX.test(title));
   }, [title]);
 
   useEffect(() => {
-    setValidCreditsNumber(CREDITSNUMBERREGEX.test(creditsNumber));
+    setValidCreditsNumber(CREDITSMAJORREGEX.test(creditsNumber));
   }, [creditsNumber]);
 
   useEffect(() => {
     setErrMsg("");
   }, [title, creditsNumber]);
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    if (
-      !TITLEREGEX.test(title) ||
-      !CREDITSNUMBERREGEX.test(creditsNumber) ||
-      majorCourses.length === 0
-    ) {
-      setErrMsg("Please fill out all fields.");
-      setEmptyFields(true);
-
-      setTimeout(() => {
-        setEmptyFields(false);
-      }, 400);
-
-      return;
-    }
-
-    const newMajor = {
-      id: majors.length + 1,
-      majorTitle: title,
-      majorCredits: parseInt(creditsNumber),
-      majorCourses,
-    };
-    setMajors([...majors, newMajor]);
-
-    setErrMsg("");
-    setTitle("");
-    setCreditsNumber("");
-    setMajorCourses([]);
-    setDisplayMessage(true);
-  };
   const handleClose = () => {
     close();
   };
@@ -76,6 +53,70 @@ const AddMajor = ({ majors, setMajors, courses, close }) => {
   const handleDisplay = () => {
     setDisplayMessage(false);
   };
+  function validateInputs(title, creditsNumber, majorCourses) {
+    if (!TITLEREGEX.test(title)) {
+      setErrMsg("Invalid title. Please enter a valid title.");
+      setEmptyFields(true);
+      setTimeout(() => {
+        setEmptyFields(false);
+      }, 400);
+      return false;
+    }
+
+    if (!CREDITSMAJORREGEX.test(creditsNumber)) {
+      setErrMsg("Invalid credits number. Please enter a valid number.");
+      setEmptyFields(true);
+      setTimeout(() => {
+        setEmptyFields(false);
+      }, 400);
+      return false;
+    }
+
+    if (majorCourses.length === 0) {
+      setErrMsg(
+        "No major courses selected. Please select at least one course."
+      );
+      setEmptyFields(true);
+      setTimeout(() => {
+        setEmptyFields(false);
+      }, 400);
+      return false;
+    }
+
+    return true;
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (!validateInputs(title, creditsNumber, majorCourses)) {
+      return;
+    }
+
+    const newMajor = {
+      title,
+      credits: parseInt(creditsNumber),
+      majorCourses: majorCourses,
+    };
+
+    axios
+      .post("http://127.0.0.1:8000/api/major", newMajor)
+      .then((response) => {
+        // Handle successful response if needed
+        console.log(response.data);
+      })
+      .catch((error) => {
+        // Handle error if needed
+        console.error(error);
+      });
+    getMajors();
+
+    setErrMsg("");
+    setTitle("");
+    setCreditsNumber("");
+    setMajorCourses([]);
+    setDisplayMessage(true);
+  };
+
   return (
     <form
       onSubmit={handleSubmit}
@@ -167,12 +208,14 @@ const AddMajor = ({ majors, setMajors, courses, close }) => {
             </p>
           </div>
           <div className="add-form-input">
-            <label htmlFor="majorCourses">Major Courses</label>
-            <DropListCourses
-              elementCourses={majorCourses}
-              setElementCourses={setMajorCourses}
-              courses={courses}
-            />
+            <label htmlFor="majorCourses">Major Courses: </label>
+            <div>
+              <CheckBoxCourses
+                elementCourses={majorCourses}
+                setElementCourses={setMajorCourses}
+                courses={courses}
+              />
+            </div>
           </div>
           <div>
             <div className="form-footer-btns">

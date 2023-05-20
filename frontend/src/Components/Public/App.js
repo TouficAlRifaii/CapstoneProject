@@ -22,6 +22,7 @@ import "../../CSS/Tables.css";
 import "../../CSS/Forms.css";
 import "../../CSS/Nav.css";
 import "../../CSS/DropList.css";
+import Footer from "./Footer";
 
 function App() {
   //coreq - preReq ids
@@ -106,6 +107,7 @@ function App() {
           <Route path="*" element={<Missing />} />
         </Routes>
       </body>
+      <Footer />
     </div>
   );
 }

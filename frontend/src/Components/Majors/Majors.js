@@ -3,42 +3,47 @@ import EditMajor from "./EditMajor";
 import React, { useState, useEffect } from "react";
 import ListCourseId from "../Courses/ListCourseId";
 import Popup from "reactjs-popup";
+import axios from "axios";
 
 const Majors = ({ courses, majors, setMajors }) => {
+  // search + paginate
   const [searchResults, setSearchResults] = useState([]);
   const [search, setSearch] = useState("");
-
   const [currentPage, setCurrentPage] = useState(1);
-  const [majorsPerPage, setMajorsPerPage] = useState(8);
+  const [itemsPerPage, setItemsPerPage] = useState(9);
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = searchResults.slice(indexOfFirstItem, indexOfLastItem);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  const pageNumbers = [];
+  for (let i = 1; i <= Math.ceil(searchResults.length / itemsPerPage); i++) {
+    pageNumbers.push(i);
+  }
+
+  const getMajors = async () => {
+    try {
+      const response = await axios.get("http://127.0.0.1:8000/api/major");
+      if (response.data["message"] === "success") {
+        setMajors(response.data["majors"]);
+      }
+    } catch (exception) {}
+  };
+  useEffect(() => {
+    getMajors();
+  }, []);
 
   useEffect(() => {
     const filteredResults = majors.filter((major) =>
-      major.majorTitle.toLowerCase().includes(search.toLowerCase())
+      major.title.toLowerCase().includes(search.toLowerCase())
     );
 
     setSearchResults(filteredResults);
     setCurrentPage(1);
   }, [majors, search]);
-
-  const handleDelete = (id) => {
-    const majorsList = majors.filter((major) => major.id !== id);
-    setMajors(majorsList);
-  };
-
-  const indexOfLastMajor = currentPage * majorsPerPage;
-  const indexOfFirstMajor = indexOfLastMajor - majorsPerPage;
-  const currentMajors = searchResults.slice(
-    indexOfFirstMajor,
-    indexOfLastMajor
-  );
-
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
-  const pageNumbers = [];
-  for (let i = 1; i <= Math.ceil(searchResults.length / majorsPerPage); i++) {
-    pageNumbers.push(i);
-  }
-
+  console.log(majors);
   return (
     <section className="list-section">
       <h1>Majors</h1>
@@ -69,23 +74,23 @@ const Majors = ({ courses, majors, setMajors }) => {
             </tr>
           </thead>
           <tbody>
-            {currentMajors.map((major) => (
+            {currentItems.map((major) => (
               <tr key={major.id} className="list-row">
                 <td>
-                  <div className="table-data"> {major.majorTitle} </div>
+                  <div className="table-data"> {major.title} </div>
                 </td>
                 <td>
-                  <div className="table-data">{major.majorCredits}</div>
+                  <div className="table-data-center">{major.credits}</div>
                 </td>
-                <ListCourseId course={major.majorCourses} courses={courses} />
+                <ListCourseId course={major.courses} courses={courses} />
                 <td>
                   <div className="table-btns">
-                    <button
-                      onClick={() => handleDelete(major.id)}
+                    {/* <button
+                      onClick={() => handleDeleteMajor(major.id)}
                       className="delete-btn"
                     >
                       Delete
-                    </button>
+                    </button> */}
                     <Popup
                       trigger={<button className="edit-btn">Edit</button>}
                       modal

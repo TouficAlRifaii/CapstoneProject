@@ -33,6 +33,7 @@ const AddCourse = ({ courses, setCourses, close }) => {
 
   const [preReqs, setPreReqs] = useState([""]);
   const [coReqs, setCoReqs] = useState([""]);
+  const [substitute, setSubstitute] = useState([""]);
 
   const [errMsg, setErrMsg] = useState("");
   const [displayBorderRed, setDisplayBorderRed] = useState(false); //change borders to red
@@ -128,6 +129,7 @@ const AddCourse = ({ courses, setCourses, close }) => {
       subject,
       courseNumber,
       title,
+      substitutes: substitute,
       creditsNumber: parseInt(creditsNumber),
     };
 
@@ -309,6 +311,15 @@ const AddCourse = ({ courses, setCourses, close }) => {
               elementCourses={coReqs}
               setElementCourses={setCoReqs}
               courses={courses}
+            />
+          </div>
+          <div className="add-form-input">
+            <label htmlFor="co-req">Substitute course:</label>
+            <DropListCourses
+              elementCourses={substitute}
+              setElementCourses={setSubstitute}
+              courses={courses}
+              disabled={true}
             />
           </div>
           <div></div>

@@ -1,7 +1,12 @@
 import { useState } from "react";
 import "../../CSS/DropList.css";
 
-const DropListCourses = ({ elementCourses, setElementCourses, courses }) => {
+const DropListCourses = ({
+  elementCourses,
+  setElementCourses,
+  courses,
+  disabled,
+}) => {
   const addCoursesList = (event) => {
     event.preventDefault();
     setElementCourses([...elementCourses, ""]);
@@ -35,9 +40,13 @@ const DropListCourses = ({ elementCourses, setElementCourses, courses }) => {
               ))}
           </select>
         ))}
-        <button className="add-list-btn" onClick={addCoursesList}>
-          +
-        </button>
+        {!disabled ? (
+          <button className="add-list-btn" onClick={addCoursesList}>
+            +
+          </button>
+        ) : (
+          <></>
+        )}
       </div>
     </div>
   );

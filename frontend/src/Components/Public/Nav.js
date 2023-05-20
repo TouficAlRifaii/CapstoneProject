@@ -8,7 +8,7 @@ function Nav() {
       <nav className="navbar">
         {" "}
         {/* Add a class name for styling */}
-        <div className="logo">TESTT</div>
+        <div className="logo">Course Offering software</div>
         <ul className="nav-links">
           <li>
             <Link to="/">Home</Link>

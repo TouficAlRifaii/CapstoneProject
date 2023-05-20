@@ -38,6 +38,9 @@ const EditCourse = ({ courses, setCourses, id, close }) => {
 
   const [preReqs, setPreReqs] = useState(course.preReq || [""]);
   const [coReqs, setCoReqs] = useState(course.coReq || [""]);
+  const [substitute, setSubstitute] = useState(course.subtitutes || [""]);
+  console.log(course);
+  console.log(substitute);
 
   const [errMsg, setErrMsg] = useState("");
   const [displayBorderRed, setDisplayBorderRed] = useState(false); //change borders to red
@@ -131,11 +134,11 @@ const EditCourse = ({ courses, setCourses, id, close }) => {
     const newCourse = {
       id: id,
       subject: subject,
+      substitutes: substitute,
       courseNumber: parseInt(courseNumber),
       title: title,
       creditsNumber: parseInt(creditsNumber),
     };
-    console.log(newCourse);
 
     const data = { course: newCourse, relations };
 
@@ -312,7 +315,15 @@ const EditCourse = ({ courses, setCourses, id, close }) => {
               courses={courses}
             />
           </div>
-          <div></div>
+          <div className="add-form-input">
+            <label htmlFor="co-req">Substitute course:</label>
+            <DropListCourses
+              elementCourses={[String(substitute[0])]}
+              setElementCourses={setSubstitute}
+              courses={courses}
+              disabled={true}
+            />
+          </div>
           <div className="form-footer-btns">
             <button className="close-btn" onClick={close}>
               Close

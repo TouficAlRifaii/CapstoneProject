@@ -37,10 +37,10 @@
 
 /*Doctors width*/
 .table.doctors th:nth-child(1) {
-  width: 8.75rem;
+  width: 14rem;
 }
 .table.doctors th:nth-child(2) {
-  width: 8rem;
+  width: 13rem;
 }
 .table.doctors th:nth-child(3) {
   width: 18rem;
@@ -182,6 +182,11 @@
   display: flex;
   justify-content: space-evenly;
   padding: 0.2rem;
+}
+.table-data-name {
+  display: flex;
+  justify-content: flex-start;
+  padding-left: 1rem;
 }
 
 .table-data {
