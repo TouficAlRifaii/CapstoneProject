@@ -1,3 +1,5 @@
+import math
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.db.models import Q, F
@@ -32,9 +34,9 @@ class SectionsApi(APIView):
         for section in sections:
             students = section.numOfStudents
             numOfSections = section.numOfSections
-            flag = (students // section.capacity - numOfSections) > 0
-            if flag:
-                numOfSections += students // section.capacity - numOfSections
+
+            numOfSections = math.ceil(students / section.capacity)
+
             section.numOfSections = numOfSections
             section.save(update_fields=["numOfSections"])
 
