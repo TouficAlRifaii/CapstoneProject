@@ -26,7 +26,6 @@ const EditMajor = ({ majors, setMajors, id, close, courses }) => {
 
   const [errMsg, setErrMsg] = useState("");
   const [emptyFields, setEmptyFields] = useState(false);
-  const [displayMessage, setDisplayMessage] = useState(false);
 
   const getMajors = async () => {
     try {
@@ -52,9 +51,6 @@ const EditMajor = ({ majors, setMajors, id, close, courses }) => {
     close();
   };
 
-  const handleDisplay = () => {
-    setDisplayMessage(false);
-  };
   function validateInputs(title, creditsNumber, majorCourses) {
     if (!TITLEREGEX.test(title)) {
       setErrMsg("Invalid title. Please enter a valid title.");
@@ -90,31 +86,62 @@ const EditMajor = ({ majors, setMajors, id, close, courses }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (!validateInputs(title, creditsNumber, majorCourses)) {
+    if (!TITLEREGEX.test(title)) {
+      setErrMsg("Please enter a valid title.");
+      setEmptyFields(true);
+
+      setTimeout(() => {
+        setEmptyFields(false);
+      }, 400);
+
       return;
     }
 
+    if (!CREDITSMAJORREGEX.test(creditsNumber)) {
+      setErrMsg("Please enter a valid credits number.");
+      setEmptyFields(true);
+
+      setTimeout(() => {
+        setEmptyFields(false);
+      }, 400);
+
+      return;
+    }
+
+    if (majorCourses.length === 0) {
+      setErrMsg("Please select at least one major course.");
+      setEmptyFields(true);
+
+      setTimeout(() => {
+        setEmptyFields(false);
+      }, 400);
+
+      return;
+    }
+    const filteredMajorCourses = majorCourses.filter((course) => course);
     const newMajor = {
-      title,
+      id: id,
+      title: title,
       credits: parseInt(creditsNumber),
-      majorCourses: majorCourses,
+      courses: filteredMajorCourses,
     };
 
     axios
-      .post("http://127.0.0.1:8000/api/majors/update", newMajor)
+      .post("http://127.0.0.1:8000/api/major/update", newMajor)
       .then((response) => {
         // Handle successful response if needed
+        getMajors();
       })
       .catch((error) => {
+        getMajors();
+
         // Handle error if needed
       });
-    getMajors();
-
     setErrMsg("");
     setTitle("");
     setCreditsNumber("");
     setMajorCourses([]);
-    setDisplayMessage(true);
+    close();
   };
 
   return (
@@ -122,111 +149,93 @@ const EditMajor = ({ majors, setMajors, id, close, courses }) => {
       onSubmit={handleSubmit}
       className={`add-form ${emptyFields ? "empty-fields" : ""}`}
     >
-      {displayMessage ? (
+      <div>
+        <h1 className="add-form-title">Add Major</h1>
+        <p className={errMsg ? "errmsg" : "offscreen"}>{errMsg}</p>
+        <div className="add-form-input">
+          <label htmlFor="title">
+            Major Title:
+            <FontAwesomeIcon
+              icon={faCheck}
+              className={validTitle ? "valid" : "hide"}
+            />
+            <FontAwesomeIcon
+              icon={faTimes}
+              className={validTitle || !title ? "hide invalid" : "invalid"}
+            />
+          </label>
+          <input
+            id="title"
+            value={title}
+            autoFocus={false}
+            onChange={(event) => setTitle(event.target.value)}
+            onFocus={() => setTitleFocus(true)}
+            onBlur={() => setTitleFocus(false)}
+            className="add-input-field"
+          />
+          <p
+            id="uidnote"
+            className={titleFocus && !validTitle ? "instructions" : "offscreen"}
+          >
+            <FontAwesomeIcon icon={faInfoCircle} />
+            Title is limited between 10 to 255 character
+          </p>
+        </div>
         <div>
-          <div className="message-container">
-            <p className="successful-submit">Major has been added</p>
-          </div>
+          <label htmlFor="creditsNumber">
+            Credits Number:
+            <FontAwesomeIcon
+              icon={faCheck}
+              className={validCreditsNumber ? "valid" : "hide"}
+            />
+            <FontAwesomeIcon
+              icon={faTimes}
+              className={
+                validCreditsNumber || !creditsNumber
+                  ? "hide invalid"
+                  : "invalid"
+              }
+            />
+          </label>
+          <input
+            type="text"
+            value={creditsNumber}
+            onChange={(event) => setCreditsNumber(event.target.value)}
+            onFocus={() => setCreditsNumberFocus(true)}
+            onBlur={() => setCreditsNumberFocus(false)}
+            className="add-input-field"
+          />
+          <p
+            id="uidnote"
+            className={
+              creditsNumberFocus && !validCreditsNumber
+                ? "instructions"
+                : "offscreen"
+            }
+          >
+            <FontAwesomeIcon icon={faInfoCircle} />
+            Credits number between 1-150
+          </p>
+        </div>
+        <div className="add-form-input">
+          <label htmlFor="majorCourses">Major Courses</label>
+          <CheckBoxCourses
+            elementCourses={majorCourses}
+            setElementCourses={setMajorCourses}
+            courses={courses}
+          />
+        </div>
+        <div>
           <div className="form-footer-btns">
-            <button onClick={handleClose} className="close-btn">
-              close
+            <button className="close-btn" onClick={close}>
+              Close
             </button>
-            <button onClick={handleDisplay} className="add-form-submit">
-              Add Another Major
+            <button type="submit" className="add-form-submit">
+              Add Major
             </button>
           </div>
         </div>
-      ) : (
-        <div>
-          <h1 className="add-form-title">Add Major</h1>
-          <p className={errMsg ? "errmsg" : "offscreen"}>{errMsg}</p>
-          <div className="add-form-input">
-            <label htmlFor="title">
-              Major Title:
-              <FontAwesomeIcon
-                icon={faCheck}
-                className={validTitle ? "valid" : "hide"}
-              />
-              <FontAwesomeIcon
-                icon={faTimes}
-                className={validTitle || !title ? "hide invalid" : "invalid"}
-              />
-            </label>
-            <input
-              id="title"
-              value={title}
-              autoFocus={false}
-              onChange={(event) => setTitle(event.target.value)}
-              onFocus={() => setTitleFocus(true)}
-              onBlur={() => setTitleFocus(false)}
-              className="add-input-field"
-            />
-            <p
-              id="uidnote"
-              className={
-                titleFocus && !validTitle ? "instructions" : "offscreen"
-              }
-            >
-              <FontAwesomeIcon icon={faInfoCircle} />
-              Title is limited between 10 to 255 character
-            </p>
-          </div>
-          <div>
-            <label htmlFor="creditsNumber">
-              Credits Number:
-              <FontAwesomeIcon
-                icon={faCheck}
-                className={validCreditsNumber ? "valid" : "hide"}
-              />
-              <FontAwesomeIcon
-                icon={faTimes}
-                className={
-                  validCreditsNumber || !creditsNumber
-                    ? "hide invalid"
-                    : "invalid"
-                }
-              />
-            </label>
-            <input
-              type="text"
-              value={creditsNumber}
-              onChange={(event) => setCreditsNumber(event.target.value)}
-              onFocus={() => setCreditsNumberFocus(true)}
-              onBlur={() => setCreditsNumberFocus(false)}
-              className="add-input-field"
-            />
-            <p
-              id="uidnote"
-              className={
-                creditsNumberFocus && !validCreditsNumber
-                  ? "instructions"
-                  : "offscreen"
-              }
-            >
-              <FontAwesomeIcon icon={faInfoCircle} />
-              Credits number between 1-100
-            </p>
-          </div>
-          <div className="add-form-input">
-            <label htmlFor="majorCourses">Major Courses</label>
-            <CheckBoxCourses
-              elementCourses={majorCourses}
-              setElementCourses={setMajorCourses}
-              courses={courses}
-            />
-          </div>
-          <div>
-            <div className="form-footer-btns">
-              <button className="close-btn" onClick={close}>
-                Close
-              </button>
-              <button type="submit" className="add-form-submit">
-                Add Major
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      </div>
     </form>
   );
 };

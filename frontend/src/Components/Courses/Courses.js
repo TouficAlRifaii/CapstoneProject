@@ -61,6 +61,7 @@ const Courses = ({ courses, setCourses, getCourses }) => {
   return (
     <section className="list-section">
       <h1>Courses</h1>
+      <div> </div>
       <div>
         <div className="nav-search">
           <input
@@ -118,10 +119,7 @@ const Courses = ({ courses, setCourses, getCourses }) => {
                 </td>
                 <ListCourseId course={course.preReq} courses={courses} />{" "}
                 <ListCourseId course={course.coReq} courses={courses} />{" "}
-                <ListCourseId
-                  course={[String(course.subtitutes)]}
-                  courses={courses}
-                />
+                <ListCourseId course={[course.substitutes]} courses={courses} />
                 <td>
                   <div className="table-btns">
                     <button

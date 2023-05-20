@@ -38,7 +38,7 @@ const EditCourse = ({ courses, setCourses, id, close }) => {
 
   const [preReqs, setPreReqs] = useState(course.preReq || [""]);
   const [coReqs, setCoReqs] = useState(course.coReq || [""]);
-  const [substitute, setSubstitute] = useState(course.subtitutes || [""]);
+  const [substitutes, setSubstitute] = useState(course.substitutes || [""]);
 
   const [errMsg, setErrMsg] = useState("");
   const [displayBorderRed, setDisplayBorderRed] = useState(false); //change borders to red
@@ -89,7 +89,7 @@ const EditCourse = ({ courses, setCourses, id, close }) => {
     };
 
     if (subject === "") {
-      handleInvalidInput("Invalid Entry, check subject");
+      handleInvalidInput("Invalid entry, please check subject");
       return;
     }
 
@@ -127,10 +127,11 @@ const EditCourse = ({ courses, setCourses, id, close }) => {
         });
       }
     });
+
     const newCourse = {
       id: id,
       subject: subject,
-      substitutes: substitute,
+      substitutes: substitutes.map((sub) => parseInt(sub)),
       courseNumber: parseInt(courseNumber),
       title: title,
       creditsNumber: parseInt(creditsNumber),
@@ -145,8 +146,7 @@ const EditCourse = ({ courses, setCourses, id, close }) => {
       );
 
       if (response.data.message === "success") {
-        await getCourses();
-        setCourses((prevCourses) => [...prevCourses, newCourse]);
+        getCourses();
         setSubject("");
         setCourseNumber("");
         setTitle("");
@@ -157,7 +157,7 @@ const EditCourse = ({ courses, setCourses, id, close }) => {
         setDisplayMessage(true);
       }
     } catch (error) {
-      // Handle error
+      // Handle error if needed
     }
   };
 
@@ -314,7 +314,7 @@ const EditCourse = ({ courses, setCourses, id, close }) => {
           <div className="add-form-input">
             <label htmlFor="co-req">Substitute course:</label>
             <DropListCourses
-              elementCourses={[String(substitute[0])]}
+              elementCourses={substitutes}
               setElementCourses={setSubstitute}
               courses={courses}
               disabled={true}

@@ -122,7 +122,6 @@ const EditDoctor = ({ close, doctors, setDoctors, courses, id }) => {
       }
     } catch (error) {
       getDoctors();
-      console.log(error);
     }
   };
 

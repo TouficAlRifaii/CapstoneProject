@@ -34,7 +34,7 @@ const DropListCourses = ({
                 courses.subject.localeCompare(NCourse.subject)
               )
               .map((course) => (
-                <option key={course.id} value={course.id}>
+                <option key={course.id} value={parseInt(course.id)}>
                   {`${course.subject} ${course.courseNumber}`}
                 </option>
               ))}

@@ -13,6 +13,13 @@ const CheckBoxCourses = ({
   const handleCheckboxChange = (index) => {
     const newCourses = [...elementCourses];
     newCourses[index] = !newCourses[index];
+
+    if (newCourses[index]) {
+      newCourses[index] = courses[index].id;
+    } else {
+      newCourses[index] = false;
+    }
+
     setElementCourses(newCourses);
   };
 
