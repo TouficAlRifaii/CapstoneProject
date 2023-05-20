@@ -63,8 +63,10 @@ class Section(models.Model):
 class Doctor(models.Model):
     name = models.CharField(max_length=100)
     title = models.CharField(max_length=100)
+    campus = models.IntegerField()
     courses = models.ManyToManyField('Course', related_name='doctors', blank=True)
     availability = models.ManyToManyField('Availability', related_name='doctors', blank=True)
+
 
     def __str__(self):
         return f"{self.name}"
