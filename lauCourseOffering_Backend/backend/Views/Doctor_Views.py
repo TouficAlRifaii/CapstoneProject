@@ -31,7 +31,7 @@ class DoctorsApi(APIView):
             })
 
     def post(self, request):
-        times = request.data["availabilties"]
+        times = request.data["availabilities"]
         doctor = request.data["doctor"]
         times_ids = []
         for time in times:
@@ -71,7 +71,17 @@ class DoctorUpdate(APIView):
             doctor = Doctor.objects.get(pk=request.data["id"])
         except Doctor.DoesNotExist:
             return Response({"message": "Doctor not found."})
-
+        sessions = doctor.availability
+        for session in sessions:
+            Availability.objects.get(session).delete()
+        times = request.data['availabilities']
+        times_ids = []
+        for time in times:
+            timeSerializer = AvailabilitySerializer(data=time)
+            timeSerializer.is_valid(raise_exception=True)
+            timeSerializer.save()
+            times_ids.append(timeSerializer.data['id'])
+        doctor['availability'] = times_ids
         serializer = DoctorSerializer(doctor, data=request.data)
         if serializer.is_valid():
             serializer.save()
