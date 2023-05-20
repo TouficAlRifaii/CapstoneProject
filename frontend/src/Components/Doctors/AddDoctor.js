@@ -9,8 +9,8 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 
-const nameRegex = /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)+$/; //will be used for both name and lastname
-const titleRegex = /^[a-zA-Z0-9\s]{2,50}$/;
+const NAMEREGEX = /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)+$/; //will be used for both name and lastname
+const TITLEREGEX = /^[a-zA-Z0-9\s]{2,50}$/;
 
 const AddDoctor = ({ doctors, setDoctors, courses, close }) => {
   const [name, setName] = useState("");
@@ -29,24 +29,25 @@ const AddDoctor = ({ doctors, setDoctors, courses, close }) => {
   const [sessions, setSessions] = useState([{ days: "", start: "", end: "" }]);
 
   const [errMsg, setErrMsg] = useState("");
-  const [emptyFields, setEmptyFields] = useState(false); //change borders to red
+  const [displayBorderRed, setDisplayBorderRed] = useState(false); //change borders to red
   const [displayMessage, setDisplayMessage] = useState(false); //after submitting (return or another input)
 
   useEffect(() => {
-    setValidName(nameRegex.test(name));
+    setValidName(NAMEREGEX.test(name));
   }, [name]);
 
   useEffect(() => {
-    setValidLastName(nameRegex.test(lastName));
+    setValidLastName(NAMEREGEX.test(lastName));
   }, [lastName]);
 
   useEffect(() => {
-    setValidTitle(titleRegex.test(title));
+    setValidTitle(TITLEREGEX.test(title));
   }, [title]);
 
   useEffect(() => {
     setErrMsg("");
   }, [name, lastName, title]);
+
   const handleClose = () => {
     close();
   };
@@ -59,19 +60,19 @@ const AddDoctor = ({ doctors, setDoctors, courses, close }) => {
     const lastSession = sessions[sessions.length - 1];
 
     if (
-      !nameRegex.test(name) ||
-      !nameRegex.test(lastName) ||
-      !titleRegex.test(title) ||
+      !NAMEREGEX.test(name) ||
+      !NAMEREGEX.test(lastName) ||
+      !TITLEREGEX.test(title) ||
       tCourses.length === 0 ||
       !lastSession.days ||
       !lastSession.start ||
       !lastSession.end
     ) {
       setErrMsg("Please fill all the fields");
-      setEmptyFields(true);
+      setDisplayBorderRed(true);
 
       setTimeout(() => {
-        setEmptyFields(false);
+        setDisplayBorderRed(false);
       }, 400);
       return;
     }
@@ -112,9 +113,8 @@ const AddDoctor = ({ doctors, setDoctors, courses, close }) => {
   return (
     <form
       onSubmit={handleSubmit}
-      className={`add-form ${emptyFields ? "empty-fields" : ""}`}
+      className={`add-form ${displayBorderRed ? "empty-fields" : ""}`}
     >
-      {" "}
       {displayMessage ? (
         <div>
           <div className="message-container">

@@ -8,12 +8,8 @@ import EditDoctor from "./EditDoctor";
 import axios from "axios";
 
 const Doctors = ({ courses }) => {
-  const [searchResults, setSearchResults] = useState([]);
-  const [search, setSearch] = useState("");
+  //getting doctors from database
   const [doctors, setDoctors] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [doctorsPerPage, setDoctorsPerPage] = useState(3);
-
   const getDoctors = async () => {
     try {
       const response = await axios.get("http://127.0.0.1:8000/api/doctors");
@@ -26,6 +22,22 @@ const Doctors = ({ courses }) => {
     getDoctors();
   }, []);
 
+  // search + paginate
+  const [searchResults, setSearchResults] = useState([]);
+  const [search, setSearch] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(3);
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = searchResults.slice(indexOfFirstItem, indexOfLastItem);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  const pageNumbers = [];
+  for (let i = 1; i <= Math.ceil(searchResults.length / itemsPerPage); i++) {
+    pageNumbers.push(i);
+  }
   useEffect(() => {
     const filteredResults = doctors.filter(
       (doctor) =>
@@ -36,25 +48,11 @@ const Doctors = ({ courses }) => {
     setSearchResults(filteredResults);
   }, [doctors, search]);
 
-  const handleDelete = (id) => {
+  // delete
+  const handleDeleteDoctor = (id) => {
     const doctorsList = doctors.filter((doctor) => doctor.id !== id);
     setDoctors(doctorsList);
   };
-
-  const indexOfLastDoctor = currentPage * doctorsPerPage;
-  const indexOfFirstDoctor = indexOfLastDoctor - doctorsPerPage;
-  const currentDoctors = searchResults.slice(
-    indexOfFirstDoctor,
-    indexOfLastDoctor
-  );
-
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
-  const pageNumbers = [];
-  for (let i = 1; i <= Math.ceil(searchResults.length / doctorsPerPage); i++) {
-    pageNumbers.push(i);
-  }
-
   return (
     <section className="list-section">
       <h1>Doctors</h1>
@@ -88,12 +86,10 @@ const Doctors = ({ courses }) => {
             </tr>
           </thead>
           <tbody>
-            {currentDoctors.map((doctor) => (
+            {currentItems.map((doctor) => (
               <tr key={doctor.id} className="list-row">
                 <td>
-                  <div className="table-data">
-                    {doctor.name} {doctor.lastName}
-                  </div>
+                  <div className="table-data">{doctor.name}</div>
                 </td>
                 <td>
                   <div className="table-data">{doctor.title} </div>
@@ -103,7 +99,7 @@ const Doctors = ({ courses }) => {
                 <td>
                   <div className="table-btns">
                     <button
-                      onClick={() => handleDelete(doctor.id)}
+                      onClick={() => handleDeleteDoctor(doctor.id)}
                       className="delete-btn"
                     >
                       Delete

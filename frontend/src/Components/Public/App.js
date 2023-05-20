@@ -25,108 +25,25 @@ import "../../CSS/DropList.css";
 
 function App() {
   //coreq - preReq ids
-  const [users, setUsers] = useState([
-    {
-      name: "John",
-      lastName: "Doe",
-      email: "john.doe@example.com",
-      authorizationLevel: "admin",
-    },
-    {
-      name: "Jane",
-      lastName: "Doe",
-      email: "jane.doe@example.com",
-      authorizationLevel: "admin",
-    },
-    {
-      name: "Bob",
-      lastName: "Smith",
-      email: "bob.smith@example.com",
-      authorizationLevel: "admin",
-    },
-    {
-      name: "Sarah",
-      lastName: "Johnson",
-      email: "sarah.johnson@example.com",
-      authorizationLevel: "user",
-    },
-    {
-      name: "Tom",
-      lastName: "Wilson",
-      email: "tom.wilson@example.com",
-      authorizationLevel: "user",
-    },
-    {
-      name: "Emily",
-      lastName: "Brown",
-      email: "emily.brown@example.com",
-      authorizationLevel: "user",
-    },
-    {
-      name: "David",
-      lastName: "Lee",
-      email: "david.lee@example.com",
-      authorizationLevel: "user",
-    },
-    {
-      name: "Jessica",
-      lastName: "Chen",
-      email: "jessica.chen@example.com",
-      authorizationLevel: "user",
-    },
-    {
-      name: "Matt",
-      lastName: "Nguyen",
-      email: "matt.nguyen@example.com",
-      authorizationLevel: "user",
-    },
-    {
-      name: "Olivia",
-      lastName: "Garcia",
-      email: "olivia.garcia@example.com",
-      authorizationLevel: "user",
-    },
-    {
-      name: "Kevin",
-      lastName: "Wang",
-      email: "kevin.wang@example.com",
-      authorizationLevel: "user",
-    },
-    {
-      name: "Maria",
-      lastName: "Martinez",
-      email: "maria.martinez@example.com",
-      authorizationLevel: "user",
-    },
-    {
-      name: "Ryan",
-      lastName: "Lopez",
-      email: "ryan.lopez@example.com",
-      authorizationLevel: "user",
-    },
-    {
-      name: "Melissa",
-      lastName: "Jones",
-      email: "melissa.jones@example.com",
-      authorizationLevel: "user",
-    },
-    {
-      name: "Justin",
-      lastName: "Gonzalez",
-      email: "justin.gonzalez@example.com",
-      authorizationLevel: "user",
-    },
-  ]);
+
   const [courses, setCourses] = useState([]);
   const [doctors, setDoctors] = useState([]);
+  const [majors, setMajors] = useState([]);
+
   const getCourses = async () => {
     try {
       const response = await axios.get("http://127.0.0.1:8000/api/courses");
       if (response.data["message"] === "success") {
         setCourses(response.data["courses"]);
       }
-    } catch (exception) {}
+    } catch (exception) {
+      console.log(exception);
+    }
   };
+
+  useEffect(() => {
+    getCourses();
+  }, []);
   return (
     <div className="App">
       <Nav />
@@ -176,7 +93,13 @@ function App() {
           <Route
             exact
             path="courses"
-            element={<Courses courses={courses} setCourses={setCourses} />}
+            element={
+              <Courses
+                courses={courses}
+                setCourses={setCourses}
+                getCourses={getCourses}
+              />
+            }
           />
 
           <Route path="about" element={<About />} />

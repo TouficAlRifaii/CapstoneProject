@@ -6,18 +6,21 @@ import Popup from "reactjs-popup";
 import axios from "axios";
 import AddCourse from "./AddCourse";
 import EditCourse from "./EditCourse";
+
 // semester: "Fall 2022",
 // subject: "Computer Science",
 // courseNumber: "CS101",
 // section: "001",
 // title: "Introduction to Computer Science"
 
-const Courses = ({ courses, setCourses }) => {
+const Courses = ({ courses, setCourses, getCourses }) => {
+  //courses API is called in app because its used in multiple pages
+
+  // search + paginate
   const [searchResults, setSearchResults] = useState([]);
   const [search, setSearch] = useState("");
-
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [itemsPerPage, setItemsPerPage] = useState(9);
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -26,6 +29,9 @@ const Courses = ({ courses, setCourses }) => {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const pageNumbers = [];
+  for (let i = 1; i <= Math.ceil(searchResults.length / itemsPerPage); i++) {
+    pageNumbers.push(i);
+  }
 
   useEffect(() => {
     const filteredResults = courses.filter(
@@ -35,12 +41,14 @@ const Courses = ({ courses, setCourses }) => {
         course.courseNumber.toLowerCase().includes(search.toLowerCase())
     );
 
-    setSearchResults(filteredResults.reverse());
-    setCurrentPage(1);
+    setSearchResults(filteredResults);
   }, [courses, search]);
+
+  //delete
   const handleDeleteCourse = async (courseId) => {
     const data = new FormData();
     data.append("id", courseId);
+    console.log(data);
     const url = "http://127.0.0.1:8000/api/courses/delete";
     try {
       const response = await axios.post(url, data);
@@ -52,10 +60,6 @@ const Courses = ({ courses, setCourses }) => {
     } catch (error) {}
   };
 
-  for (let i = 1; i <= Math.ceil(searchResults.length / itemsPerPage); i++) {
-    pageNumbers.push(i);
-  }
-
   return (
     <section className="list-section">
       <h1>Courses</h1>
@@ -63,50 +67,52 @@ const Courses = ({ courses, setCourses }) => {
         <div className="nav-search">
           <input
             type="text"
-            placeholder="Search"
+            placeholder="Search courses"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="search-input"
           />
         </div>
-        <table className="list-table courses">
+        <table className="table courses">
           <thead>
             <tr>
               <th>
-                <div className="table-data">Subject</div>
+                <div className="table-data-center">Subject</div>
               </th>
               <th>
-                <div className="table-data">Course Number</div>
+                <div className="table-data-center">Number</div>
               </th>
               <th>
-                <div className="table-data">Title</div>
+                <div className="table-data-center">Title</div>
               </th>
               <th>
-                <div className="table-data">Credits</div>
+                <div className="table-data-center">Credits</div>
               </th>
               <th>
-                <div className="table-data">Prerequisites</div>
+                <div className="table-data-center">Pre-requisites</div>
               </th>
               <th>
-                <div className="table-data">Corequisites</div>
+                <div className="table-data-center">Co-requisites</div>
               </th>
               <th></th>
             </tr>
           </thead>
           <tbody>
             {currentItems.map((course) => (
-              <tr key={course} className="list-row">
+              <tr key={course.id} className="list-row">
                 <td>
-                  <div className="table-data">{course.subject}</div>
+                  <div className="table-data-center">{course.subject}</div>
                 </td>
                 <td>
-                  <div className="table-data">{course.courseNumber}</div>
+                  <div className="table-data-center">{course.courseNumber}</div>
                 </td>
                 <td>
                   <div className="table-data">{course.title}</div>
                 </td>
                 <td>
-                  <div className="table-data">{course.creditsNumber}</div>
+                  <div className="table-data-center">
+                    {course.creditsNumber}
+                  </div>
                 </td>
                 <ListCourseId course={course.preReq} courses={courses} />{" "}
                 <ListCourseId course={course.coReq} courses={courses} />{" "}

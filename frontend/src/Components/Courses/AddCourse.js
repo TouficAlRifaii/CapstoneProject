@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import DropListSubjects from "./DropListSubjects";
 import DropListCourses from "./DropListCourses";
@@ -9,12 +9,12 @@ import {
   faInfoCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-const courseNumberRegex = /^[0-9]{3}[A-Z]?[A-Z]?$/;
-
-const titleRegex = /^.{10,255}$/;
-
-const CREDITSNUMBERREGEX = /^[1-5]$/;
+import { getCourses } from "../Public/App";
+import {
+  COURSENUMBERREGEX,
+  TITLEREGEX,
+  CREDITSNUMBERREGEX,
+} from "../Public/ValidationRegex";
 
 const AddCourse = ({ courses, setCourses, close }) => {
   const [subject, setSubject] = useState("");
@@ -35,13 +35,26 @@ const AddCourse = ({ courses, setCourses, close }) => {
   const [coReqs, setCoReqs] = useState([""]);
 
   const [errMsg, setErrMsg] = useState("");
+  const [displayBorderRed, setDisplayBorderRed] = useState(false); //change borders to red
+  const [displayMessage, setDisplayMessage] = useState(false); //after submitting (return or another input)
 
+  const getCourses = async () => {
+    try {
+      const response = await axios.get("http://127.0.0.1:8000/api/courses");
+      if (response.data["message"] === "success") {
+        setCourses(response.data["courses"]);
+      }
+    } catch (exception) {
+      console.log(exception);
+    }
+  };
+  //check valid inputs
   useEffect(() => {
-    setValidCourseNumber(courseNumberRegex.test(courseNumber));
+    setValidCourseNumber(COURSENUMBERREGEX.test(courseNumber));
   }, [courseNumber]);
 
   useEffect(() => {
-    setValidTitle(titleRegex.test(title));
+    setValidTitle(TITLEREGEX.test(title));
   }, [title]);
 
   useEffect(() => {
@@ -52,30 +65,47 @@ const AddCourse = ({ courses, setCourses, close }) => {
     setErrMsg("");
   }, [courseNumber, title, creditsNumber]);
 
+  const handleClose = () => {
+    close();
+  };
+
+  const handleDisplay = () => {
+    setDisplayMessage(false);
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (subject === "") {
-      setErrMsg("Invalid Entry, check subject");
-      return;
-    } else if (
-      subject === "" ||
-      !courseNumberRegex.test(courseNumber) ||
-      !titleRegex.test(title) ||
-      !CREDITSNUMBERREGEX.test(creditsNumber)
-    ) {
-      return; // Return early if any of the state variables are empty
-    }
-    const newCourse = {
-      subject,
-      courseNumber,
-      title,
-      creditsNumber,
-      preReq: preReqs.filter((pr) => pr !== ""), // Remove any empty strings from the preReq1 array
-      coReq: coReqs.filter((cr) => cr !== ""),
+    const handleInvalidInput = (errorMsg) => {
+      setErrMsg(errorMsg);
+      setDisplayBorderRed(true);
+      setTimeout(() => {
+        setDisplayBorderRed(false);
+      }, 400);
     };
-    const course = {};
+
+    if (subject === "") {
+      handleInvalidInput("Invalid Entry, check subject");
+      return;
+    }
+
+    if (!COURSENUMBERREGEX.test(courseNumber)) {
+      handleInvalidInput("Please enter a valid course number");
+      return;
+    }
+
+    if (!TITLEREGEX.test(title)) {
+      handleInvalidInput("Please enter a valid title");
+      return;
+    }
+
+    if (!CREDITSNUMBERREGEX.test(creditsNumber)) {
+      handleInvalidInput("Please enter a valid credits number");
+      return;
+    }
+
     const relations = [];
+
     preReqs.forEach((element) => {
       if (element !== "") {
         relations.push({
@@ -84,6 +114,7 @@ const AddCourse = ({ courses, setCourses, close }) => {
         });
       }
     });
+
     coReqs.forEach((element) => {
       if (element !== "") {
         relations.push({
@@ -92,17 +123,29 @@ const AddCourse = ({ courses, setCourses, close }) => {
         });
       }
     });
-    course["subject"] = subject;
-    course["courseNumber"] = courseNumber;
-    course["title"] = title;
-    course["creditsNumber"] = parseInt(creditsNumber);
-    const data = { course: course, relations: relations };
+
+    const newCourse = {
+      subject,
+      courseNumber,
+      title,
+      creditsNumber: parseInt(creditsNumber),
+    };
+
+    const data = { course: newCourse, relations };
+
     try {
       const response = await axios.post(
         "http://127.0.0.1:8000/api/courses",
         data
       );
-      if (response.data["message"] === "success") {
+
+      if (response.data.message === "Course Already exist") {
+        handleInvalidInput("Course already exists");
+        return;
+      }
+
+      if (response.data.message === "success") {
+        getCourses(); //Refreshing the courses to get the values from the database ()
         setCourses([...courses, newCourse]);
         setSubject("");
         setCourseNumber("");
@@ -111,143 +154,178 @@ const AddCourse = ({ courses, setCourses, close }) => {
         setCoReqs([""]);
         setPreReqs([""]);
         setErrMsg("");
-        close();
+        setDisplayMessage(true);
       }
-    } catch (error) {}
+    } catch (error) {
+      // Handle error
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="add-form">
-      <h1 className="add-form-title">Add Course</h1>
-      <p className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">
-        {errMsg}
-      </p>
-      <div className="add-form-input">
-        <label htmlFor="subject">Subject:</label>
-        <DropListSubjects subject={subject} setSubject={setSubject} />
-      </div>
-      <div>
-        <label htmlFor="course-number">
-          Course Number:
-          <FontAwesomeIcon
-            icon={faCheck}
-            className={validCourseNumber ? "valid" : "hide"}
-          />
-          <FontAwesomeIcon
-            icon={faTimes}
-            className={
-              validCourseNumber || !courseNumber ? "hide invalid" : "invalid"
-            }
-          />
-        </label>
-        <input
-          type="text"
-          value={courseNumber}
-          onChange={(event) => setCourseNumber(event.target.value)}
-          autocomplete="off"
-          onFocus={() => setCourseNumberfocus(true)}
-          onBlur={() => setCourseNumberfocus(false)}
-          className="add-input-field"
-        />
-        <p
-          id="uidnote"
-          className={
-            courseNumberFocus && !validCourseNumber
-              ? "instructions"
-              : "offscreen"
-          }
-        >
-          <FontAwesomeIcon icon={faInfoCircle} />
-          Format Example: 498 or 498A or 498AA
-        </p>
-      </div>
-      <div className="add-form-input">
-        <label htmlFor="title">
-          Title:
-          <FontAwesomeIcon
-            icon={faCheck}
-            className={validTitle ? "valid" : "hide"}
-          />
-          <FontAwesomeIcon
-            icon={faTimes}
-            className={validTitle || !title ? "hide invalid" : "invalid"}
-          />
-        </label>
-        <input
-          type="text"
-          id="title"
-          value={title}
-          onChange={(event) => setTitle(event.target.value)}
-          onFocus={() => setTitleFocus(true)}
-          onBlur={() => setTitleFocus(false)}
-          className="add-input-field"
-        />
-        <p
-          id="uidnote"
-          className={titleFocus && !validTitle ? "instructions" : "offscreen"}
-        >
-          <FontAwesomeIcon icon={faInfoCircle} />
-          Title is limited between 10 to 255 character
-        </p>
-      </div>
-      <div className="add-form-input">
-        <label htmlFor="credits-number">
-          Credits Number:
-          <FontAwesomeIcon
-            icon={faCheck}
-            className={validCreditsNumber ? "valid" : "hide"}
-          />
-          <FontAwesomeIcon
-            icon={faTimes}
-            className={
-              validCreditsNumber || !creditsNumber ? "hide invalid" : "invalid"
-            }
-          />
-        </label>
-        <input
-          type="text"
-          id="credits-number"
-          value={creditsNumber}
-          onChange={(event) => setCreditsNumber(event.target.value)}
-          onFocus={() => setCreditsNumberFocus(true)}
-          onBlur={() => setCreditsNumberFocus(false)}
-          className="add-input-field"
-        />
-        <p
-          id="uidnote"
-          className={
-            creditsNumberFocus && !validCreditsNumber
-              ? "instructions"
-              : "offscreen"
-          }
-        >
-          <FontAwesomeIcon icon={faInfoCircle} />
-          Credits number are limited between 1-5
-        </p>
-      </div>
-      <div className="add-form-input">
-        <label htmlFor="pre-req">Pre requisites:</label>
-        <DropListCourses
-          elementCourses={preReqs}
-          setElementCourses={setPreReqs}
-          courses={courses}
-        />
-      </div>
-      <div className="add-form-input">
-        <label htmlFor="co-req">Co requisites:</label>
-        <DropListCourses
-          elementCourses={coReqs}
-          setElementCourses={setCoReqs}
-          courses={courses}
-        />
-      </div>
-      <div></div>
-      <button type="submit" onClick={handleSubmit} className="add-form-submit">
-        Add Course
-      </button>
-      <button className="close-btn" onClick={close}>
-        Close
-      </button>
+    <form
+      onSubmit={handleSubmit}
+      className={`add-form ${displayBorderRed ? "empty-fields" : ""}`}
+    >
+      {displayMessage ? (
+        <div>
+          <div className="message-container">
+            <p className="successful-submit">Doctor has been added</p>
+          </div>
+          <div className="form-footer-btns">
+            <button onClick={handleClose} className="close-btn">
+              close
+            </button>
+            <button onClick={handleDisplay} className="add-form-submit">
+              Add Another doctor
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div>
+          {" "}
+          <h1 className="add-form-title">Add Course</h1>
+          <p className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">
+            {errMsg}
+          </p>
+          <div className="add-form-input">
+            <label htmlFor="subject">Subject:</label>
+            <DropListSubjects subject={subject} setSubject={setSubject} />
+          </div>
+          <div>
+            <label htmlFor="course-number">
+              Course Number:
+              <FontAwesomeIcon
+                icon={faCheck}
+                className={validCourseNumber ? "valid" : "hide"}
+              />
+              <FontAwesomeIcon
+                icon={faTimes}
+                className={
+                  validCourseNumber || !courseNumber
+                    ? "hide invalid"
+                    : "invalid"
+                }
+              />
+            </label>
+            <input
+              type="text"
+              value={courseNumber}
+              onChange={(event) => setCourseNumber(event.target.value)}
+              onFocus={() => setCourseNumberfocus(true)}
+              onBlur={() => setCourseNumberfocus(false)}
+              className="add-input-field"
+            />
+            <p
+              id="uidnote"
+              className={
+                courseNumberFocus && !validCourseNumber
+                  ? "instructions"
+                  : "offscreen"
+              }
+            >
+              <FontAwesomeIcon icon={faInfoCircle} />
+              Format Example: 498 or 498A or 498AA
+            </p>
+          </div>
+          <div className="add-form-input">
+            <label htmlFor="title">
+              Title:
+              <FontAwesomeIcon
+                icon={faCheck}
+                className={validTitle ? "valid" : "hide"}
+              />
+              <FontAwesomeIcon
+                icon={faTimes}
+                className={validTitle || !title ? "hide invalid" : "invalid"}
+              />
+            </label>
+            <input
+              type="text"
+              id="title"
+              value={title}
+              onChange={(event) => setTitle(event.target.value)}
+              onFocus={() => setTitleFocus(true)}
+              onBlur={() => setTitleFocus(false)}
+              className="add-input-field"
+            />
+            <p
+              id="uidnote"
+              className={
+                titleFocus && !validTitle ? "instructions" : "offscreen"
+              }
+            >
+              <FontAwesomeIcon icon={faInfoCircle} />
+              Title is limited between 4 to 255 character
+            </p>
+          </div>
+          <div className="add-form-input">
+            <label htmlFor="credits-number">
+              Credits Number:
+              <FontAwesomeIcon
+                icon={faCheck}
+                className={validCreditsNumber ? "valid" : "hide"}
+              />
+              <FontAwesomeIcon
+                icon={faTimes}
+                className={
+                  validCreditsNumber || !creditsNumber
+                    ? "hide invalid"
+                    : "invalid"
+                }
+              />
+            </label>
+            <input
+              type="text"
+              id="credits-number"
+              value={creditsNumber}
+              onChange={(event) => setCreditsNumber(event.target.value)}
+              onFocus={() => setCreditsNumberFocus(true)}
+              onBlur={() => setCreditsNumberFocus(false)}
+              className="add-input-field"
+            />
+            <p
+              id="uidnote"
+              className={
+                creditsNumberFocus && !validCreditsNumber
+                  ? "instructions"
+                  : "offscreen"
+              }
+            >
+              <FontAwesomeIcon icon={faInfoCircle} />
+              Credits number are limited between 1-5
+            </p>
+          </div>
+          <div className="add-form-input">
+            <label htmlFor="pre-req">Pre requisites:</label>
+            <DropListCourses
+              elementCourses={preReqs}
+              setElementCourses={setPreReqs}
+              courses={courses}
+            />
+          </div>
+          <div className="add-form-input">
+            <label htmlFor="co-req">Co requisites:</label>
+            <DropListCourses
+              elementCourses={coReqs}
+              setElementCourses={setCoReqs}
+              courses={courses}
+            />
+          </div>
+          <div></div>
+          <div className="form-footer-btns">
+            <button className="close-btn" onClick={close}>
+              Close
+            </button>
+            <button
+              type="submit"
+              onClick={handleSubmit}
+              className="add-form-submit"
+            >
+              Add Course
+            </button>
+          </div>
+        </div>
+      )}
     </form>
   );
 };

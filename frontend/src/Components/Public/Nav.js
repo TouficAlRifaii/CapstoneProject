@@ -4,7 +4,7 @@ import "../../CSS/Nav.css"; // Import your CSS file for navbar styling
 
 function Nav() {
   return (
-    <container>
+    <div>
       <nav className="navbar">
         {" "}
         {/* Add a class name for styling */}
@@ -27,7 +27,7 @@ function Nav() {
           </li>
         </ul>
       </nav>
-    </container>
+    </div>
   );
 }
 

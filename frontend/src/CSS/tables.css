@@ -20,13 +20,9 @@
 
 .table th,
 .table td {
-  padding-top: 0.3rem;
-  padding-bottom: 0.2rem;
-  padding-left: 0.2rem;
-  padding-right: 0.3rem;
+  padding-top: 0.3rem 0.2rem;
   text-align: left;
   border: 0.01rem solid rgb(201, 190, 190);
-  width: 100px;
 }
 /* MAJORS WIDTH*/
 .table.majors th:nth-child(1) {
@@ -44,7 +40,7 @@
   width: 8.75rem;
 }
 .table.doctors th:nth-child(2) {
-  width: 4rem;
+  width: 8rem;
 }
 .table.doctors th:nth-child(3) {
   width: 18rem;
@@ -61,23 +57,25 @@
 }
 
 /*       COURSES WIDTH */
-.list-table.courses th:nth-child(3) {
-  width: 10rem;
-}
-.list-table.courses th:nth-child(1) {
+.table.courses th:nth-child(1) {
   width: 4rem;
 }
-.list-table.courses th:nth-child(2) {
+.table.courses th:nth-child(2) {
   width: 4rem;
 }
-.list-table.courses th:nth-child(4) {
+.table.courses th:nth-child(3) {
+  width: 18rem;
+}
+.table.courses th:nth-child(4) {
   width: 3.2rem;
 }
-.list-table.courses th:nth-child(7) {
-  width: 8.5rem;
+.table.courses th:nth-child(5) {
+  width: 10rem;
 }
-
-/*============================================================*/
+.table.courses th:nth-child(6) {
+  width: 10rem;
+}
+/*==============================for edit and delete same row all==============================*/
 .table th:last-child {
   width: 10rem;
 }
@@ -164,6 +162,7 @@
   background-color: #3ebd3e;
   color: #ffffff;
   padding: 0.5rem;
+  margin: 0.2rem;
   border-radius: 0.4rem;
   border: none;
   cursor: pointer;
@@ -179,9 +178,16 @@
   width: 4rem;
 }
 
-.table-data {
+.table-data-center {
   display: flex;
   justify-content: space-evenly;
+  padding: 0.2rem;
+}
+
+.table-data {
+  display: flex;
+  justify-content: flex-start;
+  padding: 0.2rem;
 }
 
 .table-btns {

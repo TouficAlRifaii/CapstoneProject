@@ -2,21 +2,22 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import DropListSubjects from "./DropListSubjects";
 import DropListCourses from "./DropListCourses";
+import axios from "axios";
+
 import {
   faCheck,
   faTimes,
   faInfoCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-const courseNumberRegex = /^[0-9]{3}[A-Z]?[A-Z]?$/;
-
-const titleRegex = /^.{10,255}$/;
-
-const creditsNumberRegex = /^[1-5]$/;
+import {
+  COURSENUMBERREGEX,
+  TITLEREGEX,
+  CREDITSNUMBERREGEX,
+} from "../Public/ValidationRegex";
 
 const EditCourse = ({ courses, setCourses, id, close }) => {
   const history = useNavigate();
-
   const course = courses.find((course) => course.id === parseInt(id));
 
   const [subject, setSubject] = useState(course.subject || "");
@@ -39,197 +40,294 @@ const EditCourse = ({ courses, setCourses, id, close }) => {
   const [coReqs, setCoReqs] = useState(course.coReq || [""]);
 
   const [errMsg, setErrMsg] = useState("");
+  const [displayBorderRed, setDisplayBorderRed] = useState(false); //change borders to red
+  const [displayMessage, setDisplayMessage] = useState(false); //after submitting (return or another input)
+
+  const getCourses = async () => {
+    try {
+      const response = await axios.get("http://127.0.0.1:8000/api/courses");
+      if (response.data["message"] === "success") {
+        setCourses(response.data["courses"]);
+      }
+    } catch (exception) {
+      console.log(exception);
+    }
+  };
 
   useEffect(() => {
-    setValidCourseNumber(courseNumberRegex.test(courseNumber));
+    setValidCourseNumber(COURSENUMBERREGEX.test(courseNumber));
   }, [courseNumber]);
 
   useEffect(() => {
-    setValidTitle(titleRegex.test(title));
+    setValidTitle(TITLEREGEX.test(title));
   }, [title]);
 
   useEffect(() => {
-    setValidCreditsNumber(creditsNumberRegex.test(creditsNumber));
+    setValidCreditsNumber(CREDITSNUMBERREGEX.test(creditsNumber));
   }, [creditsNumber]);
 
   useEffect(() => {
     setErrMsg("");
   }, [courseNumber, title, creditsNumber]);
 
-  if (!course) {
-    return <div>Course not found.</div>;
-  }
-
-  const isValidCourseNumber = (courseNumber) => {
-    const regex = /^[0-9]{3}[A-Z]?[A-Z]?$/;
-    return regex.test(courseNumber);
+  const handleClose = () => {
+    close();
   };
 
-  const handleSubmit = (event) => {
+  const handleDisplay = () => {
+    setDisplayMessage(false);
+  };
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (subject === "") {
-      setErrMsg("Invalid Entry, check subject");
-      return;
-    } else if (
-      subject === "" ||
-      !courseNumberRegex.test(courseNumber) ||
-      !titleRegex.test(title) ||
-      !creditsNumberRegex.test(creditsNumber)
-    ) {
-      return; // Return early if any of the state variables are empty
-    }
-
-    const updatedCourse = {
-      ...course,
-      subject,
-      courseNumber,
-      title,
-      creditsNumber,
-      preReq: preReqs.filter((pr) => pr !== ""), // Remove any empty strings from the preReq1 array
-      coReq: coReqs.filter((cr) => cr !== ""),
+    const handleInvalidInput = (errorMsg) => {
+      setErrMsg(errorMsg);
+      setDisplayBorderRed(true);
+      setTimeout(() => {
+        setDisplayBorderRed(false);
+      }, 400);
     };
 
-    const index = courses.findIndex((course) => course.id === parseInt(id));
-    const updatedCourses = [
-      ...courses.slice(0, index),
-      updatedCourse,
-      ...courses.slice(index + 1),
-    ];
-    setCourses(updatedCourses);
-    history.push("/courses");
+    if (subject === "") {
+      handleInvalidInput("Invalid Entry, check subject");
+      return;
+    }
+
+    if (!COURSENUMBERREGEX.test(courseNumber)) {
+      handleInvalidInput("Please enter a valid course number");
+      return;
+    }
+
+    if (!TITLEREGEX.test(title)) {
+      handleInvalidInput("Please enter a valid title");
+      return;
+    }
+
+    if (!CREDITSNUMBERREGEX.test(creditsNumber)) {
+      handleInvalidInput("Please enter a valid credits number");
+      return;
+    }
+
+    const relations = [];
+
+    preReqs.forEach((element) => {
+      if (element !== "") {
+        relations.push({
+          secondCourse_id: parseInt(element),
+          isPrerequisite: true,
+        });
+      }
+    });
+
+    coReqs.forEach((element) => {
+      if (element !== "") {
+        relations.push({
+          secondCourse_id: parseInt(element),
+          isPrerequisite: false,
+        });
+      }
+    });
+    const newCourse = {
+      id: id,
+      subject: subject,
+      courseNumber: parseInt(courseNumber),
+      title: title,
+      creditsNumber: parseInt(creditsNumber),
+    };
+    console.log(newCourse);
+
+    const data = { course: newCourse, relations };
+
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:8000/api/courses/update",
+        data
+      );
+
+      if (response.data.message === "success") {
+        await getCourses();
+        setCourses((prevCourses) => [...prevCourses, newCourse]);
+        setSubject("");
+        setCourseNumber("");
+        setTitle("");
+        setCreditsNumber("");
+        setCoReqs([""]);
+        setPreReqs([""]);
+        setErrMsg("");
+        setDisplayMessage(true);
+      }
+    } catch (error) {
+      // Handle error
+    }
   };
 
   return (
-    <div className="add-form">
-      <h1 className="add-form-title">Edit Course</h1>
-      <form onSubmit={handleSubmit}>
-        <div className="add-form-input">
-          <label htmlFor="subject">Subject:</label>
-          <DropListSubjects subject={subject} setSubject={setSubject} />
+    <form
+      onSubmit={handleSubmit}
+      className={`add-form ${displayBorderRed ? "empty-fields" : ""}`}
+    >
+      {displayMessage ? (
+        <div>
+          <div className="message-container">
+            <p className="successful-submit">Course has been Update</p>
+          </div>
+          <div className="form-footer-btns">
+            <button onClick={handleClose} className="close-btn">
+              close
+            </button>
+            <button onClick={handleDisplay} className="add-form-submit">
+              Update Another Course
+            </button>
+          </div>
         </div>
-        <div className="add-form-input">
-          <label htmlFor="course-number">
-            Course Number:
-            <FontAwesomeIcon
-              icon={faCheck}
-              className={validCourseNumber ? "valid" : "hide"}
-            />
-            <FontAwesomeIcon
-              icon={faTimes}
-              className={
-                validCourseNumber || !courseNumber ? "hide invalid" : "invalid"
-              }
-            />
-          </label>
-          <input
-            type="text"
-            id="course-number"
-            value={courseNumber}
-            onChange={(event) =>
-              setCourseNumber(event.target.value.toUpperCase())
-            }
-            onFocus={() => setCourseNumberfocus(true)}
-            onBlur={() => setCourseNumberfocus(false)}
-            className="add-input-field"
-          />
-          <p
-            id="uidnote"
-            className={
-              courseNumberFocus && !validCourseNumber
-                ? "instructions"
-                : "offscreen"
-            }
-          >
-            <FontAwesomeIcon icon={faInfoCircle} />
-            Format Example: 498 or 498A or 498AA
+      ) : (
+        <div>
+          {" "}
+          <h1 className="add-form-title">Edit Course</h1>
+          <p className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">
+            {errMsg}
           </p>
-        </div>
-        <div className="add-form-input">
-          <label htmlFor="title">
-            Title:
-            <FontAwesomeIcon
-              icon={faCheck}
-              className={validTitle ? "valid" : "hide"}
+          <div className="add-form-input">
+            <label htmlFor="subject">Subject:</label>
+            <DropListSubjects subject={subject} setSubject={setSubject} />
+          </div>
+          <div>
+            <label htmlFor="course-number">
+              Course Number:
+              <FontAwesomeIcon
+                icon={faCheck}
+                className={validCourseNumber ? "valid" : "hide"}
+              />
+              <FontAwesomeIcon
+                icon={faTimes}
+                className={
+                  validCourseNumber || !courseNumber
+                    ? "hide invalid"
+                    : "invalid"
+                }
+              />
+            </label>
+            <input
+              type="text"
+              value={courseNumber}
+              onChange={(event) => setCourseNumber(event.target.value)}
+              onFocus={() => setCourseNumberfocus(true)}
+              onBlur={() => setCourseNumberfocus(false)}
+              className="add-input-field"
             />
-            <FontAwesomeIcon
-              icon={faTimes}
-              className={validTitle || !title ? "hide invalid" : "invalid"}
-            />
-          </label>
-          <input
-            type="text"
-            id="title"
-            value={title}
-            onChange={(event) => setTitle(event.target.value)}
-            onFocus={() => setTitleFocus(true)}
-            onBlur={() => setTitleFocus(false)}
-            className="add-input-field"
-          />
-          <p
-            id="uidnote"
-            className={titleFocus && !validTitle ? "instructions" : "offscreen"}
-          >
-            <FontAwesomeIcon icon={faInfoCircle} />
-            Title is limited between 10 to 255 character
-          </p>
-        </div>
-        <div className="add-form-input">
-          <label htmlFor="credits-number">
-            Credits Number:
-            <FontAwesomeIcon
-              icon={faCheck}
-              className={validCreditsNumber ? "valid" : "hide"}
-            />
-            <FontAwesomeIcon
-              icon={faTimes}
+            <p
+              id="uidnote"
               className={
-                validCreditsNumber || !creditsNumber
-                  ? "hide invalid"
-                  : "invalid"
+                courseNumberFocus && !validCourseNumber
+                  ? "instructions"
+                  : "offscreen"
               }
+            >
+              <FontAwesomeIcon icon={faInfoCircle} />
+              Format Example: 498 or 498A or 498AA
+            </p>
+          </div>
+          <div className="add-form-input">
+            <label htmlFor="title">
+              Title:
+              <FontAwesomeIcon
+                icon={faCheck}
+                className={validTitle ? "valid" : "hide"}
+              />
+              <FontAwesomeIcon
+                icon={faTimes}
+                className={validTitle || !title ? "hide invalid" : "invalid"}
+              />
+            </label>
+            <input
+              type="text"
+              id="title"
+              value={title}
+              onChange={(event) => setTitle(event.target.value)}
+              onFocus={() => setTitleFocus(true)}
+              onBlur={() => setTitleFocus(false)}
+              className="add-input-field"
             />
-          </label>
-          <input
-            type="number"
-            id="credits-number"
-            value={creditsNumber}
-            onChange={(event) => setCreditsNumber(event.target.value)}
-            onFocus={() => setCreditsNumberFocus(true)}
-            onBlur={() => setCreditsNumberFocus(false)}
-            className="add-input-field"
-          />
-          {creditsNumber === "" ||
-          (creditsNumber >= 0 && creditsNumber <= 5) ? null : (
-            <span className="error">Credits must be between 0 and 5.</span>
-          )}
+            <p
+              id="uidnote"
+              className={
+                titleFocus && !validTitle ? "instructions" : "offscreen"
+              }
+            >
+              <FontAwesomeIcon icon={faInfoCircle} />
+              Title is limited between 4 to 255 character
+            </p>
+          </div>
+          <div className="add-form-input">
+            <label htmlFor="credits-number">
+              Credits Number:
+              <FontAwesomeIcon
+                icon={faCheck}
+                className={validCreditsNumber ? "valid" : "hide"}
+              />
+              <FontAwesomeIcon
+                icon={faTimes}
+                className={
+                  validCreditsNumber || !creditsNumber
+                    ? "hide invalid"
+                    : "invalid"
+                }
+              />
+            </label>
+            <input
+              type="text"
+              id="credits-number"
+              value={creditsNumber}
+              onChange={(event) => setCreditsNumber(event.target.value)}
+              onFocus={() => setCreditsNumberFocus(true)}
+              onBlur={() => setCreditsNumberFocus(false)}
+              className="add-input-field"
+            />
+            <p
+              id="uidnote"
+              className={
+                creditsNumberFocus && !validCreditsNumber
+                  ? "instructions"
+                  : "offscreen"
+              }
+            >
+              <FontAwesomeIcon icon={faInfoCircle} />
+              Credits number are limited between 1-5
+            </p>
+          </div>
+          <div className="add-form-input">
+            <label htmlFor="pre-req">Pre requisites:</label>
+            <DropListCourses
+              elementCourses={preReqs}
+              setElementCourses={setPreReqs}
+              courses={courses}
+            />
+          </div>
+          <div className="add-form-input">
+            <label htmlFor="co-req">Co requisites:</label>
+            <DropListCourses
+              elementCourses={coReqs}
+              setElementCourses={setCoReqs}
+              courses={courses}
+            />
+          </div>
+          <div></div>
+          <div className="form-footer-btns">
+            <button className="close-btn" onClick={close}>
+              Close
+            </button>
+            <button
+              type="submit"
+              onClick={handleSubmit}
+              className="add-form-submit"
+            >
+              Update Course
+            </button>
+          </div>
         </div>
-        <div className="add-form-input">
-          <label htmlFor="pre-req">Prerequisites:</label>
-          <DropListCourses
-            elementCourses={coReqs}
-            setElementCourses={setCoReqs}
-            courses={courses}
-          />
-        </div>
-        <div className="add-form-input">
-          <label htmlFor="co-req">Corequisites:</label>
-          <DropListCourses
-            elementCourses={preReqs}
-            setElementCourses={setPreReqs}
-            courses={courses}
-          />
-        </div>
-        <div className="add-form-input">
-          <button type="submit" className="add-form-submit">
-            Save
-          </button>
-          <button className="close-btn" onClick={close}>
-            Close
-          </button>
-        </div>
-      </form>
-    </div>
+      )}
+    </form>
   );
 };
 
