@@ -51,39 +51,41 @@ class DoctorsApi(APIView):
 
 class DeleteDoctor(APIView):
     def post(self, request):
-
         doctor = Doctor.objects.filter(id=request.data['id']).first()
         if doctor:
-
+            sessions = doctor.availability.all()
             doctor.delete()
+            for session in sessions:
+                Availability.objects.get(session).delete()
             return Response({
                 "message": "success"
             })
         else:
             return Response({
-                "message": "Course does not exist"
+                "message": "Doctor does not exist"
             })
 
 
 class DoctorUpdate(APIView):
     def put(self, request):
         try:
-            doctor = Doctor.objects.get(pk=request.data["id"])
+            doctor = Doctor.objects.get(pk=request.data["doctor"]["id"])
         except Doctor.DoesNotExist:
             return Response({"message": "Doctor not found."})
-        sessions = doctor.availability
+        sessions = doctor.availability.all()
         for session in sessions:
-            Availability.objects.get(session).delete()
+            session.delete()
         times = request.data['availabilities']
         times_ids = []
         for time in times:
             timeSerializer = AvailabilitySerializer(data=time)
             timeSerializer.is_valid(raise_exception=True)
             timeSerializer.save()
+            doctor.availability.add(timeSerializer.data["id"])
             times_ids.append(timeSerializer.data['id'])
-        doctor['availability'] = times_ids
-        serializer = DoctorSerializer(doctor, data=request.data)
-        if serializer.is_valid():
+        # doctor.availability.add(times_ids)
+        serializer = DoctorSerializer(doctor, data=request.data["doctor"])
+        if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response({
                 "message": "success"

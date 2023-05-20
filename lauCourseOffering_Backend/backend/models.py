@@ -66,11 +66,17 @@ class Doctor(models.Model):
     courses = models.ManyToManyField('Course', related_name='doctors', blank=True)
     availability = models.ManyToManyField('Availability', related_name='doctors', blank=True)
 
+    def __str__(self):
+        return f"{self.name}"
+
 
 class Availability(models.Model):
     days = models.CharField(max_length=5)
     start = models.CharField(max_length=255)
     end = models.CharField(max_length=255)
+
+    def __str__(self):
+        return f"{self.days}: {self.start} ; {self.end}"
 
 
 class StudyPlan(models.Model):
@@ -78,6 +84,3 @@ class StudyPlan(models.Model):
     firstYear = models.ManyToManyField("Course", blank=True, related_name="firstYearCourses")
     secondYear = models.ManyToManyField("Course", blank=True, related_name="secondYearCourses")
     thirdYear = models.ManyToManyField("Course", blank=True, related_name="thirdYearCourses")
-
-
-
