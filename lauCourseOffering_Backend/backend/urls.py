@@ -1,6 +1,6 @@
 from django.urls import path
 from .Views.Major_Views import MajorApi, MajorUpdateView
-from .Views.Course_Views import CoursesApi, BulkCourse, DeleteCourse
+from .Views.Course_Views import CoursesApi, BulkCourse, DeleteCourse, CourseUpdate
 from .Views.Student_Views import StudentsApi
 from .Views.Section_Views import SectionsApi
 from .Views.Doctor_Views import DoctorsApi, DeleteDoctor, DoctorUpdate
@@ -17,5 +17,6 @@ urlpatterns = [
     path("timeTable", TimeTable.as_view()),
     path("doctors/delete", DeleteDoctor.as_view()),
     path("majors/update", MajorUpdateView.as_view()),
-    path("doctors/update", DoctorUpdate.as_view())
+    path("doctors/update", DoctorUpdate.as_view()),
+    path("courses/update", CourseUpdate.as_view())
 ]

@@ -130,3 +130,25 @@ class RequisitesApi(APIView):
                 serializer = CourseRelationSerializer(data)
                 serializer.is_valid()
                 serializer.save()
+
+
+class CourseUpdate(APIView):
+    def post(self, request):
+        try:
+            doctor = Course.objects.get(pk=request.data["course"]['id'])
+        except Course.DoesNotExist:
+            return Response({"message": "Doctor not found."})
+        course_relations = CourseRelationShip.objects.filter(mainCourse_id=id)
+        if course_relations.exists():
+            course_relations.delete()
+        serializer = CourseSerializer(doctor, data=request.data["course"])
+        if serializer.is_valid():
+            serializer.save()
+            for relation in request.data["relations"]:
+                relation['mainCourse_id'] = id
+                relationSerializer = CourseRelationSerializer(data=relation)
+                relationSerializer.is_valid(raise_exception=True)
+                relationSerializer.save()
+            return Response({
+                "message": "success"
+            })
