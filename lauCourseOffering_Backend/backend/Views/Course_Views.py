@@ -33,11 +33,11 @@ class CoursesApi(APIView):
                 dictionary["courseNumber"] = course.courseNumber
                 dictionary["title"] = course.title
                 dictionary["creditsNumber"] = course.creditsNumber
-                substitutes =  course.substitutes.all()
+                substitutes = course.substitutes.all()
                 subList = []
                 for substitute in substitutes:
                     subList.append(substitute.id)
-                dictionary["subtitutes"] = subList
+                dictionary["substitutes"] = subList
                 preReq = []
                 coReq = []
                 for relationship in relationships:

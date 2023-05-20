@@ -8,6 +8,14 @@ from ..models import Course, CourseRelationShip, Section, Student
 
 
 class SectionsApi(APIView):
+    def get(self, request):
+        sections = Section.objects.all()
+        serializer = SectionSerializer(sections, many=True)
+        return Response({
+            "message": "success",
+            "sections": serializer.data
+        })
+
     def post(self, request):
         Section.objects.all().delete()
 
@@ -33,10 +41,8 @@ class SectionsApi(APIView):
         sections = Section.objects.all()
         for section in sections:
             students = section.numOfStudents
-            numOfSections = section.numOfSections
-
+            # numOfSections = section.numOfSections
             numOfSections = math.ceil(students / section.capacity)
-
             section.numOfSections = numOfSections
             section.save(update_fields=["numOfSections"])
 
