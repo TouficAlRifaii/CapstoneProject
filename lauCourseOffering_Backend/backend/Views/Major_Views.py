@@ -32,12 +32,11 @@ class MajorApi(APIView):
 
 
 class MajorUpdateView(APIView):
-    def put(self, request):
+    def post(self, request):
         try:
             major = Major.objects.get(pk=request.data["id"])
         except Major.DoesNotExist:
             return Response({"message": "Major not found."})
-
         serializer = MajorSerializer(major, data=request.data)
         if serializer.is_valid():
             serializer.save()

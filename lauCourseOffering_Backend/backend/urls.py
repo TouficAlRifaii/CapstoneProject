@@ -16,7 +16,7 @@ urlpatterns = [
     path("doctors", DoctorsApi.as_view()),
     path("timeTable", TimeTable.as_view()),
     path("doctors/delete", DeleteDoctor.as_view()),
-    path("majors/update", MajorUpdateView.as_view()),
+    path("major/update", MajorUpdateView.as_view()),
     path("doctors/update", DoctorUpdate.as_view()),
     path("courses/update", CourseUpdate.as_view())
 ]
