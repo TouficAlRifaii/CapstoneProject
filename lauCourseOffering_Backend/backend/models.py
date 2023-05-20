@@ -73,3 +73,11 @@ class Availability(models.Model):
     end = models.CharField(max_length=255)
 
 
+class StudyPlan(models.Model):
+    major = models.ForeignKey("backend.Major", on_delete=models.CASCADE)
+    firstYear = models.ManyToManyField("Course", blank=True, related_name="firstYearCourses")
+    secondYear = models.ManyToManyField("Course", blank=True, related_name="secondYearCourses")
+    thirdYear = models.ManyToManyField("Course", blank=True, related_name="thirdYearCourses")
+
+
+

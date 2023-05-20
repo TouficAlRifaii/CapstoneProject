@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Course, CourseRelationShip, Student, Section, Major, Availability, Doctor
+from .models import User, Course, CourseRelationShip, Student, Section, Major, Availability, Doctor, StudyPlan
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -68,3 +68,9 @@ class AvailabilitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Availability
         fields = ['id', 'days', 'start', "end"]
+
+
+class StudyPlanSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StudyPlan
+        fields = ['id', 'major', 'firstYear', 'secondYear', "thirdYear"]
