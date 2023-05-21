@@ -1,4 +1,4 @@
-# CapstoneProject
+# Course Offering Software
 
 ## Run the backend:
 First of all make sure to download python, mysql server and mysql workbench. 
