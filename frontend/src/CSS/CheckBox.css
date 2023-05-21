@@ -1,0 +1,32 @@
+.checkbox-courses {
+  font-size: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 1rem;
+}
+
+.checkbox-item {
+  position: relative;
+  background-color: #dee2dd;
+  padding: 1rem;
+  border-radius: 8px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.checkbox-item input {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  padding-left: 30px;
+}
+
+.search-checkbox {
+  padding: 0.5rem;
+  border: none;
+  border-bottom: 3px solid black;
+  margin-top: 0.3rem;
+  margin-bottom: 1rem;
+  width: 5rem;
+  font-size: 1rem;
+}

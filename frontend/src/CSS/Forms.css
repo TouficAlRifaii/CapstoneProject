@@ -1,0 +1,314 @@
+.add-form {
+  font-size: 1.5rem;
+  width: 40vw;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  border: 1px solid #ddd;
+  box-shadow: 0 0 1rem rgba(27, 27, 29, 0.955);
+}
+
+.add-form-title {
+  margin-bottom: 1rem;
+  font-size: 2rem;
+  text-align: center;
+}
+
+.errmsg {
+  margin-top: 1rem;
+  color: #e60000;
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.add-form-input {
+  margin-bottom: 1.5rem;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.2rem;
+  font-weight: bold;
+}
+
+.add-input-field {
+  font-size: 1.2rem;
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 0.3rem;
+  border: 1px solid #858585;
+}
+
+.form-footer-btns {
+  display: flex;
+  justify-content: flex-end;
+}
+.add-form-submit {
+  display: block;
+  width: 20%;
+  margin-top: 1.5rem;
+  padding: 0.5rem;
+  font-weight: bold;
+  color: #fff;
+  background-color: #333;
+  border: none;
+  border-radius: 0.3rem;
+  cursor: pointer;
+}
+
+.add-form-submit:hover {
+  background-color: #111;
+}
+
+.close-btn {
+  display: block;
+  width: 20%;
+  margin-top: 1.5rem;
+  padding: 0.5rem;
+  font-weight: bold;
+  color: #fff;
+  background-color: #c4baba;
+  border: none;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  margin-right: 1rem;
+}
+.close-btn:hover {
+  background-color: #a39b9b;
+}
+
+.add-course-btn {
+  display: inline-block;
+  padding: 0.4rem;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #fff;
+  background-color: #9ea3a9;
+  border: none;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.add-course-btn:hover {
+  background-color: #393b3c;
+  border: none;
+}
+
+/*
+==============================Sessions==================================
+*/
+/* Style for sessions container */
+.session-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Style for individual session */
+.session {
+  margin: 1rem 0;
+  padding: 1rem;
+  border: 0.1rem solid #ccc;
+  border-radius: 0.5rem;
+}
+
+/* Style for session title */
+.session h3 {
+  margin-top: 0;
+}
+
+/* Style for session days label */
+.session label.session-days {
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.session-days {
+  margin: 0.3rem;
+}
+/* Style for day checkboxes */
+.session label.session-days div {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.session label.session-days div input[type="checkbox"] {
+  margin-right: 1rem;
+}
+
+/* Style for start and end time labels */
+.session label.session-start,
+.session label.session-end {
+  display: block;
+  margin-bottom: 1rem;
+}
+
+/* Style for add session button */
+.add-session-btn {
+  padding: 0.6rem;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.remove-session-btn {
+  padding: 0.4rem;
+  background-color: #ff0000;
+  color: #fff;
+  border: none;
+  border-radius: 0.4rem;
+  cursor: pointer;
+}
+
+.remove-session-btn:hover {
+  padding: 0.4rem;
+  background-color: #e92424;
+  color: #fff;
+  border: none;
+  border-radius: 0.4rem;
+  cursor: pointer;
+}
+
+.add-session-btn:hover {
+  background-color: #0069d9;
+}
+
+.day {
+  margin: 0.1rem;
+}
+/*
+======================================JS===========================
+*/
+
+.hide {
+  display: none;
+}
+
+.valid {
+  color: limegreen;
+  margin-left: 0.25rem;
+}
+
+.invalid {
+  color: rgb(244, 12, 0);
+  margin-left: 0.25rem;
+}
+
+.instructions {
+  font-size: 1rem;
+  border-radius: 0.5rem;
+  background: #000;
+  color: #fff;
+  padding: 0.4rem;
+  margin-bottom: 1rem;
+  position: relative;
+  bottom: -10px;
+}
+
+.instructions > svg {
+  margin-right: 0.25rem;
+}
+
+.offscreen {
+  position: absolute;
+  left: -9999px;
+}
+
+/*=============================== POPUP ================================*/
+.popup {
+  overflow-y: scroll;
+  height: 40rem;
+  padding: 0%;
+  margin-top: 20px;
+  background-color: white;
+}
+.popup-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+.close-icon {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #ccc;
+}
+.popup-overlay {
+  background-color: rgba(0, 0, 0, 0.5) !important;
+}
+
+.empty-fields {
+  transition: red 0.5s ease-in-out;
+  border-color: red;
+  border-width: 0.5rem;
+  border-radius: 0.4rem;
+}
+
+.checkboxes-container {
+  display: flex;
+}
+
+.checkbox-item {
+  cursor: pointer;
+  padding-right: 10rem;
+  background-color: white;
+}
+.radio-buttons:hover {
+  cursor: pointer;
+}
+
+/*=============================== Successful submission ================================*/
+
+.message-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 20rem;
+}
+
+.successful-submit {
+  color: green;
+  text-align: center;
+}
+
+.add-form-submit-green {
+  display: block;
+  width: 20%;
+  margin-top: 1.5rem;
+  padding: 0.5rem;
+  font-weight: bold;
+  color: #fff;
+  background-color: #5bb971;
+  border: none;
+  border-radius: 0.3rem;
+  cursor: pointer;
+}
+
+.add-form-submit-green:hover {
+  background-color: #547b39;
+}
+
+.close-btn-dark {
+  display: block;
+  width: 20%;
+  margin-top: 1.5rem;
+  padding: 0.5rem;
+  font-weight: bold;
+  color: #fff;
+  background-color: #555656;
+  border: none;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  margin-right: 1rem;
+}
+.close-btn-dark:hover {
+  background-color: #434343;
+}
