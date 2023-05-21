@@ -119,10 +119,10 @@ const EditDoctor = ({ close, doctors, setDoctors, courses, id }) => {
         getDoctors();
       }
     } catch (error) {
-      window.location.reload();
       getDoctors();
     }
     getDoctors();
+    window.location.reload();
   };
 
   return (

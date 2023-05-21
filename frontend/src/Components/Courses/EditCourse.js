@@ -173,173 +173,153 @@ const EditCourse = ({ courses, setCourses, id, close }) => {
       onSubmit={handleSubmit}
       className={`add-form ${displayBorderRed ? "empty-fields" : ""}`}
     >
-      {displayMessage ? (
-        <div>
-          <div className="message-container">
-            <p className="successful-submit">Course has been Update</p>
-          </div>
-          <div className="form-footer-btns">
-            <button onClick={handleClose} className="close-btn">
-              close
-            </button>
-            <button onClick={handleDisplay} className="add-form-submit">
-              Update Another Course
-            </button>
-          </div>
+      <div>
+        {" "}
+        <h1 className="add-form-title">Edit Course</h1>
+        <p className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">
+          {errMsg}
+        </p>
+        <div className="add-form-input">
+          <label htmlFor="subject">Subject:</label>
+          <DropListSubjects subject={subject} setSubject={setSubject} />
         </div>
-      ) : (
         <div>
-          {" "}
-          <h1 className="add-form-title">Edit Course</h1>
-          <p className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">
-            {errMsg}
+          <label htmlFor="course-number">
+            Course Number:
+            <FontAwesomeIcon
+              icon={faCheck}
+              className={validCourseNumber ? "valid" : "hide"}
+            />
+            <FontAwesomeIcon
+              icon={faTimes}
+              className={
+                validCourseNumber || !courseNumber ? "hide invalid" : "invalid"
+              }
+            />
+          </label>
+          <input
+            type="text"
+            value={courseNumber}
+            onChange={(event) => setCourseNumber(event.target.value)}
+            onFocus={() => setCourseNumberfocus(true)}
+            onBlur={() => setCourseNumberfocus(false)}
+            className="add-input-field"
+          />
+          <p
+            id="uidnote"
+            className={
+              courseNumberFocus && !validCourseNumber
+                ? "instructions"
+                : "offscreen"
+            }
+          >
+            <FontAwesomeIcon icon={faInfoCircle} />
+            Format Example: 498 or 498A or 498AA
           </p>
-          <div className="add-form-input">
-            <label htmlFor="subject">Subject:</label>
-            <DropListSubjects subject={subject} setSubject={setSubject} />
-          </div>
-          <div>
-            <label htmlFor="course-number">
-              Course Number:
-              <FontAwesomeIcon
-                icon={faCheck}
-                className={validCourseNumber ? "valid" : "hide"}
-              />
-              <FontAwesomeIcon
-                icon={faTimes}
-                className={
-                  validCourseNumber || !courseNumber
-                    ? "hide invalid"
-                    : "invalid"
-                }
-              />
-            </label>
-            <input
-              type="text"
-              value={courseNumber}
-              onChange={(event) => setCourseNumber(event.target.value)}
-              onFocus={() => setCourseNumberfocus(true)}
-              onBlur={() => setCourseNumberfocus(false)}
-              className="add-input-field"
-            />
-            <p
-              id="uidnote"
-              className={
-                courseNumberFocus && !validCourseNumber
-                  ? "instructions"
-                  : "offscreen"
-              }
-            >
-              <FontAwesomeIcon icon={faInfoCircle} />
-              Format Example: 498 or 498A or 498AA
-            </p>
-          </div>
-          <div className="add-form-input">
-            <label htmlFor="title">
-              Title:
-              <FontAwesomeIcon
-                icon={faCheck}
-                className={validTitle ? "valid" : "hide"}
-              />
-              <FontAwesomeIcon
-                icon={faTimes}
-                className={validTitle || !title ? "hide invalid" : "invalid"}
-              />
-            </label>
-            <input
-              type="text"
-              id="title"
-              value={title}
-              onChange={(event) => setTitle(event.target.value)}
-              onFocus={() => setTitleFocus(true)}
-              onBlur={() => setTitleFocus(false)}
-              className="add-input-field"
-            />
-            <p
-              id="uidnote"
-              className={
-                titleFocus && !validTitle ? "instructions" : "offscreen"
-              }
-            >
-              <FontAwesomeIcon icon={faInfoCircle} />
-              Title is limited between 4 to 255 character
-            </p>
-          </div>
-          <div className="add-form-input">
-            <label htmlFor="credits-number">
-              Credits Number:
-              <FontAwesomeIcon
-                icon={faCheck}
-                className={validCreditsNumber ? "valid" : "hide"}
-              />
-              <FontAwesomeIcon
-                icon={faTimes}
-                className={
-                  validCreditsNumber || !creditsNumber
-                    ? "hide invalid"
-                    : "invalid"
-                }
-              />
-            </label>
-            <input
-              type="text"
-              id="credits-number"
-              value={creditsNumber}
-              onChange={(event) => setCreditsNumber(event.target.value)}
-              onFocus={() => setCreditsNumberFocus(true)}
-              onBlur={() => setCreditsNumberFocus(false)}
-              className="add-input-field"
-            />
-            <p
-              id="uidnote"
-              className={
-                creditsNumberFocus && !validCreditsNumber
-                  ? "instructions"
-                  : "offscreen"
-              }
-            >
-              <FontAwesomeIcon icon={faInfoCircle} />
-              Credits number are limited between 1-5
-            </p>
-          </div>
-          <div className="add-form-input">
-            <label htmlFor="pre-req">Pre requisites:</label>
-            <DropListCourses
-              elementCourses={preReqs}
-              setElementCourses={setPreReqs}
-              courses={courses}
-            />
-          </div>
-          <div className="add-form-input">
-            <label htmlFor="co-req">Co requisites:</label>
-            <DropListCourses
-              elementCourses={coReqs}
-              setElementCourses={setCoReqs}
-              courses={courses}
-            />
-          </div>
-          <div className="add-form-input">
-            <label htmlFor="co-req">Substitute course:</label>
-            <DropListCourses
-              elementCourses={substitutes}
-              setElementCourses={setSubstitute}
-              courses={courses}
-            />
-          </div>
-          <div className="form-footer-btns">
-            <button className="close-btn" onClick={close}>
-              Close
-            </button>
-            <button
-              type="submit"
-              onClick={handleSubmit}
-              className="add-form-submit"
-            >
-              Update Course
-            </button>
-          </div>
         </div>
-      )}
+        <div className="add-form-input">
+          <label htmlFor="title">
+            Title:
+            <FontAwesomeIcon
+              icon={faCheck}
+              className={validTitle ? "valid" : "hide"}
+            />
+            <FontAwesomeIcon
+              icon={faTimes}
+              className={validTitle || !title ? "hide invalid" : "invalid"}
+            />
+          </label>
+          <input
+            type="text"
+            id="title"
+            value={title}
+            onChange={(event) => setTitle(event.target.value)}
+            onFocus={() => setTitleFocus(true)}
+            onBlur={() => setTitleFocus(false)}
+            className="add-input-field"
+          />
+          <p
+            id="uidnote"
+            className={titleFocus && !validTitle ? "instructions" : "offscreen"}
+          >
+            <FontAwesomeIcon icon={faInfoCircle} />
+            Title is limited between 4 to 255 character
+          </p>
+        </div>
+        <div className="add-form-input">
+          <label htmlFor="credits-number">
+            Credits Number:
+            <FontAwesomeIcon
+              icon={faCheck}
+              className={validCreditsNumber ? "valid" : "hide"}
+            />
+            <FontAwesomeIcon
+              icon={faTimes}
+              className={
+                validCreditsNumber || !creditsNumber
+                  ? "hide invalid"
+                  : "invalid"
+              }
+            />
+          </label>
+          <input
+            type="text"
+            id="credits-number"
+            value={creditsNumber}
+            onChange={(event) => setCreditsNumber(event.target.value)}
+            onFocus={() => setCreditsNumberFocus(true)}
+            onBlur={() => setCreditsNumberFocus(false)}
+            className="add-input-field"
+          />
+          <p
+            id="uidnote"
+            className={
+              creditsNumberFocus && !validCreditsNumber
+                ? "instructions"
+                : "offscreen"
+            }
+          >
+            <FontAwesomeIcon icon={faInfoCircle} />
+            Credits number are limited between 1-5
+          </p>
+        </div>
+        <div className="add-form-input">
+          <label htmlFor="pre-req">Pre requisites:</label>
+          <DropListCourses
+            elementCourses={preReqs}
+            setElementCourses={setPreReqs}
+            courses={courses}
+          />
+        </div>
+        <div className="add-form-input">
+          <label htmlFor="co-req">Co requisites:</label>
+          <DropListCourses
+            elementCourses={coReqs}
+            setElementCourses={setCoReqs}
+            courses={courses}
+          />
+        </div>
+        <div className="add-form-input">
+          <label htmlFor="co-req">Substitute course:</label>
+          <DropListCourses
+            elementCourses={substitutes}
+            setElementCourses={setSubstitute}
+            courses={courses}
+          />
+        </div>
+        <div className="form-footer-btns">
+          <button className="close-btn" onClick={close}>
+            Close
+          </button>
+          <button
+            type="submit"
+            onClick={handleSubmit}
+            className="add-form-submit"
+          >
+            Update Course
+          </button>
+        </div>
+      </div>
     </form>
   );
 };

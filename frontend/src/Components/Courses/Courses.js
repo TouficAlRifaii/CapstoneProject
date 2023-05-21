@@ -129,7 +129,7 @@ const Courses = ({ courses, setCourses, getCourses }) => {
                       Delete
                     </button>
                     <Popup
-                      trigger={<button className="edit-btn">Edt</button>}
+                      trigger={<button className="edit-btn">Edit</button>}
                       modal
                       lockScroll={true}
                     >
