@@ -9,8 +9,6 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { NAMEREGEX, TITLEREGEX } from "../Public/ValidationRegex";
-const nameRegex = /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)+$/; //will be used for both name and lastname
-const titleRegex = /^[a-zA-Z0-9\s]{2,50}$/;
 
 const EditDoctor = ({ close, doctors, setDoctors, courses, id }) => {
   const doctor = doctors.find((doctor) => doctor.id === parseInt(id));

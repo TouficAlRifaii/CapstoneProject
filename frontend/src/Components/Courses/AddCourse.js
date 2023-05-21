@@ -104,7 +104,7 @@ const AddCourse = ({ courses, setCourses, close }) => {
     }
 
     const relations = [];
-
+    const substitutes = [];
     preReqs.forEach((element) => {
       if (element !== "") {
         relations.push({
@@ -122,12 +122,17 @@ const AddCourse = ({ courses, setCourses, close }) => {
         });
       }
     });
+    substitute.forEach((element) => {
+      if (element !== "") {
+        substitutes.push(parseInt(element));
+      }
+    });
 
     const newCourse = {
       subject,
       courseNumber,
       title,
-      substitutes: substitute,
+      substitutes,
       creditsNumber: parseInt(creditsNumber),
     };
 
@@ -317,7 +322,6 @@ const AddCourse = ({ courses, setCourses, close }) => {
               elementCourses={substitute}
               setElementCourses={setSubstitute}
               courses={courses}
-              disabled={true}
             />
           </div>
           <div></div>

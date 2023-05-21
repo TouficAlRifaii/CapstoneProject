@@ -317,7 +317,6 @@ const EditCourse = ({ courses, setCourses, id, close }) => {
               elementCourses={substitutes}
               setElementCourses={setSubstitute}
               courses={courses}
-              disabled={true}
             />
           </div>
           <div className="form-footer-btns">
