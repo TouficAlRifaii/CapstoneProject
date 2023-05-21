@@ -101,13 +101,16 @@ const AddMajor = ({ majors, setMajors, courses, close }) => {
     axios
       .post("http://127.0.0.1:8000/api/major", newMajor)
       .then((response) => {
+        getMajors();
+
         // Handle successful response if needed
       })
       .catch((error) => {
+        getMajors();
+
         // Handle error if needed
       });
     getMajors();
-
     setErrMsg("");
     setTitle("");
     setCreditsNumber("");
