@@ -1,6 +1,6 @@
 # CapstoneProject
 
-### Run the backend::
+## Run the backend::
 First of all make sure to download python, mysql server and mysql workbench. 
 and make sure pip is added to the path
 
@@ -31,7 +31,7 @@ in the terminal go to the folder again `CapstoneProject/lauCourseOffering_Backen
 and execute: 
 `python manage.py runserver`
 
-### Run the front end::
+## Run the front end::
 Open a terminal window and navigate to the directory where your React app is located. `CapstoneProject/frontend`
 Run the following command to install the dependencies:
 
