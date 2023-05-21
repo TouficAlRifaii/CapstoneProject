@@ -36,9 +36,17 @@ const EditCourse = ({ courses, setCourses, id, close }) => {
   const [validCreditsNumber, setValidCreditsNumber] = useState(false);
   const [creditsNumberFocus, setCreditsNumberFocus] = useState(false);
 
-  const [preReqs, setPreReqs] = useState(course.preReq || [""]);
-  const [coReqs, setCoReqs] = useState(course.coReq || [""]);
-  const [substitutes, setSubstitute] = useState(course.substitutes || [""]);
+  const [preReqs, setPreReqs] = useState(
+    course.preReq && course.preReq.length > 0 ? course.preReq : [""]
+  );
+  const [coReqs, setCoReqs] = useState(
+    course.coReq && course.coReq.length > 0 ? course.coReq : [""]
+  );
+  const [substitutes, setSubstitute] = useState(
+    course.substitutes && course.substitutes.length > 0
+      ? course.substitutes
+      : [""]
+  );
 
   const [errMsg, setErrMsg] = useState("");
   const [displayBorderRed, setDisplayBorderRed] = useState(false); //change borders to red
@@ -136,7 +144,6 @@ const EditCourse = ({ courses, setCourses, id, close }) => {
       title: title,
       creditsNumber: parseInt(creditsNumber),
     };
-
     const data = { course: newCourse, relations };
 
     try {

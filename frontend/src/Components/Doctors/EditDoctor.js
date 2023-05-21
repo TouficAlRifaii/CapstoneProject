@@ -109,7 +109,6 @@ const EditDoctor = ({ close, doctors, setDoctors, courses, id }) => {
       );
 
       if (response.data["message"] === "success") {
-        getDoctors();
         setName("");
         setTitle("");
         setTCourses([""]);
@@ -117,10 +116,13 @@ const EditDoctor = ({ close, doctors, setDoctors, courses, id }) => {
         setErrMsg("");
         setDisplayMessage(true);
         handleClose();
+        getDoctors();
       }
     } catch (error) {
+      window.location.reload();
       getDoctors();
     }
+    getDoctors();
   };
 
   return (

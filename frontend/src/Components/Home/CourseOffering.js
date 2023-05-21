@@ -11,8 +11,6 @@ const CourseOffering = ({
 }) => {
   const [activeTimeTable, setActiveTimeTable] = useState(false);
 
-  const [sectionsNumber, setSectionsNumber] = useState();
-
   // search + paginate
   const [searchResults, setSearchResults] = useState([]);
   const [search, setSearch] = useState("");
@@ -30,7 +28,37 @@ const CourseOffering = ({
   for (let i = 1; i <= Math.ceil(searchResults.length / itemsPerPage); i++) {
     pageNumbers.push(i);
   }
+  //===============================
+  // const [newSections, setNewSections] = useState();
 
+  // let count = 0;
+  // const campus = "Byblos"; // Specify the desired campus
+
+  // sections.forEach((section) => {
+  //   if (section.campus === campus) {
+  //     if (section.substitutes && section.substitutes.length > 0) {
+  //       section.substitutes.forEach((substituteId) => {
+  //         const substituteSection = sections.find((s) => s.id === substituteId);
+  //         if (substituteSection && substituteSection.campus === campus) {
+  //           setNewSections((prevSections) => [
+  //             ...prevSections,
+  //             substituteSection,
+  //           ]);
+  //           count++;
+  //         }
+  //       });
+  //     } else {
+  //       setNewSections((prevSections) => [...sections, section]);
+  //     }
+  //   }
+  // });
+  // console.log(count);
+  // console.log(newSections);
+  // console.log("Total changes:", count);
+
+  // console.log(newSections);
+  // console.log("Total changes:", count);
+  //===================
   useEffect(() => {
     const filteredResults = sections.filter((section) =>
       section.campus.toLowerCase().includes(search.toLowerCase())
@@ -59,7 +87,8 @@ const CourseOffering = ({
     setSearchResults(filteredResults.reverse());
   }, [sections, courses, search]);
 
-  const handleActive = () => {
+  const handleCancel = () => {
+    setActiveTimeTable(false);
     setActive(true);
   };
   const handleTimeTable = () => {
@@ -107,7 +136,6 @@ const CourseOffering = ({
                     <td>
                       <div className="table-data">{section.campus}</div>
                     </td>
-                    {console.log(section.course)}
                     <ListCourseId course={[section.course]} courses={courses} />
 
                     <td>
@@ -179,7 +207,7 @@ const CourseOffering = ({
               ))}
             </div>
             <div className="form-footer-btns">
-              <button onClick={handleActive} className="close-btn">
+              <button onClick={handleCancel} className="close-btn">
                 Cancel Operation
               </button>
               <button onClick={handleTimeTable} className="close-btn-dark">
@@ -189,7 +217,16 @@ const CourseOffering = ({
               <Download elements={sections} />
             </div>
           </div>
-          {activeTimeTable ? <TimeTable campus="Byblos" /> : <></>}
+          {activeTimeTable ? (
+            <TimeTable
+              sections={sections}
+              campus="Byblos"
+              courses={courses}
+              setSections={setSections}
+            />
+          ) : (
+            <></>
+          )}
         </section>
       )}
     </div>

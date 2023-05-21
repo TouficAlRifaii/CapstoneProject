@@ -1,6 +1,9 @@
+import { type } from "@testing-library/user-event/dist/type";
+import { useState } from "react";
 import React from "react";
 
-const TimeTable = () => {
+const TimeTable = (sections, setSections, courses, campus) => {
+  //need campus
   const timeTable = {
     M: [
       {
@@ -47,6 +50,16 @@ const TimeTable = () => {
       },
     ],
   };
+
+  const [newSections, setNewSections] = useState();
+
+  // Define the campus for which you want to add the property
+
+  // Map over each element in sections
+
+  // Example usage:
+
+  // Update the state with the updatedSections array
 
   return (
     <div>
