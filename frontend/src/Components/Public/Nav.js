@@ -20,9 +20,6 @@ function Nav() {
           <li>
             <Link to="/majors">Majors</Link>
           </li>
-          <li>
-            <Link to="/about">About</Link>
-          </li>
         </ul>
       </nav>
     </div>
