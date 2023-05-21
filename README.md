@@ -24,3 +24,38 @@ The React app will open in your default browser. You can make changes to the cod
 
 - To close the React app, you can close the terminal window or press Ctrl+C.
 
+### Run the backend::
+First of all make sure to download python, mysql server and mysql workbench. 
+and make sure pip is added to the path
+
+Then: 
+Open a terminal window and then execute the following commands:
+
+`pip install django`
+
+then:  
+
+`pip install djangorestframework`
+
+`pip install mysqlclient`
+
+after that go to the location of the porject `CapstoneProject/lauCourseOffering_Backend`
+
+and then perform: 
+
+`pip install -r requirements.txt`. 
+
+#### how to add the data to the database: 
+
+Open MySQL Workbench and import the `data.sql` file and execute it. 
+
+#### launch the server: 
+
+in the terminal go to the folder again `CapstoneProject/lauCourseOffering_Backend`
+and execute: 
+`python manage.py runserver`
+
+
+
+
+
