@@ -1,15 +1,14 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Loading from "./Loading";
-import { wait } from "@testing-library/user-event/dist/utils";
-import { faL } from "@fortawesome/free-solid-svg-icons";
 
 const UploadCSV = ({ active, setActive, sections, setSections }) => {
-  const [selectedFiles, setSelectedFiles] = useState();
+  const [selectedFile, setSelectedFile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+
   const handleFileSelect = (event) => {
-    const files = Array.from(event.target.files);
-    setSelectedFiles(files);
+    const file = event.target.files[0];
+    setSelectedFile(file);
   };
 
   const handleActive = () => {
@@ -30,19 +29,19 @@ const UploadCSV = ({ active, setActive, sections, setSections }) => {
       } else {
         alert("Sections failed");
       }
-    } catch (error) {}
+    } catch (error) {
+      // Handle error
+    }
     setActive(false);
   };
 
   const handleFileUpload = async () => {
-    if (!selectedFiles || selectedFiles.length === 0) {
-      alert("Please select at least one file.");
+    if (!selectedFile) {
+      alert("Please select a file.");
       return;
     }
     const formData = new FormData();
-    selectedFiles.forEach((file) => {
-      formData.append("excel", file);
-    });
+    formData.append("excel", selectedFile);
 
     setIsLoading(true);
     try {
@@ -55,37 +54,38 @@ const UploadCSV = ({ active, setActive, sections, setSections }) => {
           },
         }
       );
+      setSelectedFile(null);
 
       if (response.data["message"] === "success") {
         // handle success
-
-        alert("CSV files uploaded successfully!");
+        alert("CSV file uploaded successfully!");
         try {
           const sectionsResponse = await axios.post(
             "http://127.0.0.1:8000/api/sections"
           );
           if (sectionsResponse.data["message"] === "success") {
             setSections(sectionsResponse.data.sections);
+            setSelectedFile(null);
 
             setIsLoading(false);
             setActive(false);
-            alert("Sections Created Sucessfully");
+            alert("Sections Created Successfully");
           } else {
             alert("Sections failed");
             setIsLoading(false);
           }
-        } catch (error) {}
+        } catch (error) {
+          // Handle error
+        }
       } else {
         // handle error
         setIsLoading(false);
-
-        alert("Error uploading CSV files. hahah");
+        alert("Error uploading CSV file.");
       }
     } catch (error) {
-      setIsLoading(false);
-
       // handle error
-      alert("Error uploading CSV files.");
+      setIsLoading(false);
+      alert("Error uploading CSV file.");
     }
   };
 
@@ -95,9 +95,8 @@ const UploadCSV = ({ active, setActive, sections, setSections }) => {
         <section className="home-section">
           <div className="container">
             <div className="browse">
-              <h2>Upload CSV files</h2>
-
-              <input type="file" onChange={handleFileSelect} multiple />
+              <h2>Upload CSV file</h2>
+              <input type="file" onChange={handleFileSelect} accept=".xlsx" />
               <div>
                 <button onClick={handleFileUpload} className="generate-btn">
                   Generate New one
