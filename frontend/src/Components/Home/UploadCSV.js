@@ -26,9 +26,7 @@ const UploadCSV = ({ active, setActive, sections, setSections }) => {
         "http://127.0.0.1:8000/api/sections"
       );
       if (sectionsResponse.data["message"] === "success") {
-        console.log(sectionsResponse.data);
         setSections(sectionsResponse.data.sections);
-        alert("Sections Created Sucessfully");
       } else {
         alert("Sections failed");
       }
