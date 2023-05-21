@@ -106,7 +106,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'CapstoneProject',
         'USER': 'root',
-        'PASSWORD': '1235Amse@'
+        'PASSWORD': ''
     }
 }
 
