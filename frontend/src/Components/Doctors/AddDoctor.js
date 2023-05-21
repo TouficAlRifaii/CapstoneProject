@@ -10,7 +10,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { NAMEREGEX, TITLEREGEX } from "../Public/ValidationRegex";
 import CheckboxDay from "./Sessions/CheckboxDay";
-
 const AddDoctor = ({ doctors, setDoctors, courses, close }) => {
   const [name, setName] = useState("");
   const [validName, setValidName] = useState(false);
@@ -26,8 +25,10 @@ const AddDoctor = ({ doctors, setDoctors, courses, close }) => {
   const [campus, setCampus] = useState("");
 
   const [errMsg, setErrMsg] = useState("");
-  const [displayBorderRed, setDisplayBorderRed] = useState(false); //change borders to red
-  const [displayMessage, setDisplayMessage] = useState(false); //after submitting (return or another input)
+  const [displayBorderRed, setDisplayBorderRed] = useState(false);
+  const [displayMessage, setDisplayMessage] = useState(false);
+
+  // Function to fetch doctors from the API
   const getDoctors = async () => {
     try {
       const response = await axios.get("http://127.0.0.1:8000/api/doctors");
@@ -36,30 +37,39 @@ const AddDoctor = ({ doctors, setDoctors, courses, close }) => {
       }
     } catch (exception) {}
   };
+
+  // Function to handle checkbox change for campus selection
   const handleCheckboxChange = (event) => {
     const value = event.target.value;
     setCampus(value);
   };
+
+  // Effect to validate the name input field
   useEffect(() => {
     setValidName(NAMEREGEX.test(name));
   }, [name]);
 
+  // Effect to validate the title input field
   useEffect(() => {
     setValidTitle(TITLEREGEX.test(title));
   }, [title]);
 
+  // Effect to reset the error message
   useEffect(() => {
     setErrMsg("");
-  }, [name, , title]);
+  }, [name, title]);
 
+  // Function to close the popup
   const handleClose = () => {
     close();
   };
 
+  // Function to handle display message
   const handleDisplay = () => {
     setDisplayMessage(false);
   };
 
+  // Function to handle invalid input
   const handleInvalidInput = (errorMsg) => {
     setErrMsg(errorMsg);
     setDisplayBorderRed(true);
@@ -68,6 +78,7 @@ const AddDoctor = ({ doctors, setDoctors, courses, close }) => {
     }, 400);
   };
 
+  // Function to handle form submission
   const handleSubmit = async (event) => {
     event.preventDefault();
     const lastSession = sessions[sessions.length - 1];

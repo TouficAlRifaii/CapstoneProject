@@ -9,20 +9,22 @@ const CourseOffering = ({
   setSections,
   courses,
 }) => {
+  //if true show it (disbaled for now)
   const [activeTimeTable, setActiveTimeTable] = useState(false);
+
+  //this useState will hold th values to display in the course offering
   const [sectionsSub, setSectionsSub] = useState([]);
   // search + paginate
   const [searchResults, setSearchResults] = useState([]);
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(11);
-
+  
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = searchResults.slice(indexOfFirstItem, indexOfLastItem);
-
-  //========================================
-
+  
+  // Update the sections with substitutes and calculate the total number of students
   useEffect(() => {
     if (sections && sections.length > 0) {
       const updatedSections = sections.map((section) => {
@@ -33,7 +35,7 @@ const CourseOffering = ({
                 parseInt(substituteId, 10)
               )
             : [];
-
+  
         return {
           ...section,
           substitute: substituteIds,
@@ -50,22 +52,22 @@ const CourseOffering = ({
             }, 0),
         };
       });
-
+  
       setSectionsSub(updatedSections);
     }
   }, [sections, courses]);
-
-  //========================================
-
+  
+  // Sort the sections based on the number of students
   sections.sort((a, b) => a.numOfStudents - b.numOfStudents);
-
+  
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
+  
   const pageNumbers = [];
   for (let i = 1; i <= Math.ceil(searchResults.length / itemsPerPage); i++) {
     pageNumbers.push(i);
   }
-
+  
+  // Filter the sections based on the search query
   useEffect(() => {
     const filteredResults = sectionsSub.filter((section) => {
       const course = courses.find((course) => course.id === section.course);
@@ -74,18 +76,19 @@ const CourseOffering = ({
         (course && course.subject.toLowerCase().includes(search.toLowerCase()))
       );
     });
-
+  
     setSearchResults(filteredResults.reverse());
   }, [sectionsSub, courses, search]);
-
+  
   const handleCancel = () => {
     setActiveTimeTable(false);
     setActive(true);
   };
+  
   const handleTimeTable = () => {
     setActiveTimeTable(true);
   };
-
+  
   return (
     <div>
       {!active && (

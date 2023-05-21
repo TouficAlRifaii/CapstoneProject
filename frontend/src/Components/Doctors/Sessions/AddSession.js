@@ -1,20 +1,25 @@
 import CheckboxDay from "./CheckboxDay";
 
 const AddSession = ({ sessions, setSessions }) => {
+  // Function to add a new session
   const addNewSession = () => {
+    // Check if the last session has all required fields
     const lastSession = sessions[sessions.length - 1];
     if (!lastSession.days || !lastSession.start || !lastSession.end) {
       return;
     }
+    // Add a new session to the sessions array
     setSessions([...sessions, { days: "", start: "", end: "" }]);
   };
+
+  // Function to update a session's field
   const updateSession = (index, field, value) => {
     const updatedSessions = [...sessions];
     const session = updatedSessions[index];
     if (field === "days") {
+      // Handle updating the 'days' field
       const selectedDays = [...session.days];
       const dayIndex = selectedDays.includes(value);
-
       if (!dayIndex) {
         selectedDays.push(value);
       } else {
@@ -23,13 +28,15 @@ const AddSession = ({ sessions, setSessions }) => {
       }
       session.days = selectedDays.join("");
     } else {
+      // Handle updating other fields (start and end)
       session[field] = value;
     }
     setSessions(updatedSessions);
   };
 
+  // Function to remove a session
   const removeSession = (index) => {
-    if (sessions.length == 1) {
+    if (sessions.length === 1) {
       return;
     }
     const updatedSessions = sessions.filter((session, i) => i !== index);

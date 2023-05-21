@@ -18,23 +18,30 @@ const Majors = ({ courses, majors, setMajors }) => {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+  // Create an array of page numbers for pagination
   const pageNumbers = [];
   for (let i = 1; i <= Math.ceil(searchResults.length / itemsPerPage); i++) {
     pageNumbers.push(i);
   }
 
+  // Fetch the list of majors from the server
   const getMajors = async () => {
     try {
       const response = await axios.get("http://127.0.0.1:8000/api/major");
       if (response.data["message"] === "success") {
         setMajors(response.data["majors"]);
       }
-    } catch (exception) {}
+    } catch (exception) {
+      // Handle exception if needed
+    }
   };
+
+  // Fetch the list of majors when the component mounts
   useEffect(() => {
     getMajors();
   }, []);
 
+  // Update the search results when majors or search term change
   useEffect(() => {
     const filteredResults = majors.filter((major) =>
       major.title.toLowerCase().includes(search.toLowerCase())
@@ -43,6 +50,7 @@ const Majors = ({ courses, majors, setMajors }) => {
     setSearchResults(filteredResults);
     setCurrentPage(1);
   }, [majors, search]);
+
   return (
     <section className="list-section">
       <h1>Majors</h1>

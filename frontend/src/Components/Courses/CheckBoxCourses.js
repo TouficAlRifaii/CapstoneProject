@@ -10,6 +10,7 @@ const CheckBoxCourses = ({
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
 
+  // Handles the change event for the checkbox
   const handleCheckboxChange = (index) => {
     const newCourses = [...elementCourses];
     newCourses[index] = !newCourses[index];
@@ -23,10 +24,12 @@ const CheckBoxCourses = ({
     setElementCourses(newCourses);
   };
 
+  // Handles the change event for the search input
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   };
 
+  // Filters the courses based on the search term
   const filteredCourses = courses.filter((course) =>
     `${course.subject}${course.courseNumber}`
       .toLowerCase()

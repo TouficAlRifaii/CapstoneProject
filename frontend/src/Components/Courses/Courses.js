@@ -7,44 +7,42 @@ import axios from "axios";
 import AddCourse from "./AddCourse";
 import EditCourse from "./EditCourse";
 
-// semester: "Fall 2022",
-// subject: "Computer Science",
-// courseNumber: "CS101",
-// section: "001",
-// title: "Introduction to Computer Science"
-
 const Courses = ({ courses, setCourses, getCourses }) => {
-  //courses API is called in app because its used in multiple pages
+  // courses API is called in app because it's used in multiple pages
 
   // search + paginate
-  const [searchResults, setSearchResults] = useState([]);
-  const [search, setSearch] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(9);
+  const [searchResults, setSearchResults] = useState([]); // Stores the filtered search results
+  const [search, setSearch] = useState(""); // Stores the search query
+  const [currentPage, setCurrentPage] = useState(1); // Stores the current page number
+  const [itemsPerPage, setItemsPerPage] = useState(9); // Stores the number of items per page
 
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = searchResults.slice(indexOfFirstItem, indexOfLastItem);
+  const indexOfLastItem = currentPage * itemsPerPage; // Calculates the index of the last item on the current page
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage; // Calculates the index of the first item on the current page
+  const currentItems = searchResults.slice(indexOfFirstItem, indexOfLastItem); // Retrieves the items to display on the current page
 
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
-  const pageNumbers = [];
+  // paginate (pageNumber: number)
+  const paginate = (pageNumber) => setCurrentPage(pageNumber); // Sets the current page number for pagination
+
+  const pageNumbers = []; // Stores the available page numbers for pagination
   for (let i = 1; i <= Math.ceil(searchResults.length / itemsPerPage); i++) {
     pageNumbers.push(i);
   }
 
   useEffect(() => {
+    // Filter search results based on courses and search query
     const filteredResults = courses.filter(
       (course) =>
         course.title.toLowerCase().includes(search.toLowerCase()) ||
         course.subject.toLowerCase().includes(search.toLowerCase()) ||
         course.courseNumber.toLowerCase().includes(search.toLowerCase())
     );
-    setCurrentPage(1);
-
-    setSearchResults(filteredResults);
+    setCurrentPage(1); // Reset the current page to the first page
+    setSearchResults(filteredResults); // Update the filtered search results
   }, [courses, search]);
-  //delete
+
+  // handleDeleteCourse (courseId: string)
   const handleDeleteCourse = async (courseId) => {
+    // Sends a DELETE request to delete a course with the specified ID
     const data = new FormData();
     data.append("id", courseId);
     const url = "http://127.0.0.1:8000/api/courses/delete";
@@ -52,6 +50,7 @@ const Courses = ({ courses, setCourses, getCourses }) => {
       const response = await axios.post(url, data);
 
       if (response.data["message"] === "success") {
+        // Update the courses list after successful deletion
         const coursesList = courses.filter((course) => course.id !== courseId);
         setCourses(coursesList);
       }

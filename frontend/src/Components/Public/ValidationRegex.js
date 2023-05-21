@@ -1,5 +1,6 @@
-export const COURSENUMBERREGEX = /^[0-9]{3}[A-Z]?[A-Z]?$/;
+//Regex valudation file, used throught the program to validate input forms
 
+export const COURSENUMBERREGEX = /^[0-9]{3}[A-Z]?[A-Z]?$/;
 export const TITLEREGEX = /^.{3,255}$/;
 export const CREDITSNUMBERREGEX = /^[1-5]$/;
 export const NAMEREGEX = /^[a-zA-Z\s]{3,40}$/;

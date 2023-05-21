@@ -10,6 +10,8 @@ import axios from "axios";
 const Doctors = ({ courses }) => {
   //getting doctors from database
   const [doctors, setDoctors] = useState([]);
+
+  // Fetch doctors from the API
   const getDoctors = async () => {
     try {
       const response = await axios.get("http://127.0.0.1:8000/api/doctors");
@@ -18,6 +20,8 @@ const Doctors = ({ courses }) => {
       }
     } catch (exception) {}
   };
+
+  // Call getDoctors() once when the component mounts
   useEffect(() => {
     getDoctors();
   }, []);
@@ -38,6 +42,8 @@ const Doctors = ({ courses }) => {
   for (let i = 1; i <= Math.ceil(searchResults.length / itemsPerPage); i++) {
     pageNumbers.push(i);
   }
+
+  // Filter the doctors based on the search query
   useEffect(() => {
     const filteredResults = doctors.filter((doctor) =>
       doctor.name.toLowerCase().includes(search.toLowerCase())
@@ -46,7 +52,7 @@ const Doctors = ({ courses }) => {
     setSearchResults(filteredResults);
   }, [doctors, search]);
 
-  // delete
+  // Delete a doctor
   const handleDeleteDoctor = async (doctorId) => {
     const data = new FormData();
     data.append("id", doctorId);

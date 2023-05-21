@@ -30,6 +30,7 @@ const EditDoctor = ({ close, doctors, setDoctors, courses, id }) => {
   const [displayBorderRed, setDisplayBorderRed] = useState(false);
   const [displayMessage, setDisplayMessage] = useState(false);
 
+  // Function to fetch doctors from the API so the page does nto refresh
   const getDoctors = async () => {
     try {
       const response = await axios.post(
@@ -41,20 +42,25 @@ const EditDoctor = ({ close, doctors, setDoctors, courses, id }) => {
     } catch (exception) {}
   };
 
+  // Effect to validate the name input field
   useEffect(() => {
     setValidName(NAMEREGEX.test(name));
   }, [name]);
 
+  // Effect to validate the title input field
   useEffect(() => {
     setValidTitle(TITLEREGEX.test(title));
   }, [title]);
 
+  // Effect to reset the error message
   useEffect(() => {
     setErrMsg("");
   }, [name, title]);
   const handleClose = () => {
     close();
   };
+
+  // Function to handle checkbox change for campus selection
   const handleCheckboxChange = (event) => {
     const value = event.target.value;
     setCampus(value);

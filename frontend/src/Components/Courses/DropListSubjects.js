@@ -1,6 +1,7 @@
 import "../../CSS/DropList.css";
 
 const DropListSubjects = ({ disabled, subject, setSubject }) => {
+  // Renders a dropdown list for selecting a subject
   return (
     <select
       disabled={disabled}

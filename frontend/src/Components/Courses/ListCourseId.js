@@ -1,4 +1,5 @@
 const ListCourseId = ({ course, courses }) => {
+  //Courses are stored as ids, this is to display course for users
   return (
     <td>
       <div className="table-btns">

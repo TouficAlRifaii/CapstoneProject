@@ -7,26 +7,16 @@ import Missing from "./Missing";
 import axios from "axios";
 
 import Doctors from "../Doctors/Doctors";
-import {
-  Route,
-  Routes,
-  useNavigate,
-  BrowserRouter as Router,
-} from "react-router-dom";
+import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
 import { useState, useEffect } from "react";
-import AddUser from "../Users/AddUser";
-import AddCourse from "../Courses/AddCourse";
-import Login from "./Login";
 
 import "../../CSS/Tables.css";
 import "../../CSS/Forms.css";
 import "../../CSS/Nav.css";
 import "../../CSS/DropList.css";
-import Footer from "./Footer";
 
 function App() {
-  //coreq - preReq ids
-
+  //main hooks that will be used around the program
   const [courses, setCourses] = useState([]);
   const [doctors, setDoctors] = useState([]);
   const [majors, setMajors] = useState([]);
@@ -105,7 +95,6 @@ function App() {
           <Route path="*" element={<Missing />} />
         </Routes>
       </body>
-      <Footer />
     </div>
   );
 }

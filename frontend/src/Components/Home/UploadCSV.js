@@ -6,11 +6,13 @@ const UploadCSV = ({ active, setActive, sections, setSections }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
+  // Handle file selection
   const handleFileSelect = (event) => {
     const file = event.target.files[0];
     setSelectedFile(file);
   };
 
+  // Handle activation of the component
   const handleActive = () => {
     setIsLoading(true);
     setTimeout(() => {
@@ -19,12 +21,15 @@ const UploadCSV = ({ active, setActive, sections, setSections }) => {
     setActive(false);
   };
 
+  // Handle reloading of old sections
   const handleReload = async () => {
     try {
+      // Retrieve sections from the server
       const sectionsResponse = await axios.get(
         "http://127.0.0.1:8000/api/sections"
       );
       if (sectionsResponse.data["message"] === "success") {
+        // Update the sections state
         setSections(sectionsResponse.data.sections);
       } else {
         alert("Sections failed");
@@ -35,6 +40,7 @@ const UploadCSV = ({ active, setActive, sections, setSections }) => {
     setActive(false);
   };
 
+  // Handle file upload
   const handleFileUpload = async () => {
     if (!selectedFile) {
       alert("Please select a file.");
@@ -45,6 +51,7 @@ const UploadCSV = ({ active, setActive, sections, setSections }) => {
 
     setIsLoading(true);
     try {
+      // Upload the file to the server
       const response = await axios.post(
         "http://127.0.0.1:8000/api/excel",
         formData,
@@ -60,10 +67,12 @@ const UploadCSV = ({ active, setActive, sections, setSections }) => {
         // handle success
         alert("CSV file uploaded successfully!");
         try {
+          // Retrieve updated sections from the server
           const sectionsResponse = await axios.post(
             "http://127.0.0.1:8000/api/sections"
           );
           if (sectionsResponse.data["message"] === "success") {
+            // Update the sections state
             setSections(sectionsResponse.data.sections);
             setSelectedFile(null);
 

@@ -24,9 +24,11 @@ const EditMajor = ({ majors, setMajors, id, close, courses }) => {
 
   const [majorCourses, setMajorCourses] = useState(major.courses);
 
+  // State variables for error messages and form submission status
   const [errMsg, setErrMsg] = useState("");
   const [emptyFields, setEmptyFields] = useState(false);
 
+  // Function to fetch the list of majors
   const getMajors = async () => {
     try {
       const response = await axios.get("http://127.0.0.1:8000/api/major");
@@ -36,53 +38,18 @@ const EditMajor = ({ majors, setMajors, id, close, courses }) => {
     } catch (exception) {}
   };
 
+  // useEffect hook to validate the title field when it changes
   useEffect(() => {
     setValidTitle(TITLEREGEX.test(title));
   }, [title]);
-
+  // useEffect hook to validate the creditsNumber field when it changes
   useEffect(() => {
     setValidCreditsNumber(CREDITSMAJORREGEX.test(creditsNumber));
   }, [creditsNumber]);
-
+  // useEffect hook to clear the error message when title or creditsNumber change
   useEffect(() => {
     setErrMsg("");
   }, [title, creditsNumber]);
-  const handleClose = () => {
-    close();
-  };
-
-  function validateInputs(title, creditsNumber, majorCourses) {
-    if (!TITLEREGEX.test(title)) {
-      setErrMsg("Invalid title. Please enter a valid title.");
-      setEmptyFields(true);
-      setTimeout(() => {
-        setEmptyFields(false);
-      }, 400);
-      return false;
-    }
-
-    if (!CREDITSMAJORREGEX.test(creditsNumber)) {
-      setErrMsg("Invalid credits number. Please enter a valid number.");
-      setEmptyFields(true);
-      setTimeout(() => {
-        setEmptyFields(false);
-      }, 400);
-      return false;
-    }
-
-    if (majorCourses.length === 0) {
-      setErrMsg(
-        "No major courses selected. Please select at least one course."
-      );
-      setEmptyFields(true);
-      setTimeout(() => {
-        setEmptyFields(false);
-      }, 400);
-      return false;
-    }
-
-    return true;
-  }
 
   const handleSubmit = (event) => {
     event.preventDefault();

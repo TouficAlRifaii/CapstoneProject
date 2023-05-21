@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
+//NOT USED - It may be added later
 const Users = ({ users, setUsers }) => {
   const [searchResults, setSearchResults] = useState([]);
   const [search, setSearch] = useState("");

@@ -1,14 +1,17 @@
 import React from "react";
 
 const DisplayDoctorSessions = ({ doctor, day }) => {
+    // Filter and sort sessions based on the specified day
   const sessions = doctor.sessions
     .filter((session) => session.days.includes(day))
     .sort((a, b) => (a.start > b.start ? 1 : -1));
 
+  // If there are no sessions for the specified day, return null
   if (sessions.length === 0) {
     return null;
   }
 
+  // Function to format the time in AM/PM format
   function formatTime(time) {
     const [hour, minute] = time.split(":");
     const formattedHour = parseInt(hour) % 12 || 12;

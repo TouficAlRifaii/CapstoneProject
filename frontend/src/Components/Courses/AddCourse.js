@@ -47,23 +47,28 @@ const AddCourse = ({ courses, setCourses, close }) => {
       }
     } catch (exception) {}
   };
-  //check valid inputs
+
+  // Checks if the course number is valid
   useEffect(() => {
     setValidCourseNumber(COURSENUMBERREGEX.test(courseNumber));
   }, [courseNumber]);
 
+  // Checks if the title is valid
   useEffect(() => {
     setValidTitle(TITLEREGEX.test(title));
   }, [title]);
 
+  // Checks if the credits number is valid
   useEffect(() => {
     setValidCreditsNumber(CREDITSNUMBERREGEX.test(creditsNumber));
   }, [creditsNumber]);
 
+  // Resets the error message when any of the input fields change
   useEffect(() => {
     setErrMsg("");
   }, [courseNumber, title, creditsNumber]);
 
+  // Closes the form
   const handleClose = () => {
     close();
   };
@@ -75,6 +80,7 @@ const AddCourse = ({ courses, setCourses, close }) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    // Handles invalid input and displays error message
     const handleInvalidInput = (errorMsg) => {
       setErrMsg(errorMsg);
       setDisplayBorderRed(true);
@@ -103,6 +109,7 @@ const AddCourse = ({ courses, setCourses, close }) => {
       return;
     }
 
+    // Constructs relations and substitutes arrays
     const relations = [];
     const substitutes = [];
     preReqs.forEach((element) => {
@@ -128,6 +135,7 @@ const AddCourse = ({ courses, setCourses, close }) => {
       }
     });
 
+    // Constructs the new course object
     const newCourse = {
       subject,
       courseNumber,
@@ -150,7 +158,7 @@ const AddCourse = ({ courses, setCourses, close }) => {
       }
 
       if (response.data.message === "success") {
-        getCourses(); //Refreshing the courses to get the values from the database ()
+        getCourses(); // Refreshes the courses to get the values from the database
         setCourses([...courses, newCourse]);
         setSubject("");
         setCourseNumber("");

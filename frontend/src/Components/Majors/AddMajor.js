@@ -22,37 +22,49 @@ const AddMajor = ({ majors, setMajors, courses, close }) => {
 
   const [majorCourses, setMajorCourses] = useState([""]);
 
+  // State variables for error messages and form submission status
   const [errMsg, setErrMsg] = useState("");
   const [emptyFields, setEmptyFields] = useState(false);
   const [displayMessage, setDisplayMessage] = useState(false);
 
+  // Function to fetch the list of majors
   const getMajors = async () => {
     try {
       const response = await axios.get("http://127.0.0.1:8000/api/major");
       if (response.data["message"] === "success") {
         setMajors(response.data["majors"]);
       }
-    } catch (exception) {}
+    } catch (exception) {
+      // Handle exception if needed
+    }
   };
 
+  // useEffect hook to validate the title field when it changes
   useEffect(() => {
     setValidTitle(TITLEREGEX.test(title));
   }, [title]);
 
+  // useEffect hook to validate the creditsNumber field when it changes
   useEffect(() => {
     setValidCreditsNumber(CREDITSMAJORREGEX.test(creditsNumber));
   }, [creditsNumber]);
 
+  // useEffect hook to clear the error message when title or creditsNumber change
   useEffect(() => {
     setErrMsg("");
   }, [title, creditsNumber]);
+
+  // Function to handle closing the form
   const handleClose = () => {
     close();
   };
 
+  // Function to handle hiding the display message
   const handleDisplay = () => {
     setDisplayMessage(false);
   };
+
+  // Function to validate form inputs
   function validateInputs(title, creditsNumber, majorCourses) {
     if (!TITLEREGEX.test(title)) {
       setErrMsg("Invalid title. Please enter a valid title.");
@@ -86,6 +98,7 @@ const AddMajor = ({ majors, setMajors, courses, close }) => {
     return true;
   }
 
+  // Function to handle form submission
   const handleSubmit = (event) => {
     event.preventDefault();
     if (!validateInputs(title, creditsNumber, majorCourses)) {

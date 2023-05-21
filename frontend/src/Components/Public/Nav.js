@@ -1,13 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "../../CSS/Nav.css"; // Import your CSS file for navbar styling
-
+import "../../CSS/Nav.css";
+//Navbar
 function Nav() {
   return (
     <div>
       <nav className="navbar">
-        {" "}
-        {/* Add a class name for styling */}
         <div className="logo">Course Offering software</div>
         <ul className="nav-links">
           <li>

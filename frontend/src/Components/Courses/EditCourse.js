@@ -17,7 +17,6 @@ import {
 } from "../Public/ValidationRegex";
 
 const EditCourse = ({ courses, setCourses, id, close }) => {
-  const history = useNavigate();
   const course = courses.find((course) => course.id === parseInt(id));
 
   const [subject, setSubject] = useState(course.subject || "");
@@ -60,19 +59,22 @@ const EditCourse = ({ courses, setCourses, id, close }) => {
       }
     } catch (exception) {}
   };
-
+  // Checks if the course number is valid
   useEffect(() => {
     setValidCourseNumber(COURSENUMBERREGEX.test(courseNumber));
   }, [courseNumber]);
 
+  // Checks if the title is valid
   useEffect(() => {
     setValidTitle(TITLEREGEX.test(title));
   }, [title]);
 
+  // Checks if the credits number is valid
   useEffect(() => {
     setValidCreditsNumber(CREDITSNUMBERREGEX.test(creditsNumber));
   }, [creditsNumber]);
 
+  // Resets the error message when any of the input fields change
   useEffect(() => {
     setErrMsg("");
   }, [courseNumber, title, creditsNumber]);
@@ -81,10 +83,7 @@ const EditCourse = ({ courses, setCourses, id, close }) => {
     close();
   };
 
-  const handleDisplay = () => {
-    setDisplayMessage(false);
-  };
-
+  // Closes the form
   const handleSubmit = async (event) => {
     event.preventDefault();
 

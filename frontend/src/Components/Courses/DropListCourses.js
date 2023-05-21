@@ -7,11 +7,13 @@ const DropListCourses = ({
   courses,
   disabled,
 }) => {
+  // Adds a new course to the list of selected courses
   const addCoursesList = (event) => {
     event.preventDefault();
     setElementCourses([...elementCourses, ""]);
   };
 
+  // Handles the change event for the selected course in the list add it to the selected courses
   const handleChangeCourses = (indexCourses, newCourse) => {
     const newCourses = [...elementCourses];
     newCourses[indexCourses] = newCourse;

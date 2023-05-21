@@ -3,6 +3,7 @@ import * as XLSX from "xlsx";
 
 const Download = ({ sectionsSub, courses }) => {
   const handleDownload = () => {
+    // Prepare the data for the worksheet
     const worksheetData = sectionsSub.map((element) => {
       const course = courses.find((c) => c.id === element.course);
       const courseName = course
@@ -29,12 +30,15 @@ const Download = ({ sectionsSub, courses }) => {
       };
     });
 
+    // Create a new worksheet and workbook using XLSX utility functions
     const worksheet = XLSX.utils.json_to_sheet(worksheetData);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Sections");
 
+    // Convert the workbook to base64 data URL
     const dataURL = XLSX.write(workbook, { type: "base64", bookType: "xlsx" });
 
+    // Create a link element to trigger the download
     const link = document.createElement("a");
     link.href = `data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,${dataURL}`;
     link.download = "courseOffering.xlsx";

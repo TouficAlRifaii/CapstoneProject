@@ -1,6 +1,7 @@
 import React from "react";
 
 const CheckboxDay = ({ day, isChecked, onChange }) => {
+  //a checkbox component to easily replicate checkbox creation
   return (
     <>
       <span className="day">{day}</span>
