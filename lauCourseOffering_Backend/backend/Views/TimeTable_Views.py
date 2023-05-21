@@ -160,3 +160,8 @@ from django.http import JsonResponse
 class TimeTable(APIView):
     def get(self, request):
         return "halo"
+
+
+def create_timetable(sections):
+    doctors = Doctor.objects.all()
+    
