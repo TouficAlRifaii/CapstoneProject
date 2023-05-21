@@ -9,37 +9,37 @@ const CourseOffering = ({
   setSections,
   courses,
 }) => {
+  const [activeTimeTable, setActiveTimeTable] = useState(false);
+
   const [sectionsNumber, setSectionsNumber] = useState();
 
+  // search + paginate
   const [searchResults, setSearchResults] = useState([]);
   const [search, setSearch] = useState("");
-
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(18);
+  const [itemsPerPage, setItemsPerPage] = useState(11);
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-
-  const currentItems = searchResults
-    .slice()
-    .sort((a, b) => {
-      // Sort by campus
-      if (a.campus < b.campus) return -1;
-      if (a.campus > b.campus) return 1;
-
-      // Sort by numOfStudents if campuses are the same
-      if (a.numOfStudents < b.numOfStudents) return -1;
-      if (a.numOfStudents > b.numOfStudents) return 1;
-
-      return 0;
-    })
-    .slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = searchResults.slice(indexOfFirstItem, indexOfLastItem);
+  sections.sort((a, b) => a.numOfStudents - b.numOfStudents);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   const pageNumbers = [];
   for (let i = 1; i <= Math.ceil(searchResults.length / itemsPerPage); i++) {
     pageNumbers.push(i);
   }
+
+  useEffect(() => {
+    const filteredResults = sections.filter((section) =>
+      section.campus.toLowerCase().includes(search.toLowerCase())
+    );
+    setCurrentPage(1);
+    const currentItems = searchResults.slice(indexOfFirstItem, indexOfLastItem);
+
+    setSearchResults(currentItems);
+  }, [sections, search]);
 
   const handleSectionChange = (index, value) => {
     const updatedSections = [...sections];
@@ -62,12 +62,14 @@ const CourseOffering = ({
   const handleActive = () => {
     setActive(true);
   };
+  const handleTimeTable = () => {
+    setActiveTimeTable(true);
+  };
 
   return (
     <div>
       {!active && (
         <section className="list-section">
-          <button onClick={handleActive}> Cancel Operation </button>
           <h1>Course Offering</h1>
           <div>
             <div className="nav-search">
@@ -105,6 +107,7 @@ const CourseOffering = ({
                     <td>
                       <div className="table-data">{section.campus}</div>
                     </td>
+                    {console.log(section.course)}
                     <ListCourseId course={[section.course]} courses={courses} />
 
                     <td>
@@ -175,9 +178,18 @@ const CourseOffering = ({
                 </button>
               ))}
             </div>
+            <div className="form-footer-btns">
+              <button onClick={handleActive} className="close-btn">
+                Cancel Operation
+              </button>
+              <button onClick={handleTimeTable} className="close-btn-dark">
+                {" "}
+                generate time table
+              </button>
+              <Download elements={sections} />
+            </div>
           </div>
-          <Download elements={sections} />
-          <TimeTable campus="Byblos" />{" "}
+          {activeTimeTable ? <TimeTable campus="Byblos" /> : <></>}
         </section>
       )}
     </div>

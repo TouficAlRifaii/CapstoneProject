@@ -42,11 +42,11 @@ const EditDoctor = ({ close, doctors, setDoctors, courses, id }) => {
   };
 
   useEffect(() => {
-    setValidName(nameRegex.test(name));
+    setValidName(NAMEREGEX.test(name));
   }, [name]);
 
   useEffect(() => {
-    setValidTitle(titleRegex.test(title));
+    setValidTitle(TITLEREGEX.test(title));
   }, [title]);
 
   useEffect(() => {

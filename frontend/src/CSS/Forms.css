@@ -278,3 +278,37 @@ label {
   color: green;
   text-align: center;
 }
+
+.add-form-submit-green {
+  display: block;
+  width: 20%;
+  margin-top: 1.5rem;
+  padding: 0.5rem;
+  font-weight: bold;
+  color: #fff;
+  background-color: #5bb971;
+  border: none;
+  border-radius: 0.3rem;
+  cursor: pointer;
+}
+
+.add-form-submit-green:hover {
+  background-color: #547b39;
+}
+
+.close-btn-dark {
+  display: block;
+  width: 20%;
+  margin-top: 1.5rem;
+  padding: 0.5rem;
+  font-weight: bold;
+  color: #fff;
+  background-color: #555656;
+  border: none;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  margin-right: 1rem;
+}
+.close-btn-dark:hover {
+  background-color: #434343;
+}

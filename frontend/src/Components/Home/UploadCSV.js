@@ -3,7 +3,7 @@ import axios from "axios";
 import Loading from "./Loading";
 import { wait } from "@testing-library/user-event/dist/utils";
 
-const UploadCSV = ({ active, setActive }) => {
+const UploadCSV = ({ active, setActive, sections, setSections }) => {
   const [selectedFiles, setSelectedFiles] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const handleFileSelect = (event) => {
@@ -18,6 +18,11 @@ const UploadCSV = ({ active, setActive }) => {
     }, 1000);
     setActive(false);
   };
+
+  const handleReload = () => {
+    setActive(false);
+  };
+
   const handleFileUpload = async () => {
     if (!selectedFiles || selectedFiles.length === 0) {
       alert("Please select at least one file.");
@@ -72,9 +77,14 @@ const UploadCSV = ({ active, setActive }) => {
               <h2>Upload CSV files</h2>
 
               <input type="file" onChange={handleFileSelect} multiple />
-              <button onClick={handleActive} className="generate-btn">
-                Upload
-              </button>
+              <div>
+                <button onClick={handleActive} className="generate-btn">
+                  Generate New one
+                </button>
+                <button onClick={handleReload} className="generate-btn">
+                  Reload old
+                </button>
+              </div>
             </div>
           </div>
         </section>

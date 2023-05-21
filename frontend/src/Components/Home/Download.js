@@ -31,7 +31,7 @@ const Download = ({ elements, courses }) => {
   };
 
   return (
-    <button className="add-form-submit" onClick={handleDownload}>
+    <button className="add-form-submit-green" onClick={handleDownload}>
       Download
     </button>
   );
