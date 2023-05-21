@@ -15,6 +15,8 @@ then:
 
 `pip install mysqlclient`
 
+`pip install django-cors-headers`
+
 after that go to the location of the porject `CapstoneProject/lauCourseOffering_Backend`
 
 and then perform: 
