@@ -4,7 +4,7 @@ from .Views.Course_Views import CoursesApi, BulkCourse, DeleteCourse, CourseUpda
 from .Views.Student_Views import StudentsApi
 from .Views.Section_Views import SectionsApi
 from .Views.Doctor_Views import DoctorsApi, DeleteDoctor, DoctorUpdate
-from .Views.TimeTable_Views import TimeTable
+
 
 urlpatterns = [
     path("courses", CoursesApi.as_view()),
@@ -14,7 +14,6 @@ urlpatterns = [
     path("sections", SectionsApi.as_view()),
     path("major", MajorApi.as_view()),
     path("doctors", DoctorsApi.as_view()),
-    path("timeTable", TimeTable.as_view()),
     path("doctors/delete", DeleteDoctor.as_view()),
     path("major/update", MajorUpdateView.as_view()),
     path("doctors/update", DoctorUpdate.as_view()),

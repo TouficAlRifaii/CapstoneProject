@@ -6,7 +6,9 @@ from ..models import User
 import jwt
 import datetime
 
-
+"""""
+This was an old requirement but then it was removed hence its not being used anymore
+"""
 def checkToken(request):
     token = request.COOKIES.get('jwt')
 

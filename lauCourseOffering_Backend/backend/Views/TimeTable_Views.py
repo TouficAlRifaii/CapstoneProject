@@ -5,7 +5,9 @@ from ..serializers import SectionSerializer
 from django.db.models import Count
 from django.http import JsonResponse
 
-
+""""
+Not working
+"""
 # class TimeTable(APIView):
 #     def get(self, request):
 #         # from collections import defaultdict
@@ -99,7 +101,7 @@ from django.http import JsonResponse
 #                     assigned_courses[doctor.id].append(chosen_time_slot)
 #
 #     # Step 8: Repeat until all doctors have taken their maximum courses possible
-#     while doctors.filter(course_count__lt=4).exists():
+#     while doctors.filter(course_count__lt=4).exists():## read the input from the user instead of 4
 #         for doctor in doctors:
 #             available_courses = Course.objects.filter(doctors=doctor)
 #             available_time_slots = doctor.availability.all()
@@ -155,12 +157,3 @@ from django.http import JsonResponse
 #             timetable.append(entry)
 #
 #     return timetable
-
-
-class TimeTable(APIView):
-    def get(self, request):
-        return "halo"
-
-
-def create_timetable(sections):
-    doctors = Doctor.objects.all()
