@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import Loading from "./Loading";
 import { wait } from "@testing-library/user-event/dist/utils";
+import { faL } from "@fortawesome/free-solid-svg-icons";
 
 const UploadCSV = ({ active, setActive, sections, setSections }) => {
   const [selectedFiles, setSelectedFiles] = useState();
@@ -43,6 +44,7 @@ const UploadCSV = ({ active, setActive, sections, setSections }) => {
       formData.append("excel", file);
     });
 
+    setIsLoading(true);
     try {
       const response = await axios.post(
         "http://127.0.0.1:8000/api/excel",
@@ -63,13 +65,18 @@ const UploadCSV = ({ active, setActive, sections, setSections }) => {
             "http://127.0.0.1:8000/api/sections"
           );
           if (sectionsResponse.data["message"] === "success") {
+            setIsLoading(false);
+            setActive(false);
             alert("Sections Created Sucessfully");
           } else {
             alert("Sections failed");
+            setIsLoading(false);
           }
         } catch (error) {}
       } else {
         // handle error
+        setIsLoading(false);
+
         alert("Error uploading CSV files. hahah");
       }
     } catch (error) {
@@ -88,7 +95,7 @@ const UploadCSV = ({ active, setActive, sections, setSections }) => {
 
               <input type="file" onChange={handleFileSelect} multiple />
               <div>
-                <button onClick={handleFileUpload} className="generate-btn">
+                <button onClick={handleActive} className="generate-btn">
                   Generate New one
                 </button>
                 <button onClick={handleReload} className="generate-btn">
