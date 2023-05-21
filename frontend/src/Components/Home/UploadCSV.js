@@ -19,7 +19,17 @@ const UploadCSV = ({ active, setActive, sections, setSections }) => {
     setActive(false);
   };
 
-  const handleReload = () => {
+  const handleReload = async () => {
+    try {
+      const sectionsResponse = await axios.post(
+        "http://127.0.0.1:8000/api/sections"
+      );
+      if (sectionsResponse.data["message"] === "success") {
+        alert("Sections Created Sucessfully");
+      } else {
+        alert("Sections failed");
+      }
+    } catch (error) {}
     setActive(false);
   };
 
@@ -78,7 +88,7 @@ const UploadCSV = ({ active, setActive, sections, setSections }) => {
 
               <input type="file" onChange={handleFileSelect} multiple />
               <div>
-                <button onClick={handleActive} className="generate-btn">
+                <button onClick={handleFileUpload} className="generate-btn">
                   Generate New one
                 </button>
                 <button onClick={handleReload} className="generate-btn">

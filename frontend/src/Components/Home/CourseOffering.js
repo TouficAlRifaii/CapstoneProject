@@ -28,37 +28,7 @@ const CourseOffering = ({
   for (let i = 1; i <= Math.ceil(searchResults.length / itemsPerPage); i++) {
     pageNumbers.push(i);
   }
-  //===============================
-  // const [newSections, setNewSections] = useState();
 
-  // let count = 0;
-  // const campus = "Byblos"; // Specify the desired campus
-
-  // sections.forEach((section) => {
-  //   if (section.campus === campus) {
-  //     if (section.substitutes && section.substitutes.length > 0) {
-  //       section.substitutes.forEach((substituteId) => {
-  //         const substituteSection = sections.find((s) => s.id === substituteId);
-  //         if (substituteSection && substituteSection.campus === campus) {
-  //           setNewSections((prevSections) => [
-  //             ...prevSections,
-  //             substituteSection,
-  //           ]);
-  //           count++;
-  //         }
-  //       });
-  //     } else {
-  //       setNewSections((prevSections) => [...sections, section]);
-  //     }
-  //   }
-  // });
-  // console.log(count);
-  // console.log(newSections);
-  // console.log("Total changes:", count);
-
-  // console.log(newSections);
-  // console.log("Total changes:", count);
-  //===================
   useEffect(() => {
     const filteredResults = sections.filter((section) =>
       section.campus.toLowerCase().includes(search.toLowerCase())
