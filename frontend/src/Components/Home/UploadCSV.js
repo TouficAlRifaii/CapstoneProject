@@ -22,11 +22,12 @@ const UploadCSV = ({ active, setActive, sections, setSections }) => {
 
   const handleReload = async () => {
     try {
-      const sectionsResponse = await axios.post(
+      const sectionsResponse = await axios.get(
         "http://127.0.0.1:8000/api/sections"
       );
       if (sectionsResponse.data["message"] === "success") {
         console.log(sectionsResponse.data);
+        setSections(sectionsResponse.data.sections);
         alert("Sections Created Sucessfully");
       } else {
         alert("Sections failed");
@@ -66,6 +67,8 @@ const UploadCSV = ({ active, setActive, sections, setSections }) => {
             "http://127.0.0.1:8000/api/sections"
           );
           if (sectionsResponse.data["message"] === "success") {
+            setSections(sectionsResponse.data.sections);
+
             setIsLoading(false);
             setActive(false);
             alert("Sections Created Sucessfully");
