@@ -80,6 +80,8 @@ const UploadCSV = ({ active, setActive, sections, setSections }) => {
         alert("Error uploading CSV files. hahah");
       }
     } catch (error) {
+      setIsLoading(false);
+
       // handle error
       alert("Error uploading CSV files.");
     }
@@ -95,7 +97,7 @@ const UploadCSV = ({ active, setActive, sections, setSections }) => {
 
               <input type="file" onChange={handleFileSelect} multiple />
               <div>
-                <button onClick={handleActive} className="generate-btn">
+                <button onClick={handleFileUpload} className="generate-btn">
                   Generate New one
                 </button>
                 <button onClick={handleReload} className="generate-btn">
