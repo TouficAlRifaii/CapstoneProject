@@ -147,7 +147,7 @@ class CourseUpdate(APIView):
         if course_relations.exists():
             course_relations.delete()
         serializer = CourseSerializer(course, data=request.data["course"])
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             serializer.save()
             for relation in request.data["relations"]:
                 relation['mainCourse_id'] = request.data["course"]['id']

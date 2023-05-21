@@ -164,4 +164,3 @@ class TimeTable(APIView):
 
 def create_timetable(sections):
     doctors = Doctor.objects.all()
-    
