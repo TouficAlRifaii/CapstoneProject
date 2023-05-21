@@ -184,7 +184,7 @@ const CourseOffering = ({
                 {" "}
                 generate time table
               </button>
-              <Download elements={sections} />
+              <Download elements={sections} courses={courses} />
             </div>
           </div>
           {activeTimeTable ? (
