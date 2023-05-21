@@ -119,7 +119,9 @@ const CourseOffering = ({
                           value={
                             section.numOfSections === 0
                               ? ""
-                              : section.numOfSections
+                              : Math.ceil(
+                                  section.numOfStudents / section.capacity
+                                )
                           }
                           onChange={(e) => {
                             const inputNum = parseInt(e.target.value);
@@ -180,7 +182,11 @@ const CourseOffering = ({
               <button onClick={handleCancel} className="close-btn">
                 Cancel Operation
               </button>
-              <button onClick={handleTimeTable} className="close-btn-dark">
+              <button
+                onClick={handleTimeTable}
+                disabled="true"
+                className="close-btn-dark"
+              >
                 {" "}
                 generate time table
               </button>
