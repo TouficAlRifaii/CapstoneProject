@@ -154,6 +154,7 @@ const EditCourse = ({ courses, setCourses, id, close }) => {
 
       if (response.data.message === "success") {
         getCourses();
+        handleClose();
         setSubject("");
         setCourseNumber("");
         setTitle("");

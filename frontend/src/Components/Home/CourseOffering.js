@@ -10,7 +10,7 @@ const CourseOffering = ({
   courses,
 }) => {
   const [activeTimeTable, setActiveTimeTable] = useState(false);
-
+  const [sectionsSub, setSectionsSub] = useState([]);
   // search + paginate
   const [searchResults, setSearchResults] = useState([]);
   const [search, setSearch] = useState("");
@@ -20,6 +20,43 @@ const CourseOffering = ({
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = searchResults.slice(indexOfFirstItem, indexOfLastItem);
+
+  //========================================
+
+  useEffect(() => {
+    if (sections && sections.length > 0) {
+      const updatedSections = sections.map((section) => {
+        const course = courses.find((course) => course.id === section.course);
+        const substituteIds =
+          course && course.substitutes
+            ? course.substitutes.map((substituteId) =>
+                parseInt(substituteId, 10)
+              )
+            : [];
+
+        return {
+          ...section,
+          substitute: substituteIds,
+          numOfStudents:
+            section.numOfStudents +
+            substituteIds.reduce((total, substituteId) => {
+              const substituteSection = sections.find(
+                (sec) => sec.id === substituteId
+              );
+              return (
+                total +
+                (substituteSection ? substituteSection.numOfStudents : 0)
+              );
+            }, 0),
+        };
+      });
+
+      setSectionsSub(updatedSections);
+    }
+  }, [sections, courses]);
+
+  //========================================
+
   sections.sort((a, b) => a.numOfStudents - b.numOfStudents);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
@@ -30,23 +67,7 @@ const CourseOffering = ({
   }
 
   useEffect(() => {
-    const filteredResults = sections.filter((section) =>
-      section.campus.toLowerCase().includes(search.toLowerCase())
-    );
-    setCurrentPage(1);
-    const currentItems = searchResults.slice(indexOfFirstItem, indexOfLastItem);
-
-    setSearchResults(currentItems);
-  }, [sections, search]);
-
-  const handleSectionChange = (index, value) => {
-    const updatedSections = [...sections];
-    updatedSections[index].numOfSections = parseInt(value, 10);
-    setSections(updatedSections);
-  };
-
-  useEffect(() => {
-    const filteredResults = sections.filter((section) => {
+    const filteredResults = sectionsSub.filter((section) => {
       const course = courses.find((course) => course.id === section.course);
       return (
         section.campus.toLowerCase().includes(search.toLowerCase()) ||
@@ -55,7 +76,7 @@ const CourseOffering = ({
     });
 
     setSearchResults(filteredResults.reverse());
-  }, [sections, courses, search]);
+  }, [sectionsSub, courses, search]);
 
   const handleCancel = () => {
     setActiveTimeTable(false);
@@ -90,6 +111,9 @@ const CourseOffering = ({
                     <div className="table-data">Course</div>
                   </th>
                   <th>
+                    <div className="table-data">Substitute</div>
+                  </th>
+                  <th>
                     <div className="table-data">Number of Students</div>
                   </th>
                   <th>
@@ -108,8 +132,14 @@ const CourseOffering = ({
                     </td>
                     <ListCourseId course={[section.course]} courses={courses} />
 
+                    <ListCourseId
+                      course={[section.substitute]}
+                      courses={courses}
+                    />
                     <td>
-                      <div className="table-data">{section.numOfStudents}</div>
+                      <div className="table-data-center">
+                        {section.numOfStudents}
+                      </div>
                     </td>
 
                     <td>
